@@ -1,8 +1,4 @@
 import CardSwap, { Card } from "./CardSwap";
-import burgerImg from "../assets/images/png/burgeur house.png";
-import algoImg from "../assets/images/png/site-algo.png";
-import fruityImg from "../assets/images/png/fruity.jpg.png";
-import generatorImg from "../assets/images/png/generateur.png";
 
 export default function Projects() {
   return (
@@ -56,7 +52,7 @@ export default function Projects() {
               target="_blank"
             >
               <img
-                src={burgerImg}
+                src="src/assets/images/png/burgeur house.png"
                 alt="burger"
                 className="h-full rounded-lg mt-4"
               />
@@ -75,7 +71,7 @@ export default function Projects() {
               target="_blank"
             >
               <img
-                src={algoImg}
+                src="src/assets/images/png/site-algo.png"
                 alt=""
                 className="h-full rounded-lg mt-4"
               />
@@ -94,7 +90,7 @@ export default function Projects() {
               target="_blank"
             >
               <img
-                src={fruityImg}
+                src="src/assets/images/png/fruity.jpg.png"
                 alt=""
                 className="h-full rounded-lg mt-4"
               />
@@ -113,7 +109,7 @@ export default function Projects() {
               target="_blank"
             >
               <img
-                src={generatorImg}
+                src="src/assets/images/png/generateur.png"
                 alt=""
                 className="h-full rounded-lg mt-4"
               />

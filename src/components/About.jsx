@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
-import profileImg from "../assets/images/png/photo_2026-03-01_12-30-58.jpg";
 
 export default function About() {
   return (
@@ -19,7 +18,7 @@ export default function About() {
         >
           <div className="relative group">
             <img
-              src={profileImg}
+              src="src/assets/images/png/photo_2026-03-01_12-30-58.jpg"
               alt="Kebe Abdoul Kader"
               className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl"
             />
