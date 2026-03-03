@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import presentationVid from "../assets/images/png/IMG_4212.mp4";
 
 export default function VideoSection() {
   return (
@@ -11,7 +12,7 @@ export default function VideoSection() {
       >
         <h2 className="text-4xl mb-8">Ma Présentation</h2>
         <video controls className="rounded-xl shadow-2xl h-85 w-96">
-          <source src="src/assets/images/png/IMG_4212.mp4" type="video/mp4"/>
+          <source src={presentationVid} type="video/mp4"/>
         </video>
       </motion.div>
     </section>

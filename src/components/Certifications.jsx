@@ -1,6 +1,10 @@
 import { useRef } from "react";
 import GradualBlur from "./GradualBlur";
-
+import cert1 from "../../public/Screenshot 2026-03-01 164744.png"
+import cert2 from "../../public/Screenshot 2026-03-01 164822.png"
+import cert3 from "../../public/Screenshot 2026-03-01 164843.png"
+import cert4 from "../assets/images/png/photo_2026-03-02_18-55-22-removebg-preview.png"
+import cert5 from "../assets/images/png/photo_2026-03-02_18-55-26-removebg-preview.png"
 export default function Certifications() {
   const ref = useRef(null);
 
@@ -11,7 +15,7 @@ export default function Certifications() {
       className="text-center bg-slate-950 py-24 scroll-mt-24 relative"
     >
       <h2 className="text-4xl md:text-5xl font-semibold text-white mb-16 relative z-10">
-        Certifications
+         Mes <span className="text-violet-500">Certifications</span>
       </h2>
         <GradualBlur
           target="parent"
@@ -28,31 +32,31 @@ export default function Certifications() {
         <section className="relative overflow-hidden">
         <div className="max-w-6xl mx-auto md:max-h-[650px] max-h-[520px] overflow-y-auto px-6 md:px-36 py-16 scroll-smooth">
           <img
-            src="public/Screenshot 2026-03-01 164744.png"
+            src={cert1}
             alt="Certification"
             className="w-full mb-16 rounded-2xl shadow-2xl transition-transform duration-300"
           />
 
           <img
-            src="public/Screenshot 2026-03-01 164822.png"
+            src={cert2}
             alt="Certification"
             className="w-full mb-16 rounded-2xl shadow-2xl transition-transform duration-300"
           />
 
           <img
-            src="public/Screenshot 2026-03-01 164843.png"
+            src={cert3}
             alt="Certification"
             className="w-full mb-16 rounded-2xl shadow-2xl transition-transform duration-300"
           />
 
           <img
-            src="src/assets/images/png/photo_2026-03-02_18-55-22-removebg-preview.png"
+            src={cert4}
             alt="Certification"
             className="w-full mb-16 rounded-2xl shadow-2xl transition-transform duration-300"
           />
 
           <img
-            src="src/assets/images/png/photo_2026-03-02_18-55-26-removebg-preview.png"
+            src={cert5}
             alt="Certification"
             className="w-full mb-16 rounded-2xl shadow-2xl transition-transform duration-300"
           />

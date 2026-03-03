@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
+import imga from "../assets/images/png/photo_2026-03-01_12-30-58.jpg"
 
 export default function About() {
   return (
@@ -9,7 +10,7 @@ export default function About() {
     >
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         
-        {/* Photo */}
+        
         <motion.div
           initial={{ opacity: 0, x: -80 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -18,7 +19,7 @@ export default function About() {
         >
           <div className="relative group">
             <img
-              src="src/assets/images/png/photo_2026-03-01_12-30-58.jpg"
+              src={imga}
               alt="Kebe Abdoul Kader"
               className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl"
             />
@@ -36,8 +37,8 @@ export default function About() {
   className="max-w-xl"
 >
   
-  <h2 className="text-xl md:text-2xl text-center font-semibold mb-6 text-white">
-    À propos de moi
+  <h2 className="text-xl md:text-2xl text-center font-semibold mb-6">
+    <span className="text-violet-400">À propos</span> de moi
   </h2>
 
   
