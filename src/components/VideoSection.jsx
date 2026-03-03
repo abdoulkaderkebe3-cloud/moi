@@ -10,8 +10,8 @@ export default function VideoSection() {
         className="text-center"
       >
         <h2 className="text-4xl mb-8">Ma Présentation</h2>
-        <video controls className="rounded-xl shadow-2xl w-[600px]">
-          <source src="/video.mp4" type="video/mp4"/>
+        <video controls className="rounded-xl shadow-2xl h-85 w-96">
+          <source src="src/assets/images/png/IMG_4212.mp4" type="video/mp4"/>
         </video>
       </motion.div>
     </section>

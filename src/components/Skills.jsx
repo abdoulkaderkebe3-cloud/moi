@@ -1,112 +1,58 @@
-import ChromaGrid from './ChromaGrid'
+import { motion } from "framer-motion";
+import figmaIcon from "../assets/images/svg/devicon_figma.svg";
+import javaIcon from "../assets/images/svg/devicon_java.svg";
+import tailwindIcon from "../assets/images/svg/devicon_tailwindcss.svg";
+import gitIcon from "../assets/images/svg/icomoon-free_git.svg";
+import reactIcon from "../assets/images/svg/Group.svg";
+import htmlIcon from "../assets/images/svg/logos_html-5.svg";
+import githubIcon from "../assets/images/svg/mdi_github.svg";
+import springBootIcon from "../assets/images/svg/Vector.svg";
+import jsIcon from "../assets/images/svg/vscode-icons_file-type-js-official.svg";
+import cssIcon from "../assets/images/svg/logos_css-3.svg";
+import framerIcon from "../assets/images/svg/Vector (1).svg";
+import angularIcon from "../assets/images/svg/skill-icons_angular-light.svg";
+import tsIcon from "../assets/images/svg/akar-icons_typescript-fill.svg";
 
+export default function Stack() {
+  const techs = [
+    { name: "figma", icon: figmaIcon },
+    { name: "java", icon: javaIcon },
+    { name: "Tailwind CSS", icon: tailwindIcon },
+    { name: "git", icon: gitIcon },
+    { name: "react", icon: reactIcon },
+    { name: "html", icon: htmlIcon },
+    { name: "github", icon: githubIcon },
+    { name: "Spring Boot", icon: springBootIcon },
+    { name: "JavaScript", icon: jsIcon },
+    { name: "css", icon: cssIcon },
+    { name: "Framer-motion", icon: framerIcon },
+    { name: "Angular", icon: angularIcon },
+    { name: "TypeScript", icon: tsIcon },
+  ];
 
-export default function Skills() {
-    const items = [
-        {
-          image: "src/assets/images/svg/devicon_java.svg",
-          title: "java",
-          subtitle: "poo",
-          handle: "oriente objet",
-          borderColor: "#3B82F6",
-          gradient: "linear-gradient(145deg, #3B82F6, #000)",
-          url: "#"
-        },
-        {
-          image: "src/assets/images/svg/devicon_tailwindcss.svg",
-          title: "tailwindcss",
-          subtitle: "frame-work css",
-          handle: "style",
-          borderColor: "#10B981",
-          gradient: "linear-gradient(180deg, #10B981, #000)",
-          url: "#"
-        },
-        {
-            image: "src/assets/images/svg/Group.svg",
-            title: "react",
-            subtitle: "frame-work js",
-            handle: "composants",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/icomoon-free_git.svg",
-            title: "git",
-            subtitle: "versionner de code",
-            handle: "push",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/logos_html-5.svg",
-            title: "html",
-            subtitle: "language de balisage",
-            handle: "achitecture",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/devicon_figma.svg",
-            title: "Figma",
-            subtitle: "maquette",
-            handle: "@design",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/mdi_github.svg",
-            title: "Github",
-            subtitle: "Hebergement",
-            handle: "repository",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/Vector.svg",
-            title: "Spring Boot",
-            subtitle: "Frame-work java",
-            handle: "robustre",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/vscode-icons_file-type-js-official.svg",
-            title: "java script",
-            subtitle: "le coeur du web",
-            handle: "polyvalent",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: ""
-          },
-          {
-            image: "src/assets/images/svg/logos_css-3.svg",
-            title: "css",
-            subtitle: "styliser",
-            handle: "style",
-            borderColor: "#10B981",
-            gradient: "linear-gradient(180deg, #10B981, #000)",
-            url: "https://linkedin.com/in/mikechen"
-          }
-        
-      ];
-    return (
-      <section id="compétences" className="min-h-screen bg-slate-900 text-white p-20">
-        <h2 className="text-4xl text-center mb-12">Compétences</h2>
-        <div style={{ height: '800px', position: 'relative' }}>
-  <ChromaGrid 
-    items={items}
-    radius={300}
-    damping={0.5}
-    fadeOut={0.4}
-    ease="power3.out"
-  />
-</div>
-      </section>
-    );
-  }
+  return (
+    <section id="compétences" className="min-h-screen bg-slate-900 py-24 px-6 overflow-hidden">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">
+        Ma Stack
+      </h2>
+
+      <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10">
+        {techs.map((tech, index) => (
+          <motion.div
+            key={index}
+            whileHover={{ scale: 1.1, y: -5 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col items-center justify-center p-4 bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer"
+          >
+            <img
+              src={tech.icon}
+              alt={tech.name}
+              className="w-16 h-16 mb-4 object-contain"
+            />
+            <span className="text-white text-sm md:text-base">{tech.name}</span>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}

@@ -5,14 +5,14 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white flex items-center justify-center p-10"
+      className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white flex items-center justify-center p-6 sm:p-8 md:p-10 scroll-mt-24 overflow-hidden"
     >
       <motion.div
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="w-full max-w-5xl grid md:grid-cols-2 gap-10 bg-white/5 backdrop-blur-xl p-12 rounded-3xl shadow-2xl border border-white/10"
+        className="w-full max-w-5xl grid md:grid-cols-2 gap-10 bg-white/5 backdrop-blur-xl p-6 sm:p-8 md:p-12 rounded-3xl shadow-2xl border border-white/10"
       >
         {/* LEFT SIDE INFO */}
         <div className="space-y-6">
