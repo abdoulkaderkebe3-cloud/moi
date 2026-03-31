@@ -3,7 +3,7 @@ import presentationVid from "../assets/images/png/IMG_4212.mp4";
 
 export default function VideoSection() {
   return (
-    <section id="vidéo" className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
+    <section id="vidéo" className="min-h-screen bg-slate-900 text-white flex items-center justify-center ">
       <motion.div
         initial={{ opacity:0 }}
         whileInView={{ opacity:1 }}

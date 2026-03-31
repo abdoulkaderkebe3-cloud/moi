@@ -7,7 +7,7 @@ export default function Hero() {
       return (
         <section
         id="accueil"
-        className="relative h-screen w-full bg-black text-white overflow-hidden"
+        className="relative h-screen w-full bg-black text-white overflow-hidden  "
       >
     
         <LightRays

@@ -48,7 +48,7 @@ export default function Navbar() {
           : "bg-slate-950/40 backdrop-blur-sm"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 py-3 md:py-4 text-white">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 py-3 md:py-4 text-white ">
         <a
           href="#accueil"
           className="text-lg sm:text-xl font-bold tracking-wider hover:text-indigo-400 transition"

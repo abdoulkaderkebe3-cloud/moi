@@ -12,7 +12,7 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <>
-      <ScrollProgress/>
+      <ScrollProgress />
       <Navbar/>
       <Hero/>
       <About/>

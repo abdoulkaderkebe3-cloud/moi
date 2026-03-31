@@ -12,6 +12,7 @@ import cssIcon from "../assets/images/svg/logos_css-3.svg";
 import framerIcon from "../assets/images/svg/Vector (1).svg";
 import angularIcon from "../assets/images/svg/skill-icons_angular-light.svg";
 import tsIcon from "../assets/images/svg/akar-icons_typescript-fill.svg";
+import postegre from "../assets/images/svg/devicon_postgresql-wordmark.svg"
 
 export default function Stack() {
   const techs = [
@@ -28,6 +29,7 @@ export default function Stack() {
     { name: "Framer-motion", icon: framerIcon },
     { name: "Angular", icon: angularIcon },
     { name: "TypeScript", icon: tsIcon },
+    { name: "postegreSQl", icon: postegre },
   ];
 
   return (

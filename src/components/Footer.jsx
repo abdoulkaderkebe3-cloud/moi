@@ -3,7 +3,7 @@ import { Github, Linkedin, LineChartIcon} from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer id="footer" className="bg-slate-950 text-gray-400 py-10 border-t border-white/10">
+    <footer id="footer" className="bg-slate-950 text-gray-400 py-10 border-t border-white/10 ">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

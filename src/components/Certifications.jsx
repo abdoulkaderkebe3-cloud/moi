@@ -12,7 +12,7 @@ export default function Certifications() {
     <section
       ref={ref}
       id="certifications"
-      className="text-center bg-slate-950 py-24 scroll-mt-24 relative"
+      className="text-center bg-slate-950 py-24 scroll-mt-24 relative "
     >
       <h2 className="text-4xl md:text-5xl font-semibold text-white mb-16 relative z-10">
          Mes <span className="text-violet-500">Certifications</span>

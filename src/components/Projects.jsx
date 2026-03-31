@@ -3,6 +3,7 @@ import burgerImg from "../assets/images/png/burgeur house.png";
 import algoImg from "../assets/images/png/site-algo.png";
 import fruityImg from "../assets/images/png/fruity.jpg.png";
 import generatorImg from "../assets/images/png/generateur.png";
+import dailymuse from "../../public/Screenshot 2026-03-31 204441.png"
 
 export default function Projects() {
   return (
@@ -20,7 +21,7 @@ export default function Projects() {
         style={{ height: "auto", position: "relative", minHeight: "600px" }}
       >
         
-        <div className="max-w-xl">
+        <div className="max-w-xl text-center lg:text-left z-10">
           <h1 className="text-2xl md:text-3xl font-bold leading-relaxed">
             Découvrez mes{" "}
             <span className="text-violet-400">projets réalisés</span> avec
@@ -42,7 +43,6 @@ export default function Projects() {
           cardDistance={80}
           verticalDistance={110}
           delay={2000}
-          pauseOnHover
         >
           <Card className="bg-slate-900 border border-violet-500/20 rounded-xl shadow-xl">
             <h3 className="text-center text-xl font-bold text-violet-400">
@@ -114,6 +114,24 @@ export default function Projects() {
             >
               <img
                 src={generatorImg}
+                alt=""
+                className="h-full rounded-lg mt-4"
+              />
+            </a>
+          </Card>
+          <Card className="bg-slate-900 border border-violet-500/20 rounded-xl shadow-xl">
+            <h3 className="text-center text-xl font-bold text-violet-400">
+              application web de question reponse
+            </h3>
+            <p className="text-center text-gray-400">
+              react,nestjs
+            </p>
+            <a
+              href="https://daily-hazel.vercel.app/"
+              target="_blank"
+            >
+              <img
+                src={dailymuse}
                 alt=""
                 className="h-full rounded-lg mt-4"
               />
