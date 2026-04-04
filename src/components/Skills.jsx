@@ -31,7 +31,7 @@ export default function Stack() {
     { name: "Angular", icon: angularIcon },
     { name: "TypeScript", icon: tsIcon },
     { name: "postegreSQl", icon: postegre },
-    {name:"UML",icon:uml}
+    {name:"UML",icon: uml},
   ];
 
   return (
