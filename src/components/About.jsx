@@ -47,7 +47,7 @@ export default function About() {
     enableBlur
     baseRotation={3}
     blurStrength={4}
-    className="text-xs md:text-sm text-gray-400 leading-relaxed"
+    className="text-xs md:text-sm text-gray-500 leading-relaxed"
   >
     Bonjour, je suis Kader, développeur Full Stack passionné par le web
     et les nouvelles technologies. Avec une expertise en React,
