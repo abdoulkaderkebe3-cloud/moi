@@ -4,6 +4,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+function getTextFromChildren(children) {
+  let text = '';
+  Children.forEach(children, (child) => {
+    if (typeof child === 'string' || typeof child === 'number') {
+      text += child;
+    }
+  });
+  return text.trim();
+}
+
 const ScrollReveal = ({
   children,
   scrollContainerRef,
@@ -20,12 +30,10 @@ const ScrollReveal = ({
   const containerRef = useRef(null);
 
   const splitText = useMemo(() => {
-    let text = '';
-    Children.forEach(children, (child) => {
-      if (typeof child === 'string' || typeof child === 'number') {
-        text += child;
-      }
-    });
+    const text = getTextFromChildren(children);
+    if (!text) {
+      return null;
+    }
 
     return text.split(/(\s+)/).map((word, index) => {
       if (word.match(/^\s+$/)) return word;
@@ -44,6 +52,11 @@ const ScrollReveal = ({
     const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
 
     const ctx = gsap.context(() => {
+      const wordElements = el.querySelectorAll('.word');
+      if (wordElements.length === 0) {
+        return;
+      }
+
       gsap.fromTo(
         el,
         { transformOrigin: '0% 50%', rotate: baseRotation },
@@ -59,8 +72,6 @@ const ScrollReveal = ({
           }
         }
       );
-
-      const wordElements = el.querySelectorAll('.word');
 
       gsap.fromTo(
         wordElements,
@@ -97,6 +108,8 @@ const ScrollReveal = ({
           }
         );
       }
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     }, el);
 
     return () => ctx.revert();
@@ -104,7 +117,9 @@ const ScrollReveal = ({
 
   return (
     <div ref={containerRef} className={`my-5 ${containerClassName}`}>
-      <p className={`text-[clamp(1rem,2vw,1.7rem)] leading-[1.5] font-semibold ${textClassName} ${className}`}>{splitText}</p>
+      <p className={`text-[clamp(1rem,2vw,1.7rem)] leading-[1.5] font-semibold ${textClassName} ${className}`}>
+        {splitText ?? children}
+      </p>
     </div>
   );
 };

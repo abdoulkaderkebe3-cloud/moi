@@ -5,8 +5,8 @@ import imga from "../assets/images/png/photo_2026-03-01_12-30-58.jpg"
 export default function About() {
   return (
     <section
-      id="à propos"
-      className="min-h-screen bg-slate-900 text-white px-6 md:px-20 py-20 flex items-center overflow-hidden "
+      id="a-propos"
+      className="min-h-screen bg-slate-900 text-white px-6 md:px-20 py-20 flex items-center overflow-hidden scroll-mt-24"
     >
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         
