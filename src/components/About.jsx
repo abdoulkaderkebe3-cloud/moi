@@ -18,17 +18,24 @@ export default function About() {
   const sectionRef = useRef(null);
   const isMobile = useIsMobile();
 
-  // Scroll-driven values (utilisés uniquement sur desktop)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start 90%", "end center"],
   });
 
-  const springConfig = { stiffness: 40, damping: 18, mass: 0.8 };
-  const imageX      = useSpring(useTransform(scrollYProgress, [0, 1], [-40, 0]), springConfig);
-  const imageOp     = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), springConfig);
-  const textX       = useSpring(useTransform(scrollYProgress, [0, 1], [40, 0]), springConfig);
-  const textOp      = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), springConfig);
+  // Desktop spring config
+  const desktopSpring = { stiffness: 40, damping: 18, mass: 0.8 };
+  const imageX  = useSpring(useTransform(scrollYProgress, [0, 1], [-40, 0]), desktopSpring);
+  const imageOp = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), desktopSpring);
+  const textX   = useSpring(useTransform(scrollYProgress, [0, 1], [40, 0]), desktopSpring);
+  const textOp  = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), desktopSpring);
+
+  // Mobile spring config — stiffer pour coller au scroll sans lag
+  const mobileSpring = { stiffness: 80, damping: 24, mass: 0.5 };
+  const imageY    = useSpring(useTransform(scrollYProgress, [0, 0.6], [40, 0]), mobileSpring);
+  const imageOpM  = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), mobileSpring);
+  const textY     = useSpring(useTransform(scrollYProgress, [0.1, 0.7], [40, 0]), mobileSpring);
+  const textOpM   = useSpring(useTransform(scrollYProgress, [0.1, 0.6], [0, 1]), mobileSpring);
 
   return (
     <section
@@ -42,10 +49,7 @@ export default function About() {
           {/* ── IMAGE ── */}
           {isMobile ? (
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.3 }}
+              style={{ y: imageY, opacity: imageOpM, willChange: "transform" }}
               className="flex justify-center"
             >
               <ImageContent />
@@ -62,10 +66,7 @@ export default function About() {
           {/* ── TEXTE ── */}
           {isMobile ? (
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-              viewport={{ once: true, amount: 0.3 }}
+              style={{ y: textY, opacity: textOpM, willChange: "transform" }}
               className="max-w-xl"
             >
               <TextContent />
