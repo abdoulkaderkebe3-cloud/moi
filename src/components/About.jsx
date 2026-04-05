@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 import imga from "../assets/images/png/photo_2026-03-01_12-30-58.jpg";
 
@@ -8,28 +8,31 @@ export default function About() {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "center center"],
+    offset: ["start 90%", "end center"],
   });
 
+  const springConfig = { stiffness: 40, damping: 18, mass: 0.8 };
+
   // Image vient de la gauche
-  const imageX = useTransform(scrollYProgress, [0, 1], [-120, 0]);
-  const imageOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const imageX = useSpring(useTransform(scrollYProgress, [0, 1], [-40, 0]), springConfig);
+  const imageOpacity = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), springConfig);
 
   // Texte vient de la droite
-  const textX = useTransform(scrollYProgress, [0, 1], [120, 0]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const textX = useSpring(useTransform(scrollYProgress, [0, 1], [40, 0]), springConfig);
+  const textOpacity = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), springConfig);
 
   return (
     <section
       ref={sectionRef}
       id="a-propos"
-      className="min-h-screen bg-slate-900 text-white px-6 md:px-20 py-20 flex items-center overflow-hidden scroll-mt-24"
+      className="min-h-screen bg-slate-900 text-white px-6 md:px-20 py-20 flex items-center scroll-mt-24"
     >
+      <div className="overflow-hidden w-full">
       <div className="max-w-6xl w-full mx-auto grid md:grid-cols-2 gap-12 items-center">
 
         {/* ── Image ── */}
         <motion.div
-          style={{ x: imageX, opacity: imageOpacity }}
+          style={{ x: imageX, opacity: imageOpacity, willChange: "transform" }}
           className="flex justify-center"
         >
           <div className="relative group">
@@ -44,7 +47,7 @@ export default function About() {
 
         {/* ── Texte ── */}
         <motion.div
-          style={{ x: textX, opacity: textOpacity }}
+          style={{ x: textX, opacity: textOpacity, willChange: "transform" }}
           className="max-w-xl"
         >
           <h2 className="text-xl md:text-2xl text-center font-semibold mb-6">
@@ -67,6 +70,7 @@ export default function About() {
           </ScrollReveal>
         </motion.div>
 
+      </div>
       </div>
     </section>
   );
