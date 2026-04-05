@@ -70,14 +70,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 py-3 md:py-4 text-white ">
         <a
           href="#accueil"
-          className="group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
+          className="group   flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
           aria-label="Accueil — Kader Dev"
         >
-          <span className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center overflow-hidden rounded-xl bg-white/[0.06] ring-1 ring-white/10 shadow-sm shadow-black/20 transition group-hover:bg-white/[0.12] group-hover:ring-indigo-400/35 group-hover:shadow-indigo-500/10">
+          <span className="relative flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center overflow-hidden rounded-2xl bg-black/5 dark:bg-white/10 ring-1 ring-black/10 dark:ring-white/20 shadow-lg dark:shadow-indigo-500/20 shadow-indigo-500/5 transition-all duration-300 group-hover:bg-black/10 dark:group-hover:bg-white/20 group-hover:ring-indigo-400/50 dark:group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] scale-100 group-hover:scale-105">
             <img
               src={logo}
               alt="Logo Kader Dev"
-              className="h-6 w-6 sm:h-7 sm:w-7 object-contain opacity-95 group-hover:opacity-100 transition duration-300"
+              className="h-8 w-8 sm:h-9 sm:w-9 object-contain dark:invert drop-shadow-md transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110"
             />
           </span>
         </a>
