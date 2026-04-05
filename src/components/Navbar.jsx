@@ -47,7 +47,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         setMenuOpen(false);
       }
     };
@@ -82,7 +82,7 @@ export default function Navbar() {
           </span>
         </a>
 
-        <div className="hidden md:flex gap-8">
+        <div className="hidden lg:flex items-center gap-4 xl:gap-8 text-sm xl:text-base">
           {links.map((link, index) => (
             <a
               key={index}
@@ -113,7 +113,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="md:hidden p-2 rounded-md hover:bg-white/5 transition"
+            className="lg:hidden p-2 rounded-md hover:bg-white/5 transition"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
@@ -153,7 +153,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-slate-950/95 backdrop-blur-md border-t border-white/5 overflow-y-auto overflow-x-hidden max-h-screen w-full">
+        <div className="lg:hidden bg-slate-950/95 backdrop-blur-md border-t border-white/5 overflow-y-auto overflow-x-hidden max-h-[85vh] w-full">
           <div className="px-4 sm:px-6 py-6 flex flex-col gap-3">
             {links.map((link, i) => (
               <a
