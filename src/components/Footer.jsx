@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, LineChartIcon} from "lucide-react";
+import { useLang } from "../context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLang();
   return (
     <footer id="footer" className="bg-slate-950 text-gray-400 py-10 border-t border-white/10 ">
       <motion.div
@@ -16,7 +18,7 @@ export default function Footer() {
             Kebe Abdoul kader
           </h3>
           <p className="text-sm mt-2">
-            © {new Date().getFullYear()} Tous droits réservés.
+            © {new Date().getFullYear()} {t.footer.rights}
           </p>
         </div>
 

@@ -1,9 +1,7 @@
 @import "tailwindcss";
-*{
-  scroll-behavior:smooth;
-}
 
 html {
+  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 

@@ -1,7 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Github, Linkedin, LineChartIcon } from "lucide-react";
+import { Github, Linkedin, LineChartIcon, Languages } from "lucide-react";
 import logo from "../assets/images/svg/noun-mind-5663275.svg";
+import { useLang } from "../context/LanguageContext";
 
 const socialLinks = [
   {
@@ -22,55 +23,50 @@ const socialLinks = [
 ];
 
 export default function Navbar() {
+  const { lang, toggleLang, t } = useLang();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const links = [
-    { name: "Accueil", href: "#accueil" },
-    { name: "À propos", href: "#a-propos" },
-    { name: "Certifications", href: "#certifications" },
-    { name: "Compétences", href: "#compétences" },
-    { name: "Projets", href: "#projets" },
-    { name: "Vidéo", href: "#vidéo" },
-    { name: "Footer", href: "#footer" },
-  ];
-
-  const [menuOpen, setMenuOpen] = useState(false);
-
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setMenuOpen(false);
-      }
+      if (window.innerWidth >= 1024) setMenuOpen(false);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const links = [
+    { name: t.nav.home, href: "#accueil" },
+    { name: t.nav.about, href: "#a-propos" },
+    { name: t.nav.skills, href: "#compétences" },
+    { name: t.nav.projects, href: "#projets" },
+    { name: t.nav.certifications, href: "#certifications" },
+    { name: t.nav.video, href: "#vidéo" },
+    { name: t.nav.footer, href: "#footer" },
+  ];
 
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 overflow-hidden ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-slate-950/95 backdrop-blur-md shadow-lg"
           : "bg-slate-950/40 backdrop-blur-sm"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 py-3 md:py-4 text-white ">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 py-3 md:py-4 text-white">
+        {/* Logo */}
         <a
           href="#accueil"
-          className="group   flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
+          className="group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
           aria-label="Accueil — Kader Dev"
         >
           <span className="relative flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center overflow-hidden rounded-2xl bg-black/5 dark:bg-white/10 ring-1 ring-black/10 dark:ring-white/20 shadow-lg dark:shadow-indigo-500/20 shadow-indigo-500/5 transition-all duration-300 group-hover:bg-black/10 dark:group-hover:bg-white/20 group-hover:ring-indigo-400/50 dark:group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] scale-100 group-hover:scale-105">
@@ -82,6 +78,7 @@ export default function Navbar() {
           </span>
         </a>
 
+        {/* Desktop nav links */}
         <div className="hidden lg:flex items-center gap-4 xl:gap-8 text-sm xl:text-base">
           {links.map((link, index) => (
             <a
@@ -90,12 +87,14 @@ export default function Navbar() {
               className="hover:text-indigo-400 transition relative group"
             >
               {link.name}
-              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-indigo-500 transition-all group-hover:w-full"></span>
+              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-indigo-500 transition-all group-hover:w-full" />
             </a>
           ))}
         </div>
 
+        {/* Right section: socials + lang toggle + burger */}
         <div className="flex items-center gap-1 sm:gap-2">
+          {/* Social icons */}
           <div className="flex items-center gap-0.5 sm:gap-1.5 rounded-xl sm:rounded-2xl bg-white/[0.04] p-0.5 sm:p-1 ring-1 ring-white/[0.08] backdrop-blur-sm">
             {socialLinks.map(({ href, label, Icon }) => (
               <a
@@ -111,6 +110,18 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/* Language toggle button */}
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-2 rounded-2xl bg-[#1e1f22] px-3.5 py-2 ring-1 ring-white/10 hover:bg-[#2a2b2f] transition duration-200 focus:outline-none select-none cursor-pointer"
+          >
+            <Languages className="h-4 w-4 text-slate-300" />
+            <span className="text-xs sm:text-sm font-bold text-white tracking-wider">
+              {lang.toUpperCase()}
+            </span>
+          </button>
+
+          {/* Mobile burger */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
             className="lg:hidden p-2 rounded-md hover:bg-white/5 transition"
@@ -118,40 +129,19 @@ export default function Navbar() {
             aria-expanded={menuOpen}
           >
             {menuOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
           </button>
         </div>
       </div>
 
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="lg:hidden bg-slate-950/95 backdrop-blur-md border-t border-white/5 overflow-y-auto overflow-x-hidden max-h-[85vh] w-full">
           <div className="px-4 sm:px-6 py-6 flex flex-col gap-3">
@@ -167,7 +157,7 @@ export default function Navbar() {
             ))}
             <div className="mt-4 pt-4 border-t border-white/10">
               <p className="text-xs font-medium uppercase tracking-widest text-slate-500 mb-3 text-center">
-                Suivez-moi
+                {t.nav.follow}
               </p>
               <div className="flex justify-center gap-2">
                 {socialLinks.map(({ href, label, Icon }) => (

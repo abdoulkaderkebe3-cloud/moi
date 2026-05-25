@@ -1,7 +1,11 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
-import imga from "../assets/images/png/photo_2026-03-01_12-30-58.jpg";
+//import imga from "../assets/images/png/photo_2026-03-01_12-30-58.jpg";
+//import photo from "../assets/images/png/Screenshot 2026-05-12 114815.png"
+import imm from "../assets/images/png/photo_2026-05-12_11-57-59.jpg"
+
+import { useLang } from "../context/LanguageContext";
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -17,7 +21,8 @@ function useIsMobile() {
 export default function About() {
   const sectionRef = useRef(null);
   const isMobile = useIsMobile();
-
+  const { t } = useLang();
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start 90%", "end center"],
@@ -69,14 +74,14 @@ export default function About() {
               style={{ y: textY, opacity: textOpM, willChange: "transform" }}
               className="max-w-xl"
             >
-              <TextContent />
+              <TextContent t={t} />
             </motion.div>
           ) : (
             <motion.div
               style={{ x: textX, opacity: textOp, willChange: "transform" }}
               className="max-w-xl"
             >
-              <TextContent />
+              <TextContent t={t} />
             </motion.div>
           )}
 
@@ -90,7 +95,7 @@ function ImageContent() {
   return (
     <div className="relative group">
       <img
-        src={imga}
+        src={imm}
         alt="Kebe Abdoul Kader"
         className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl"
       />
@@ -99,11 +104,11 @@ function ImageContent() {
   );
 }
 
-function TextContent() {
+function TextContent({ t }) {
   return (
     <>
       <h2 className="text-xl md:text-2xl text-center font-semibold mb-6">
-        <span className="text-violet-400">À propos</span> de moi
+        <span className="text-violet-400">{t.about.title}</span> {t.about.titleSuffix}
       </h2>
       <ScrollReveal
         baseOpacity={0.1}
@@ -112,12 +117,7 @@ function TextContent() {
         blurStrength={4}
         className="text-base md:text-lg text-gray-300 leading-relaxed"
       >
-        Étudiant en MIAGE, mais surtout développeur par passion. Je ne me limite pas aux cours :
-        je code, je pratique et je construis des projets concrets pour progresser chaque jour. J'aime
-        comprendre en profondeur ce que je fais et créer des solutions qui répondent à de vrais besoins.
-        Pour moi, les compétences ne viennent pas d'un diplôme, mais de l'expérience et du travail régulier.
-        Je suis constamment en train d'apprendre, d'expérimenter et de m'améliorer, avec l'objectif de devenir
-        un développeur complet capable de concevoir des applications utiles, propres et performantes.
+        {t.about.text}
       </ScrollReveal>
     </>
   );

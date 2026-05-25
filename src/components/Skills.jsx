@@ -13,9 +13,12 @@ import framerIcon from "../assets/images/svg/Vector (1).svg";
 import angularIcon from "../assets/images/svg/skill-icons_angular-light.svg";
 import tsIcon from "../assets/images/svg/akar-icons_typescript-fill.svg";
 import postegre from "../assets/images/svg/devicon_postgresql-wordmark.svg";
-import uml from "../assets/images/svg/material-icon-theme_uml.svg"
+import uml from "../assets/images/svg/material-icon-theme_uml.svg";
+import dbeaver from "../assets/images/svg/Vector (2).svg";
+import { useLang } from "../context/LanguageContext";
 
 export default function Stack() {
+  const { t } = useLang();
   const techs = [
     { name: "figma", icon: figmaIcon },
     { name: "java", icon: javaIcon },
@@ -30,15 +33,16 @@ export default function Stack() {
     { name: "Framer-motion", icon: framerIcon },
     { name: "Angular", icon: angularIcon },
     { name: "TypeScript", icon: tsIcon },
-    { name: "postegreSQl", icon: postegre },
+    { name: "postgreSQl", icon: postegre },
     {name:"UML",icon: uml},
+    {name:"Dbeaver",icon:dbeaver}
   ];
 
   return (
     <section id="compétences" className="min-h-screen bg-slate-900 py-24 px-6 overflow-hidden">
       <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">
-        Mon <span className="text-violet-500">Stack</span>
-        <p className="text-xl py-3 font-normal ">Mes Outils Tech les plus Utilisés</p>
+        {t.skills.title} <span className="text-violet-500">{t.skills.titleHighlight}</span>
+        <p className="text-xl py-3 font-normal ">{t.skills.subtitle}</p>
       </h2>
 
       <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10">
