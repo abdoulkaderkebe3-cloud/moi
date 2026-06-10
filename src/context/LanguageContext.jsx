@@ -10,6 +10,7 @@ const translations = {
       projects: "Projets",
       certifications: "Certifications",
       video: "Vidéo",
+      contact: "Contact",
       footer: "Footer",
       follow: "Suivez-moi",
     },
@@ -21,7 +22,7 @@ const translations = {
     about: {
       title: "À propos",
       titleSuffix: "de moi",
-      text: "Étudiant en MIAGE, mais surtout développeur par passion. Je ne me limite pas aux cours : je code, je pratique et je construis des projets concrets pour progresser chaque jour. J'aime comprendre en profondeur ce que je fais et créer des solutions qui répondent à de vrais besoins. Pour moi, les compétences ne viennent pas d'un diplôme, mais de l'expérience et du travail régulier. Je suis constamment en train d'apprendre, d'expérimenter et de m'améliorer, avec l'objectif de devenir un développeur complet capable de concevoir des applications utiles, propres et performantes.",
+      text: "Étudiant en MIAGE et développeur passionné, je ne me limite pas aux cours : je code, je pratique et je réalise des projets concrets afin de progresser continuellement. J'aime concevoir des solutions utiles, modernes et performantes tout en approfondissant mes compétences techniques à travers l'apprentissage et l'expérimentation.\n\nJe suis également Président du Club des Développeurs de mon université, où je participe à la promotion de la technologie, au partage de connaissances et à l'organisation d'activités autour du développement et de l'innovation.",
     },
     // Skills
     skills: {
@@ -44,6 +45,7 @@ const translations = {
       p2: "Site d'apprentissage d'algorithme",
       p3: "Générateur de citation",
       p4: "application web de question reponse",
+      p5: "Système de gestion d'engrais",
     },
     // Certifications
     certifications: {
@@ -58,7 +60,7 @@ const translations = {
     },
     // Video
     video: {
-      title: "Ma",
+      title: "ma",
       titleHighlight: "Présentation",
     },
     // Footer
@@ -75,6 +77,7 @@ const translations = {
       projects: "Projects",
       certifications: "Certifications",
       video: "Video",
+      contact: "Contact",
       footer: "Footer",
       follow: "Follow me",
     },
@@ -86,7 +89,7 @@ const translations = {
     about: {
       title: "About",
       titleSuffix: "me",
-      text: "A MIAGE student, but above all a developer by passion. I don't limit myself to coursework: I code, I practice, and I build concrete projects to grow every day. I love deeply understanding what I do and creating solutions that address real needs. For me, skills come not from a diploma, but from experience and consistent work. I'm constantly learning, experimenting, and improving, with the goal of becoming a well-rounded developer capable of building useful, clean, and performant applications.",
+      text: "Student in MIAGE and passionate developer, I don't limit myself to coursework: I code, I practice, and I build concrete projects to progress continuously. I love designing useful, modern, and performant solutions while deepening my technical skills through learning and experimentation.\n\nI am also President of my university's Developer Club, where I participate in promoting technology, sharing knowledge, and organizing activities around development and innovation.",
     },
     // Skills
     skills: {
@@ -109,6 +112,7 @@ const translations = {
       p2: "Algorithm learning website",
       p3: "Quote generator",
       p4: "Web Q&A application",
+      p5: "Fertilizer management system",
     },
     // Certifications
     certifications: {
@@ -123,8 +127,8 @@ const translations = {
     },
     // Video
     video: {
-      title: "My",
-      titleHighlight: "Presentation",
+      title: "Get to Know",
+      titleHighlight: "Me",
     },
     // Footer
     footer: {

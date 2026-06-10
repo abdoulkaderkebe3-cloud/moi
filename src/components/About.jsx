@@ -22,7 +22,7 @@ export default function About() {
   const sectionRef = useRef(null);
   const isMobile = useIsMobile();
   const { t } = useLang();
-  
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start 90%", "end center"],
@@ -30,23 +30,23 @@ export default function About() {
 
   // Desktop spring config
   const desktopSpring = { stiffness: 40, damping: 18, mass: 0.8 };
-  const imageX  = useSpring(useTransform(scrollYProgress, [0, 1], [-40, 0]), desktopSpring);
+  const imageX = useSpring(useTransform(scrollYProgress, [0, 1], [-40, 0]), desktopSpring);
   const imageOp = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), desktopSpring);
-  const textX   = useSpring(useTransform(scrollYProgress, [0, 1], [40, 0]), desktopSpring);
-  const textOp  = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), desktopSpring);
+  const textX = useSpring(useTransform(scrollYProgress, [0, 1], [40, 0]), desktopSpring);
+  const textOp = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), desktopSpring);
 
   // Mobile spring config — stiffer pour coller au scroll sans lag
   const mobileSpring = { stiffness: 80, damping: 24, mass: 0.5 };
-  const imageY    = useSpring(useTransform(scrollYProgress, [0, 0.6], [40, 0]), mobileSpring);
-  const imageOpM  = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), mobileSpring);
-  const textY     = useSpring(useTransform(scrollYProgress, [0.1, 0.7], [40, 0]), mobileSpring);
-  const textOpM   = useSpring(useTransform(scrollYProgress, [0.1, 0.6], [0, 1]), mobileSpring);
+  const imageY = useSpring(useTransform(scrollYProgress, [0, 0.6], [40, 0]), mobileSpring);
+  const imageOpM = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), mobileSpring);
+  const textY = useSpring(useTransform(scrollYProgress, [0.1, 0.7], [40, 0]), mobileSpring);
+  const textOpM = useSpring(useTransform(scrollYProgress, [0.1, 0.6], [0, 1]), mobileSpring);
 
   return (
     <section
       ref={sectionRef}
       id="a-propos"
-      className="min-h-screen bg-slate-900 text-white px-6 md:px-20 py-20 flex items-center scroll-mt-24"
+      className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white px-6 md:px-20 py-20 flex items-center scroll-mt-24"
     >
       <div className="overflow-hidden w-full">
         <div className="max-w-6xl w-full mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -99,7 +99,7 @@ function ImageContent() {
         alt="Kebe Abdoul Kader"
         className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl"
       />
-      <div className="absolute inset-0 rounded-2xl bg-white opacity-10 blur-2xl group-hover:opacity-20 transition duration-500" />
+      <div className="absolute inset-0 rounded-2xl bg-violet-400 opacity-5 blur-2xl group-hover:opacity-10 transition duration-500" />
     </div>
   );
 }
@@ -108,14 +108,14 @@ function TextContent({ t }) {
   return (
     <>
       <h2 className="text-xl md:text-2xl text-center font-semibold mb-6">
-        <span className="text-violet-400">{t.about.title}</span> {t.about.titleSuffix}
+        <span className="text-violet-600 dark:text-violet-400">{t.about.title}</span> {t.about.titleSuffix}
       </h2>
       <ScrollReveal
         baseOpacity={0.1}
         enableBlur
         baseRotation={0}
         blurStrength={4}
-        className="text-base md:text-lg text-gray-300 leading-relaxed"
+        className="text-base md:text-lg text-slate-600 dark:text-gray-300 leading-relaxed"
       >
         {t.about.text}
       </ScrollReveal>

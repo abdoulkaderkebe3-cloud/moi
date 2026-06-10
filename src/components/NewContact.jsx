@@ -5,6 +5,7 @@ import { motion, useInView } from 'framer-motion';
 import * as THREE from 'three';
 import { ArrowUpRight } from 'lucide-react';
 import { useLang } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
 
 // Pre-load the massive 3D model en local pour des performances monstres (CDN Vercel)
 useGLTF.preload("/ToyCar.glb");
@@ -48,7 +49,7 @@ const CarModel = React.memo(() => {
 // ✅ Loader pendant le chargement du modèle
 const CanvasLoader = () => (
   <Html center>
-    <div style={{ color: '#fff', fontSize: '14px', fontWeight: 200, letterSpacing: '1px' }}>
+    <div style={{ color: '#7c3aed', fontSize: '14px', fontWeight: 400, letterSpacing: '1px' }}>
       Loading 3D...
     </div>
   </Html>
@@ -56,9 +57,15 @@ const CanvasLoader = () => (
 
 export default function NewContact() {
   const { t } = useLang();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   // ✅ Permet de détecter si la section Contact est visible à l'écran
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { margin: "200px" });
+
+  const sectionBg = isDark ? '#020617' : '#f5f3ff';
+  const sectionColor = isDark ? '#fff' : '#1e1b4b';
+  const questionHighlightColor = isDark ? '#94a3b8' : '#a78bfa';
 
   return (
     <section
@@ -67,10 +74,10 @@ export default function NewContact() {
       style={{
         width: '100%',
         minHeight: '100vh',
-        background: '#020617',
-        color: '#fff',
+        background: sectionBg,
+        color: sectionColor,
         display: 'flex',
-        alignItems: 'center', // ✅ Alignement vertical parfait
+        alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
         padding: 'clamp(40px, 8vw, 80px) clamp(20px, 5vw, 40px)',
@@ -102,60 +109,78 @@ export default function NewContact() {
             zIndex: 2,
           }}
         >
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 4rem)', fontWeight: 700, lineHeight: 1.15, margin: 0 }}>
-            {t.contact.question}{' '}<span style={{ color: '#94a3b8' }}>{t.contact.questionHighlight}</span>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3.2vw, 2.2rem)', fontWeight: 600, margin: 0, color: isDark ? '#94a3b8' : '#4f46e5' }}>
+            {t.contact.question}{' '}{t.contact.questionHighlight}
           </h2>
 
-          <motion.a
-            href="mailto:abdoulkaderkebe3@gmail.com"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '0.75rem', 
-              textDecoration: 'none', 
-              cursor: 'pointer',
-              width: 'fit-content'
-            }}
-          >
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <motion.span
               style={{
                 display: 'block',
-                fontSize: 'clamp(2.5rem, 5.5vw, 6rem)',
+                fontSize: 'clamp(3rem, 7vw, 6.5rem)',
                 fontWeight: 900,
                 lineHeight: 1,
                 background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                margin: 0,
               }}
               animate={{ filter: ['hue-rotate(0deg)', 'hue-rotate(30deg)', 'hue-rotate(0deg)'] }}
               transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             >
               {t.contact.cta}
             </motion.span>
-            
-            <motion.div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#818cf8',
-              }}
-              animate={{ 
-                y: [0, -4, 0],
-                x: [0, 4, 0],
-              }}
-              transition={{ 
-                duration: 2, 
-                repeat: Infinity, 
-                ease: 'easeInOut' 
+
+            <motion.a
+              href="mailto:abdoulkaderkebe3@gmail.com"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '0.75rem', 
+                textDecoration: 'none', 
+                cursor: 'pointer',
+                color: isDark ? '#a78bfa' : '#6366f1',
+                alignSelf: 'flex-end',
+                marginTop: '1.5rem'
               }}
             >
-              <ArrowUpRight style={{ width: 'clamp(2.2rem, 5vw, 5.5rem)', height: 'clamp(2.2rem, 5vw, 5.5rem)', strokeWidth: 2.5 }} />
-            </motion.div>
-          </motion.a>
+              <span style={{ 
+                fontSize: 'clamp(1.1rem, 2.2vw, 2.1rem)', 
+                fontWeight: 600, 
+                letterSpacing: '0.5px' 
+              }}>
+                abdoulkaderkebe3@gmail.com
+              </span>
+              
+              <motion.div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 'clamp(2rem, 3.5vw, 3rem)',
+                  height: 'clamp(2rem, 3.5vw, 3rem)',
+                  borderRadius: '50%',
+                  border: `2px solid ${isDark ? '#a78bfa' : '#6366f1'}`,
+                  color: isDark ? '#a78bfa' : '#6366f1',
+                }}
+                animate={{ 
+                  y: [0, -3, 0],
+                  x: [0, 3, 0],
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: 'easeInOut' 
+                }}
+              >
+                <ArrowUpRight style={{ width: '60%', height: '60%', strokeWidth: 2.5 }} />
+              </motion.div>
+            </motion.a>
+          </div>
+
         </motion.div>
 
         {/* ── RIGHT: 3D Car ── */}

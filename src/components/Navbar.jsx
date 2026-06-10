@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Github, Linkedin, LineChartIcon, Languages } from "lucide-react";
+import { Github, Linkedin, LineChartIcon, Languages, Sun, Moon } from "lucide-react";
 import logo from "../assets/images/svg/noun-mind-5663275.svg";
 import { useLang } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
 
 const socialLinks = [
   {
@@ -24,6 +25,7 @@ const socialLinks = [
 
 export default function Navbar() {
   const { lang, toggleLang, t } = useLang();
+  const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -48,6 +50,7 @@ export default function Navbar() {
     { name: t.nav.projects, href: "#projets" },
     { name: t.nav.certifications, href: "#certifications" },
     { name: t.nav.video, href: "#vidéo" },
+    { name: t.nav.contact, href: "#contact" },
     { name: t.nav.footer, href: "#footer" },
   ];
 
@@ -58,22 +61,26 @@ export default function Navbar() {
       transition={{ duration: 0.6 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-slate-950/95 backdrop-blur-md shadow-lg"
-          : "bg-slate-950/40 backdrop-blur-sm"
+          ? "bg-white/90 dark:bg-slate-950/90 backdrop-blur-md shadow-sm border-b border-violet-100/50 dark:border-white/5 py-2.5 sm:py-3"
+          : "bg-transparent border-b border-transparent shadow-none backdrop-blur-none py-4 sm:py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 py-3 md:py-4 text-white">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 text-slate-800 dark:text-white">
         {/* Logo */}
         <a
           href="#accueil"
-          className="group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
+          className="group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50"
           aria-label="Accueil — Kader Dev"
         >
-          <span className="relative flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center overflow-hidden rounded-2xl bg-black/5 dark:bg-white/10 ring-1 ring-black/10 dark:ring-white/20 shadow-lg dark:shadow-indigo-500/20 shadow-indigo-500/5 transition-all duration-300 group-hover:bg-black/10 dark:group-hover:bg-white/20 group-hover:ring-indigo-400/50 dark:group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] scale-100 group-hover:scale-105">
+          <span className={`relative flex items-center justify-center overflow-hidden rounded-2xl bg-violet-50 dark:bg-white/10 ring-1 ring-violet-200 dark:ring-white/20 shadow-md shadow-violet-100 dark:shadow-indigo-500/20 transition-all duration-300 group-hover:bg-violet-100 dark:group-hover:bg-white/20 group-hover:ring-violet-400 dark:group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] scale-100 group-hover:scale-105 ${
+            scrolled ? "h-10 w-10 sm:h-11 sm:w-11" : "h-12 w-12 sm:h-14 sm:w-14"
+          }`}>
             <img
               src={logo}
               alt="Logo Kader Dev"
-              className="h-8 w-8 sm:h-9 sm:w-9 object-contain dark:invert drop-shadow-md transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110"
+              className={`object-contain dark:invert drop-shadow-md transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110 ${
+                scrolled ? "h-6 w-6 sm:h-7 sm:w-7" : "h-8 w-8 sm:h-9 sm:w-9"
+              }`}
             />
           </span>
         </a>
@@ -84,18 +91,18 @@ export default function Navbar() {
             <a
               key={index}
               href={link.href}
-              className="hover:text-indigo-400 transition relative group"
+              className="hover:text-violet-600 dark:hover:text-indigo-400 transition relative group font-medium"
             >
               {link.name}
-              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-indigo-500 transition-all group-hover:w-full" />
+              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-violet-500 dark:bg-indigo-500 transition-all group-hover:w-full" />
             </a>
           ))}
         </div>
 
-        {/* Right section: socials + lang toggle + burger */}
+        {/* Right section: socials + theme toggle + lang toggle + burger */}
         <div className="flex items-center gap-1 sm:gap-2">
           {/* Social icons */}
-          <div className="flex items-center gap-0.5 sm:gap-1.5 rounded-xl sm:rounded-2xl bg-white/[0.04] p-0.5 sm:p-1 ring-1 ring-white/[0.08] backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 sm:gap-2 mr-1">
             {socialLinks.map(({ href, label, Icon }) => (
               <a
                 key={label}
@@ -103,19 +110,52 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg sm:rounded-xl text-slate-300/90 transition duration-300 hover:bg-indigo-500/15 hover:text-indigo-200 hover:shadow-[0_0_20px_-4px_rgba(129,140,248,0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/40"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-violet-200/60 dark:border-white/10 text-slate-500 dark:text-slate-300 transition duration-300 hover:bg-violet-50 dark:hover:bg-white/10 hover:text-violet-600 dark:hover:text-indigo-400 hover:border-violet-400 dark:hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/40"
               >
-                <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
+                <Icon className="h-4.5 w-4.5" strokeWidth={1.5} />
               </a>
             ))}
           </div>
 
+          {/* Theme toggle button */}
+          <motion.button
+            onClick={toggleTheme}
+            whileTap={{ scale: 0.92 }}
+            className="flex items-center justify-center h-9 w-9 rounded-full bg-violet-50 dark:bg-white/[0.06] ring-1 ring-violet-200 dark:ring-white/10 hover:bg-violet-100 dark:hover:bg-white/10 transition duration-200 focus:outline-none cursor-pointer shadow-sm"
+            aria-label="Basculer le thème"
+            title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {theme === "dark" ? (
+                <motion.span
+                  key="sun"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Sun className="h-4 w-4 text-amber-400" strokeWidth={2} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Moon className="h-4 w-4 text-violet-600" strokeWidth={2} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
           {/* Language toggle button */}
           <button
             onClick={toggleLang}
-            className="flex items-center gap-2 rounded-2xl bg-[#1e1f22] px-3.5 py-2 ring-1 ring-white/10 hover:bg-[#2a2b2f] transition duration-200 focus:outline-none select-none cursor-pointer"
+            className="flex items-center gap-2 rounded-full bg-violet-600 dark:bg-[#1e1f22] px-3.5 py-2 ring-1 ring-violet-500 dark:ring-white/10 hover:bg-violet-700 dark:hover:bg-[#2a2b2f] transition duration-200 focus:outline-none select-none cursor-pointer shadow-md shadow-violet-200 dark:shadow-none"
           >
-            <Languages className="h-4 w-4 text-slate-300" />
+            <Languages className="h-4 w-4 text-white dark:text-slate-300" />
             <span className="text-xs sm:text-sm font-bold text-white tracking-wider">
               {lang.toUpperCase()}
             </span>
@@ -124,7 +164,7 @@ export default function Navbar() {
           {/* Mobile burger */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="lg:hidden p-2 rounded-md hover:bg-white/5 transition"
+            className="lg:hidden p-2 rounded-md hover:bg-violet-100 dark:hover:bg-white/5 text-slate-700 dark:text-white transition"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
@@ -143,20 +183,20 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="lg:hidden bg-slate-950/95 backdrop-blur-md border-t border-white/5 overflow-y-auto overflow-x-hidden max-h-[85vh] w-full">
+        <div className="lg:hidden bg-white/97 dark:bg-slate-950/95 backdrop-blur-md border-t border-violet-100 dark:border-white/5 overflow-y-auto overflow-x-hidden max-h-[85vh] w-full">
           <div className="px-4 sm:px-6 py-6 flex flex-col gap-3">
             {links.map((link, i) => (
               <a
                 key={i}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="py-3 px-4 rounded-md hover:bg-indigo-500/20 hover:text-indigo-300 transition text-white text-base font-medium"
+                className="py-3 px-4 rounded-md hover:bg-violet-50 dark:hover:bg-indigo-500/20 hover:text-violet-700 dark:hover:text-indigo-300 transition text-slate-700 dark:text-white text-base font-medium"
               >
                 {link.name}
               </a>
             ))}
-            <div className="mt-4 pt-4 border-t border-white/10">
-              <p className="text-xs font-medium uppercase tracking-widest text-slate-500 mb-3 text-center">
+            <div className="mt-4 pt-4 border-t border-violet-100 dark:border-white/10">
+              <p className="text-xs font-medium uppercase tracking-widest text-violet-400 dark:text-slate-500 mb-3 text-center">
                 {t.nav.follow}
               </p>
               <div className="flex justify-center gap-2">
@@ -168,7 +208,7 @@ export default function Navbar() {
                     rel="noopener noreferrer"
                     onClick={() => setMenuOpen(false)}
                     aria-label={label}
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06] text-slate-300 ring-1 ring-white/10 transition hover:bg-indigo-500/15 hover:text-indigo-200 hover:ring-indigo-400/25"
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-50 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 ring-1 ring-violet-200 dark:ring-white/10 transition hover:bg-violet-100 dark:hover:bg-indigo-500/15 hover:text-violet-700 dark:hover:text-indigo-200 hover:ring-violet-400 dark:hover:ring-indigo-400/25"
                   >
                     <Icon className="h-5 w-5" strokeWidth={1.75} />
                   </a>

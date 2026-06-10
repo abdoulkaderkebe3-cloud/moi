@@ -39,10 +39,10 @@ export default function Stack() {
   ];
 
   return (
-    <section id="compétences" className="min-h-screen bg-slate-900 py-24 px-6 overflow-hidden">
-      <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">
-        {t.skills.title} <span className="text-violet-500">{t.skills.titleHighlight}</span>
-        <p className="text-xl py-3 font-normal ">{t.skills.subtitle}</p>
+    <section id="compétences" className="min-h-screen bg-white dark:bg-slate-900 py-24 px-6 overflow-hidden">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-slate-900 dark:text-white mb-16">
+        {t.skills.title} <span className="text-violet-600 dark:text-violet-500">{t.skills.titleHighlight}</span>
+        <p className="text-xl py-3 font-normal text-slate-500 dark:text-white">{t.skills.subtitle}</p>
       </h2>
 
       <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10">
@@ -51,14 +51,14 @@ export default function Stack() {
             key={index}
             whileHover={{ scale: 1.1, y: -5 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col items-center justify-center p-4 bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer"
+            className="flex flex-col items-center justify-center p-4 bg-violet-50 dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-lg hover:shadow-violet-200 dark:hover:shadow-indigo-900/50 border border-violet-100 dark:border-slate-700 hover:border-violet-300 dark:hover:border-violet-500/50 cursor-pointer transition-all duration-300"
           >
             <img
               src={tech.icon}
               alt={tech.name}
               className="w-16 h-16 mb-4 object-contain"
             />
-            <span className="text-white text-sm md:text-base">{tech.name}</span>
+            <span className="text-slate-700 dark:text-white text-sm md:text-base font-medium">{tech.name}</span>
           </motion.div>
         ))}
       </div>
