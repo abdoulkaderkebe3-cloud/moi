@@ -127,7 +127,7 @@ export default function Projects() {
               />
             </a>
           </Card>
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
+          {/* <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
             <h3 className="text-center text-xl font-bold text-violet-400">
               {t.projects.p5}
             </h3>
@@ -145,7 +145,7 @@ export default function Projects() {
                 loading="lazy"
               />
             </a>
-          </Card>
+          </Card> */}
         </CardSwap>
       </div>
     </section>

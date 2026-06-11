@@ -22,7 +22,7 @@ const translations = {
     about: {
       title: "À propos",
       titleSuffix: "de moi",
-      text: "Étudiant en MIAGE et développeur passionné, je ne me limite pas aux cours : je code, je pratique et je réalise des projets concrets afin de progresser continuellement. J'aime concevoir des solutions utiles, modernes et performantes tout en approfondissant mes compétences techniques à travers l'apprentissage et l'expérimentation.\n\nJe suis également Président du Club des Développeurs de mon université, où je participe à la promotion de la technologie, au partage de connaissances et à l'organisation d'activités autour du développement et de l'innovation.",
+      text: "Étudiant en MIAGE et développeur chez Viso-Studio, je conçois des applications web modernes, performantes et utiles. Mon apprentissage va bien au-delà des cours : je perfectionne ma technique à travers des projets concrets, une pratique quotidienne et l'expérimentation de nouveaux outils.\n\nPassionné par le partage de connaissances, je suis également Président du Club des Développeurs de mon université, où je m’engage à promouvoir la technologie et à animer des ateliers d'échange autour du développement.",
     },
     // Skills
     skills: {
@@ -89,7 +89,7 @@ const translations = {
     about: {
       title: "About",
       titleSuffix: "me",
-      text: "Student in MIAGE and passionate developer, I don't limit myself to coursework: I code, I practice, and I build concrete projects to progress continuously. I love designing useful, modern, and performant solutions while deepening my technical skills through learning and experimentation.\n\nI am also President of my university's Developer Club, where I participate in promoting technology, sharing knowledge, and organizing activities around development and innovation.",
+      text: "A MIAGE student and developer at Viso-Studio, I design modern, performant, and useful web applications. My learning goes far beyond coursework: I hone my skills through concrete projects, daily practice, and experimenting with new tools.\n\nPassionate about sharing knowledge, I am also President of the Developers Club at my university, where I am committed to promoting technology and hosting workshops around software development.",
     },
     // Skills
     skills: {
