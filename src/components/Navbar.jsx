@@ -17,7 +17,7 @@ const socialLinks = [
     Icon: Linkedin,
   },
   {
-    href: "https://linktr.ee/la_marasse",
+    href: "https://linktr.ee/kvder",
     label: "Linktree",
     Icon: LineChartIcon,
   },
@@ -49,8 +49,8 @@ export default function Navbar() {
     { name: t.nav.skills, href: "#compétences" },
     { name: t.nav.projects, href: "#projets" },
     { name: t.nav.certifications, href: "#certifications" },
-    { name: t.nav.video, href: "#vidéo" },
     { name: t.nav.contact, href: "#contact" },
+    { name: t.nav.cv, href: "#cv" },
     { name: t.nav.footer, href: "#footer" },
   ];
 
@@ -59,11 +59,10 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
           ? "bg-white/90 dark:bg-slate-950/90 backdrop-blur-md shadow-sm border-b border-violet-100/50 dark:border-white/5 py-2.5 sm:py-3"
           : "bg-transparent border-b border-transparent shadow-none backdrop-blur-none py-4 sm:py-5"
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-8 text-slate-800 dark:text-white">
         {/* Logo */}
@@ -72,15 +71,13 @@ export default function Navbar() {
           className="group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50"
           aria-label="Accueil — Kader Dev"
         >
-          <span className={`relative flex items-center justify-center overflow-hidden rounded-2xl bg-violet-50 dark:bg-white/10 ring-1 ring-violet-200 dark:ring-white/20 shadow-md shadow-violet-100 dark:shadow-indigo-500/20 transition-all duration-300 group-hover:bg-violet-100 dark:group-hover:bg-white/20 group-hover:ring-violet-400 dark:group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] scale-100 group-hover:scale-105 ${
-            scrolled ? "h-10 w-10 sm:h-11 sm:w-11" : "h-12 w-12 sm:h-14 sm:w-14"
-          }`}>
+          <span className={`relative flex items-center justify-center overflow-hidden rounded-2xl bg-violet-50 dark:bg-white/10 ring-1 ring-violet-200 dark:ring-white/20 shadow-md shadow-violet-100 dark:shadow-indigo-500/20 transition-all duration-300 group-hover:bg-violet-100 dark:group-hover:bg-white/20 group-hover:ring-violet-400 dark:group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] scale-100 group-hover:scale-105 ${scrolled ? "h-10 w-10 sm:h-11 sm:w-11" : "h-12 w-12 sm:h-14 sm:w-14"
+            }`}>
             <img
               src={logo}
               alt="Logo Kader Dev"
-              className={`object-contain dark:invert drop-shadow-md transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110 ${
-                scrolled ? "h-6 w-6 sm:h-7 sm:w-7" : "h-8 w-8 sm:h-9 sm:w-9"
-              }`}
+              className={`object-contain dark:invert drop-shadow-md transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110 ${scrolled ? "h-6 w-6 sm:h-7 sm:w-7" : "h-8 w-8 sm:h-9 sm:w-9"
+                }`}
             />
           </span>
         </a>

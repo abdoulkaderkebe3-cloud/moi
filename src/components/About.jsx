@@ -1,9 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
-//import imga from "../assets/images/png/photo_2026-03-01_12-30-58.jpg";
-//import photo from "../assets/images/png/Screenshot 2026-05-12 114815.png"
-import imm from "../assets/images/png/photo_2026-05-12_11-57-59.jpg"
+import portraitImg from "../assets/images/png/kader-portrait.jpg";
 
 import { useLang } from "../context/LanguageContext";
 
@@ -95,7 +93,7 @@ function ImageContent() {
   return (
     <div className="relative group">
       <img
-        src={imm}
+        src={portraitImg}
         alt="Kebe Abdoul Kader"
         className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl"
       />
@@ -106,8 +104,8 @@ function ImageContent() {
 
 function TextContent({ t }) {
   return (
-    <>
-      <h2 className="text-xl md:text-2xl text-center font-semibold mb-6">
+    <div className="flex flex-col items-center md:items-start text-center md:text-left w-full">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
         <span className="text-violet-600 dark:text-violet-400">{t.about.title}</span> {t.about.titleSuffix}
       </h2>
       <ScrollReveal
@@ -115,10 +113,10 @@ function TextContent({ t }) {
         enableBlur
         baseRotation={0}
         blurStrength={4}
-        className="text-base md:text-lg text-slate-600 dark:text-gray-300 leading-relaxed"
+        className="text-base sm:text-lg text-slate-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap"
       >
         {t.about.text}
       </ScrollReveal>
-    </>
+    </div>
   );
 }

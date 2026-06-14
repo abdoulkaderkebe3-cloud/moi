@@ -9,7 +9,7 @@ const translations = {
       skills: "Compétences",
       projects: "Projets",
       certifications: "Certifications",
-      video: "Vidéo",
+      cv: "CV",
       contact: "Contact",
       footer: "Footer",
       follow: "Suivez-moi",
@@ -29,6 +29,30 @@ const translations = {
       title: "Ma",
       titleHighlight: "Stack",
       subtitle: "Mes Outils Tech les plus Utilisés",
+      placeholder: "⌨️ Survolez ou cliquez sur une touche du clavier...",
+      levels: {
+        expert: "Expert ★★★★★",
+        advanced: "Avancé ★★★★☆",
+        intermediate: "Intermédiaire ★★★☆☆",
+      },
+      descriptions: {
+        figma: "Outil de design collaboratif pour concevoir des interfaces modernes et prototypes.",
+        java: "Langage orienté objet robuste, utilisé pour le développement backend d'applications d'entreprise.",
+        tailwind: "Framework CSS utility-first permettant de concevoir rapidement des interfaces élégantes et responsives.",
+        react: "Bibliothèque UI moderne pour concevoir des composants d'interface réactifs et performants.",
+        typescript: "Surcouche typée à JavaScript améliorant la fiabilité du code et la productivité en équipe.",
+        github: "Plateforme cloud de gestion de code source et de collaboration basée sur Git.",
+        git: "Système de contrôle de version décentralisé indispensable pour suivre l'évolution du code.",
+        html: "Langage de balisage sémantique de base pour structurer le contenu du web.",
+        css: "Langage de style permettant de concevoir la mise en page, l'esthétique et les animations d'un site.",
+        javascript: "Le langage de programmation incontournable du web pour rendre les pages dynamiques et interactives.",
+        springboot: "Framework Java de référence pour bâtir des APIs REST et microservices robustes rapidement.",
+        angular: "Framework complet de Google pour créer des applications d'entreprise structurées et évolutives.",
+        framer: "Bibliothèque d'animation puissante pour créer des transitions fluides et des micro-interactions sur React.",
+        postgres: "Base de données relationnelle open-source réputée pour sa robustesse et sa gestion de données complexes.",
+        uml: "Langage de modélisation graphique pour concevoir la structure et le comportement des applications.",
+        dbeaver: "Client de gestion de bases de données universel, idéal pour administrer de nombreuses technologies SQL."
+      }
     },
     // Projects
     projects: {
@@ -58,10 +82,12 @@ const translations = {
       questionHighlight: "projet\u00a0?",
       cta: "Discutons-en",
     },
-    // Video
-    video: {
-      title: "ma",
-      titleHighlight: "Présentation",
+    // CV
+    cv: {
+      title: "Mon",
+      titleHighlight: "Curriculum Vitae",
+      description: "Consultez mon parcours détaillé, mes compétences et mes expériences en téléchargeant mon CV.",
+      button: "Télécharger mon CV",
     },
     // Footer
     footer: {
@@ -76,7 +102,7 @@ const translations = {
       skills: "Skills",
       projects: "Projects",
       certifications: "Certifications",
-      video: "Video",
+      cv: "CV",
       contact: "Contact",
       footer: "Footer",
       follow: "Follow me",
@@ -96,6 +122,30 @@ const translations = {
       title: "My",
       titleHighlight: "Stack",
       subtitle: "My Most Used Tech Tools",
+      placeholder: "⌨️ Hover or click a key on the keyboard...",
+      levels: {
+        expert: "Expert ★★★★★",
+        advanced: "Advanced ★★★★☆",
+        intermediate: "Intermediate ★★★☆☆",
+      },
+      descriptions: {
+        figma: "Collaborative design tool for crafting modern interfaces and prototypes.",
+        java: "Robust object-oriented language used for enterprise backend development.",
+        tailwind: "Utility-first CSS framework for building fast, responsive, and elegant layouts.",
+        react: "Modern UI library for creating reactive and high-performance user interfaces.",
+        typescript: "Typed superset of JavaScript enhancing code reliability and team productivity.",
+        github: "Cloud platform for source code management and collaborative Git workflows.",
+        git: "Decentralized version control system essential for tracking code evolution.",
+        html: "Semantic markup language structuring the foundation of web pages.",
+        css: "Style sheet language used to format, design, and animate web interfaces.",
+        javascript: "Core programming language of the web for making interactive and dynamic pages.",
+        springboot: "Reference Java framework to quickly build robust REST APIs and microservices.",
+        angular: "Comprehensive Google framework for building structured, scalable web apps.",
+        framer: "Powerful animation library for clean transitions and micro-interactions in React.",
+        postgres: "Open-source relational database known for robustness and complex data handling.",
+        uml: "Graphical modeling language to plan application structure and behaviors.",
+        dbeaver: "Universal database administration tool, ideal for managing SQL technologies."
+      }
     },
     // Projects
     projects: {
@@ -125,10 +175,12 @@ const translations = {
       questionHighlight: "project\u00a0?",
       cta: "Let's talk",
     },
-    // Video
-    video: {
-      title: "Get to Know",
-      titleHighlight: "Me",
+    // CV
+    cv: {
+      title: "My",
+      titleHighlight: "Resume",
+      description: "Check out my detailed background, skills, and professional experiences by downloading my resume.",
+      button: "Download Resume",
     },
     // Footer
     footer: {

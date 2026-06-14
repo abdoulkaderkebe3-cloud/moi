@@ -14,7 +14,7 @@ import LoadingScreen from "./components/LoadingScreen";
 
 // Lazy-load heavy components (3D model, video, large images)
 const NewContact = lazy(() => import("./components/NewContact"));
-const VideoSection = lazy(() => import("./components/VideoSection"));
+const CVSection = lazy(() => import("./components/CVSection"));
 const Certifications = lazy(() => import("./components/Certifications"));
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
     const timer = setTimeout(() => {
       timerDone = true;
       finish();
-    }, 2500);
+    }, 500);
 
     const onLoad = () => {
       ready = true;
@@ -59,7 +59,7 @@ function App() {
         </AnimatePresence>
         <ScrollProgress />
         <Navbar />
-        <Hero loading={loading}/>
+        <Hero loading={loading} />
         <Marquee />
         <About />
         <Skills />
@@ -67,7 +67,7 @@ function App() {
         <Suspense fallback={null}>
           <Certifications />
           <NewContact />
-          <VideoSection />
+          <CVSection />
         </Suspense>
         <Footer />
       </LanguageProvider>

@@ -1,12 +1,10 @@
 import CardSwap, { Card } from "./CardSwap";
-import burgerImg from "../assets/images/png/burgeur house.png";
+import burgerImg from "../assets/images/png/burger-house.png";
 import algoImg from "../assets/images/png/site-algo.png";
-//import fruityImg from "../assets/images/png/fruity.jpg.png";
 import generatorImg from "../assets/images/png/generateur.png";
-import palmci from "../assets/images/png/Screenshot 2026-05-27 180708.png"
 import { useLang } from "../context/LanguageContext";
 
-const dailymuse = "/Screenshot 2026-03-31 204441.png";
+const dailymuse = "/dailymuse-preview.png";
 
 export default function Projects() {
   const { t } = useLang();
@@ -62,7 +60,7 @@ export default function Projects() {
             >
               <img
                 src={burgerImg}
-                alt="burger"
+                alt="Aperçu du projet Burger House"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />
@@ -82,7 +80,7 @@ export default function Projects() {
             >
               <img
                 src={algoImg}
-                alt=""
+                alt="Interface du site complet Algo"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />
@@ -102,7 +100,7 @@ export default function Projects() {
             >
               <img
                 src={generatorImg}
-                alt=""
+                alt="Aperçu du générateur de citations"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />
@@ -121,31 +119,13 @@ export default function Projects() {
             >
               <img
                 src={dailymuse}
-                alt=""
+                alt="Aperçu du projet Daily Muse"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />
             </a>
           </Card>
-          {/* <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
-            <h3 className="text-center text-xl font-bold text-violet-400">
-              {t.projects.p5}
-            </h3>
-            <p className="text-center text-gray-400">
-              react
-            </p>
-            <a
-              href="https://palmci-front.vercel.app/"
-              target="_blank"
-            >
-              <img
-                src={palmci}
-                alt=""
-                className="h-full rounded-lg mt-4"
-                loading="lazy"
-              />
-            </a>
-          </Card> */}
+
         </CardSwap>
       </div>
     </section>

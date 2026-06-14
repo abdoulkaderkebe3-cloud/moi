@@ -66,24 +66,17 @@ export default function Hero({ loading }) {
           />
 
           <motion.p
-            variants={sentenceVariants}
-            initial="hidden"
-            animate="visible"
-            className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-gray-400 tracking-widest flex flex-wrap justify-center gap-x-[0.25em]"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              type: "spring",
+              damping: 15,
+              stiffness: 90,
+              delay: 0.6
+            }}
+            className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-gray-400 tracking-widest text-center px-4"
           >
-            {t.hero.role.split(" ").map((word, wordIdx) => (
-              <span key={wordIdx} className="inline-block whitespace-nowrap">
-                {word.split("").map((char, charIdx) => (
-                  <motion.span
-                    key={charIdx}
-                    variants={letterVariants}
-                    className="inline-block"
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </span>
-            ))}
+            {t.hero.role}
           </motion.p>
         </div>
       )}

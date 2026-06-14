@@ -2,10 +2,10 @@ import { useLang } from "../context/LanguageContext";
 
 export default function Marquee() {
   const { lang } = useLang();
-  
+
   const text = lang === "fr"
-    ? "DÉVELOPPEUR FULL STACK ✦ CONCEPTION & DESIGN ✦ PERFORMANCE ✦ INNOVATION ✦ ACCESSIBILITÉ ✦ "
-    : "FULL STACK DEVELOPER ✦ DESIGN & CREATIVE ✦ PERFORMANCE ✦ INNOVATION ✦ ACCESSIBILITY ✦ ";
+    ? "DÉVELOPPEUR FULL STACK ✦ CONCEPTION ✦ PERFORMANCE ✦ INNOVATION ✦ ACCESSIBILITÉ ✦ "
+    : "FULL STACK DEVELOPER ✦ CREATIVE ✦ PERFORMANCE ✦ INNOVATION ✦ ACCESSIBILITY ✦ ";
 
   // Repeat text to ensure it covers screen width twice for seamless scrolling
   const repeatedText = Array(4).fill(text).join("");
