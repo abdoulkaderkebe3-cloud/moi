@@ -3,13 +3,18 @@ import burgerImg from "../assets/images/png/burger-house.png";
 import algoImg from "../assets/images/png/site-algo.png";
 import generatorImg from "../assets/images/png/generateur.png";
 import { useLang } from "../context/LanguageContext";
+import { motion } from "framer-motion";
 
 const dailymuse = "/dailymuse-preview.png";
 
 export default function Projects() {
   const { t } = useLang();
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       id="projets"
       className="min-h-screen bg-violet-50 dark:bg-slate-950 text-slate-900 dark:text-white px-6 md:px-20 py-24"
     >
@@ -47,15 +52,15 @@ export default function Projects() {
           delay={3000}
           pauseOnHover={true}
         >
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
-            <h3 className="text-center text-xl font-bold text-violet-400">
+          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
               {t.projects.p1}
             </h3>
-            <p className="text-center text-gray-400">
+            <p className="text-center text-slate-500 dark:text-gray-400">
               React, TailwindCSS
             </p>
             <a
-              href="https://abdoulkaderkebe3-cloud.github.io/burger-kader/"
+              href="https://burger-kader.vercel.app/"
               target="_blank"
             >
               <img
@@ -67,11 +72,11 @@ export default function Projects() {
             </a>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
-            <h3 className="text-center text-xl font-bold text-violet-400">
+          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
               {t.projects.p2}
             </h3>
-            <p className="text-center text-gray-400">
+            <p className="text-center text-slate-500 dark:text-gray-400">
               HTML, CSS, JS, Bootstrap
             </p>
             <a
@@ -87,11 +92,11 @@ export default function Projects() {
             </a>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
-            <h3 className="text-center text-xl font-bold text-violet-400">
+          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
               {t.projects.p3}
             </h3>
-            <p className="text-center text-gray-400">
+            <p className="text-center text-slate-500 dark:text-gray-400">
               HTML, CSS, JS
             </p>
             <a
@@ -106,11 +111,11 @@ export default function Projects() {
               />
             </a>
           </Card>
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md">
-            <h3 className="text-center text-xl font-bold text-violet-400">
+          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
               {t.projects.p4}
             </h3>
-            <p className="text-center text-gray-400">
+            <p className="text-center text-slate-500 dark:text-gray-400">
               react,nestjs
             </p>
             <a
@@ -128,6 +133,6 @@ export default function Projects() {
 
         </CardSwap>
       </div>
-    </section>
+    </motion.section>
   );
 }

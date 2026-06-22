@@ -7,6 +7,7 @@ import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.jpg"
 import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.jpg"
 import cert6 from "../assets/images/png/photo_2026-05-25_17-12-56.jpg"
 import { useLang } from "../context/LanguageContext";
+import { motion } from "framer-motion";
 
 export default function Certifications() {
   const { t } = useLang();
@@ -80,7 +81,11 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       ref={ref}
       id="certifications"
       className="text-center bg-white dark:bg-slate-950 py-24 scroll-mt-24 relative"
@@ -95,19 +100,19 @@ export default function Certifications() {
           target="parent"
           position="top"
           height="5rem"
-          strength={1.5}
+          strength={1.1}
           divCount={5}
           curve="bezier"
           opacity={0.8}
           zIndex={20}
           style={{ pointerEvents: 'none' }}
         />
-        
+
         <GradualBlur
           target="parent"
           position="bottom"
           height="5rem"
-          strength={1.5}
+          strength={1.1}
           divCount={5}
           curve="bezier"
           opacity={0.8}
@@ -145,6 +150,6 @@ export default function Certifications() {
           />
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

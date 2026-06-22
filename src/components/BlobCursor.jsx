@@ -140,7 +140,7 @@ export default function BlobCursor({
                 borderRadius: blobType === "circle" ? "50%" : "0%",
                 backgroundColor: fillColor,
                 opacity: opacities[index] || opacities[opacities.length - 1] || 0.1,
-                boxShadow: `${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px 0 ${shadowColor}`
+                boxShadow: index === 0 ? `${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px 0 ${shadowColor}` : "none"
               }}
             >
               <div

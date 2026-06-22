@@ -41,7 +41,11 @@ export default function About() {
   const textOpM = useSpring(useTransform(scrollYProgress, [0.1, 0.6], [0, 1]), mobileSpring);
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       ref={sectionRef}
       id="a-propos"
       className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white px-6 md:px-20 py-20 flex items-center scroll-mt-24"
@@ -85,7 +89,7 @@ export default function About() {
 
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

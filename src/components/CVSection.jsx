@@ -6,7 +6,14 @@ export default function CVSection() {
   const { t } = useLang();
 
   return (
-    <section id="cv" className="min-h-[60vh] bg-violet-50 dark:bg-slate-900 text-slate-900 dark:text-white flex items-center justify-center py-20">
+    <motion.section 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      id="cv" 
+      className="min-h-[60vh] bg-white dark:bg-slate-900 text-slate-900 dark:text-white flex items-center justify-center py-20"
+    >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -35,6 +42,6 @@ export default function CVSection() {
           <span>{t.cv?.button || "Télécharger mon CV"}</span>
         </motion.a>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }

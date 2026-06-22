@@ -37,8 +37,8 @@ export default function Skills() {
     // Row 1
     { name: "Figma", key: "figma", level: "advanced", color: "#FF6B6B", icon: figmaIcon, textColor: "text-white" },
     { name: "Java", key: "java", level: "advanced", color: "#FF9500", icon: javaIcon, textColor: "text-white" },
-    { name: "Tailwind CSS", key: "tailwind", level: "expert", color: "#06B6D4", icon: tailwindIcon, textColor: "text-slate-900" },
-    { name: "React", key: "react", level: "expert", color: "#61DAFB", icon: reactIcon, textColor: "text-slate-900" },
+    { name: "Tailwind CSS", key: "tailwind", level: "expert", color: "#0F172A", icon: tailwindIcon, textColor: "text-white" },
+    { name: "React", key: "react", level: "expert", color: "#20232A", icon: reactIcon, textColor: "text-white" },
     { name: "TypeScript", key: "typescript", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white" },
     { name: "GitHub", key: "github", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white" },
     // Row 2
@@ -60,12 +60,12 @@ export default function Skills() {
   const row3 = techs.slice(12, 16);
 
   return (
-    <motion.section 
-      id="compétences" 
+    <motion.section
+      id="compétences"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       className="min-h-screen bg-white dark:bg-slate-900 py-24 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
     >
       {/* Background Subtle Glows */}
@@ -76,12 +76,15 @@ export default function Skills() {
         <BlobCursor
           blobType="circle"
           fillColor="#8b5cf6"
-          trailCount={4}
-          sizes={[80, 140, 100, 60]}
-          innerSizes={[24, 36, 28, 18]}
-          opacities={[0.25, 0.2, 0.15, 0.08]}
-          shadowColor="rgba(139, 92, 246, 0.15)"
-          shadowBlur={10}
+          trailCount={1}
+          sizes={[40]}
+          innerSizes={[0]}
+          opacities={[0.5]}
+          shadowColor="rgba(139, 92, 246, 0.8)"
+          shadowOffsetX={0}
+          shadowOffsetY={0}
+          shadowBlur={20}
+          useFilter={false}
           zIndex={0}
         />
       )}
@@ -100,7 +103,7 @@ export default function Skills() {
       <div className="w-full max-w-2xl mx-auto mb-12 relative min-h-[110px] flex items-center justify-center z-10 text-center px-4">
         <AnimatePresence mode="wait">
           {!selectedSkill ? (
-            <motion.p 
+            <motion.p
               key="placeholder"
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
@@ -133,27 +136,27 @@ export default function Skills() {
       </div>
 
       {/* Isometric Keyboard Wrapper (Desktop/Tablet only) */}
-      <div 
+      <div
         className="hidden md:flex w-full overflow-visible justify-center py-10"
         style={{
           perspective: "1200px",
         }}
         onMouseLeave={() => setSelectedSkill(null)}
       >
-        <div 
-          className="scale-[0.33] min-[420px]:scale-[0.4] min-[520px]:scale-[0.5] sm:scale-[0.62] md:scale-[0.78] lg:scale-[0.95] xl:scale-100 origin-center transition-all duration-300 relative flex flex-col gap-6 items-center"
+        <div
+          className="scale-[0.33] min-[420px]:scale-[0.4] min-[520px]:scale-[0.5] sm:scale-[0.62] md:scale-[0.78] lg:scale-[0.95] xl:scale-100 origin-center transition-all duration-300 relative flex flex-col gap-0 items-center"
           style={{
             transform: "rotateX(55deg) rotateY(0deg) rotateZ(-30deg)",
             transformStyle: "preserve-3d",
           }}
         >
           {/* Row 1 */}
-          <div className="flex gap-4 md:gap-5 justify-center pl-0" style={{ transformStyle: "preserve-3d" }}>
+          <div className="flex gap-0 justify-center pl-0" style={{ transformStyle: "preserve-3d" }}>
             {row1.map(tech => (
-              <KeyCap 
-                key={tech.name} 
-                tech={tech} 
-                active={selectedSkill?.name === tech.name} 
+              <KeyCap
+                key={tech.name}
+                tech={tech}
+                active={selectedSkill?.name === tech.name}
                 onHover={() => setSelectedSkill(tech)}
                 onClick={() => setSelectedSkill(tech)}
               />
@@ -161,12 +164,12 @@ export default function Skills() {
           </div>
 
           {/* Row 2 */}
-          <div className="flex gap-4 md:gap-5 justify-center pl-8" style={{ transformStyle: "preserve-3d" }}>
+          <div className="flex gap-0 justify-center pl-8" style={{ transformStyle: "preserve-3d" }}>
             {row2.map(tech => (
-              <KeyCap 
-                key={tech.name} 
-                tech={tech} 
-                active={selectedSkill?.name === tech.name} 
+              <KeyCap
+                key={tech.name}
+                tech={tech}
+                active={selectedSkill?.name === tech.name}
                 onHover={() => setSelectedSkill(tech)}
                 onClick={() => setSelectedSkill(tech)}
               />
@@ -174,12 +177,12 @@ export default function Skills() {
           </div>
 
           {/* Row 3 */}
-          <div className="flex gap-4 md:gap-5 justify-center pl-16" style={{ transformStyle: "preserve-3d" }}>
+          <div className="flex gap-0 justify-center pl-16" style={{ transformStyle: "preserve-3d" }}>
             {row3.map(tech => (
-              <KeyCap 
-                key={tech.name} 
-                tech={tech} 
-                active={selectedSkill?.name === tech.name} 
+              <KeyCap
+                key={tech.name}
+                tech={tech}
+                active={selectedSkill?.name === tech.name}
                 onHover={() => setSelectedSkill(tech)}
                 onClick={() => setSelectedSkill(tech)}
               />
@@ -195,11 +198,10 @@ export default function Skills() {
             key={index}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedSkill(tech)}
-            className={`flex flex-col items-center justify-center p-4 rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer ${
-              selectedSkill?.name === tech.name
-                ? "bg-violet-100 dark:bg-violet-900/40 border-violet-400 dark:border-violet-500 shadow-md shadow-violet-200/50 dark:shadow-indigo-900/30"
-                : "bg-violet-50 dark:bg-slate-800 border-violet-100 dark:border-slate-700 hover:border-violet-300 dark:hover:border-violet-500/50"
-            }`}
+            className={`flex flex-col items-center justify-center p-4 rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer ${selectedSkill?.name === tech.name
+              ? "bg-violet-100 dark:bg-violet-900/40 border-violet-400 dark:border-violet-500 shadow-md shadow-violet-200/50 dark:shadow-indigo-900/30"
+              : "bg-violet-50 dark:bg-slate-800 border-violet-100 dark:border-slate-700 hover:border-violet-300 dark:hover:border-violet-500/50"
+              }`}
           >
             <img
               src={tech.icon}
@@ -231,8 +233,8 @@ function KeyCap({ tech, active, onHover, onClick }) {
       onClick={handleClick}
       className="relative cursor-pointer select-none"
       style={{
-        width: "116px",
-        height: "116px",
+        width: "110px",
+        height: "110px",
         transformStyle: "preserve-3d",
       }}
     >
@@ -242,47 +244,39 @@ function KeyCap({ tech, active, onHover, onClick }) {
           transformStyle: "preserve-3d",
         }}
         whileHover={{
-          z: -12,
+          z: -18,
           transition: { duration: 0.12, ease: "easeOut" }
         }}
         animate={isClicked ? {
           x: [0, -1, 1, -1, 1, 0],
-          z: -20,
+          z: -28,
           transition: { duration: 0.15 }
         } : {
           x: 0,
-          z: active ? -12 : 0
+          z: active ? -18 : 0
         }}
       >
-        {/* Shadow Base */}
-        <div 
-          className="absolute inset-0 rounded-2xl bg-black/30 dark:bg-black/50 blur-[6px]"
-          style={{
-            transform: "translateZ(-20px)",
-            transition: "opacity 0.25s ease",
-            opacity: active ? 0.35 : 0.65,
-          }}
-        />
-        
+
+
         {/* 3D Depth Sides (Extrusion) */}
         <div
           className="absolute inset-0 rounded-xl"
           style={{
             backgroundColor: tech.color,
-            transform: "translateZ(-12px)",
+            transform: "translateZ(-24px)",
             boxShadow: `
-              0 1px 0 ${tech.color}ee,
-              0 2px 0 ${tech.color}dd,
-              0 3px 0 ${tech.color}cc,
-              0 4px 0 ${tech.color}bb,
-              0 5px 0 ${tech.color}aa,
-              0 6px 0 ${tech.color}99,
-              0 7px 0 ${tech.color}88,
-              0 8px 0 ${tech.color}77,
-              0 9px 0 ${tech.color}66,
-              0 10px 0 ${tech.color}55,
-              0 11px 0 ${tech.color}44,
-              0 12px 0 ${tech.color}33
+              0 2px 0 ${tech.color}ee,
+              0 4px 0 ${tech.color}dd,
+              0 6px 0 ${tech.color}cc,
+              0 8px 0 ${tech.color}bb,
+              0 10px 0 ${tech.color}aa,
+              0 12px 0 ${tech.color}99,
+              0 14px 0 ${tech.color}88,
+              0 16px 0 ${tech.color}77,
+              0 18px 0 ${tech.color}66,
+              0 20px 0 ${tech.color}55,
+              0 22px 0 ${tech.color}44,
+              0 24px 0 ${tech.color}33
             `,
             filter: "brightness(0.72)",
           }}
@@ -298,14 +292,14 @@ function KeyCap({ tech, active, onHover, onClick }) {
           }}
         >
           <div className="absolute inset-2.5 rounded-lg border border-black/5 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
-          
+
           {/* Icon & Label */}
-          <img 
-            src={tech.icon} 
-            alt="" 
-            className={`w-11 h-11 object-contain mb-2 drop-shadow-md ${tech.name === "Spring Boot" ? "invert brightness-[1.25]" : ""}`} 
+          <img
+            src={tech.icon}
+            alt=""
+            className={`w-10 h-10 object-contain mb-2 ${tech.name === "Spring Boot" ? "invert brightness-[1.25]" : ""}`}
           />
-          <span className="text-[12px] font-extrabold uppercase tracking-wide opacity-85 truncate max-w-full">
+          <span className="text-[11px] font-extrabold uppercase tracking-wide opacity-85 truncate max-w-full">
             {tech.name === "Tailwind CSS" ? "Tailwind" : tech.name === "Framer Motion" ? "Framer" : tech.name}
           </span>
         </div>

@@ -310,7 +310,6 @@ const CardSwap = ({
     const handleMouseEnter = () => {
       isHovered.current = true;
       if (pauseOnHover) {
-        tlRef.current?.pause();
         stopAutoplay();
       }
     };
@@ -318,7 +317,6 @@ const CardSwap = ({
     const handleMouseLeave = () => {
       isHovered.current = false;
       if (pauseOnHover) {
-        tlRef.current?.play();
         startAutoplay();
       }
     };

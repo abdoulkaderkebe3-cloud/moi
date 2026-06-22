@@ -68,7 +68,11 @@ export default function NewContact() {
   const questionHighlightColor = isDark ? '#94a3b8' : '#a78bfa';
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       id="contact"
       ref={containerRef}
       style={{
@@ -220,6 +224,6 @@ export default function NewContact() {
           </Canvas>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
