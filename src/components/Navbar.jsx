@@ -1,9 +1,8 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Github, Linkedin, LineChartIcon, Languages, Sun, Moon } from "lucide-react";
+import { Github, Linkedin, LineChartIcon, Languages } from "lucide-react";
 import logo from "../assets/images/svg/noun-mind-5663275.svg";
 import { useLang } from "../context/LanguageContext";
-import { useTheme } from "../context/ThemeContext";
 
 const socialLinks = [
   {
@@ -25,7 +24,6 @@ const socialLinks = [
 
 export default function Navbar() {
   const { lang, toggleLang, t } = useLang();
-  const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -99,7 +97,7 @@ export default function Navbar() {
         {/* Right section: socials + theme toggle + lang toggle + burger */}
         <div className="flex items-center gap-1 sm:gap-2">
           {/* Social icons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 mr-1">
+          <div className="hidden lg:flex items-center gap-1.5 sm:gap-2 mr-1">
             {socialLinks.map(({ href, label, Icon }) => (
               <a
                 key={label}
@@ -113,39 +111,6 @@ export default function Navbar() {
               </a>
             ))}
           </div>
-
-          {/* Theme toggle button */}
-          <motion.button
-            onClick={toggleTheme}
-            whileTap={{ scale: 0.92 }}
-            className="flex items-center justify-center h-9 w-9 rounded-full bg-violet-50 dark:bg-white/[0.06] ring-1 ring-violet-200 dark:ring-white/10 hover:bg-violet-100 dark:hover:bg-white/10 transition duration-200 focus:outline-none cursor-pointer shadow-sm"
-            aria-label="Basculer le thème"
-            title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {theme === "dark" ? (
-                <motion.span
-                  key="sun"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Sun className="h-4 w-4 text-amber-400" strokeWidth={2} />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="moon"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Moon className="h-4 w-4 text-violet-600" strokeWidth={2} />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </motion.button>
 
           {/* Language toggle button */}
           <button
