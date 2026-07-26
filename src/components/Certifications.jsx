@@ -137,7 +137,7 @@ export default function Certifications() {
           />
 
           <img
-            src={cert6}
+            src={cert4}
             alt="Certification"
             loading="lazy"
             className="w-full mb-12 rounded-xl shadow-lg hover:shadow-violet-500/10 transition-all duration-300 hover:scale-[1.01]"
@@ -151,7 +151,7 @@ export default function Certifications() {
           />
 
           <img
-            src={cert4}
+            src={cert6}
             alt="Certification"
             loading="lazy"
             className="w-full rounded-xl shadow-lg hover:shadow-violet-500/10 transition-all duration-300 hover:scale-[1.01]"

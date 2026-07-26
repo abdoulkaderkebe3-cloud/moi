@@ -2,6 +2,7 @@ import CardSwap, { Card } from "./CardSwap";
 import burgerImg from "../assets/images/png/burger-house.png";
 import algoImg from "../assets/images/png/site-algo.png";
 import generatorImg from "../assets/images/png/generateur.png";
+import billetterieImg from "../assets/images/png/Screenshot 2026-07-26 003449.png";
 import { useLang } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 
@@ -129,6 +130,21 @@ export default function Projects() {
                 loading="lazy"
               />
             </a>
+          </Card>
+
+          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
+              {t.projects.p6}
+            </h3>
+            <p className="text-center text-slate-500 dark:text-gray-400">
+              React, TypeScript
+            </p>
+            <img
+              src={billetterieImg}
+              alt="Aperçu du site de billetterie"
+              className="h-full rounded-lg mt-4"
+              loading="lazy"
+            />
           </Card>
 
         </CardSwap>

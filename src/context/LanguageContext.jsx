@@ -70,6 +70,7 @@ const translations = {
       p3: "Générateur de citation",
       p4: "application web de question reponse",
       p5: "Système de gestion d'engrais",
+      p6: "Site de billetterie",
     },
     // Certifications
     certifications: {
@@ -163,6 +164,7 @@ const translations = {
       p3: "Quote generator",
       p4: "Web Q&A application",
       p5: "Fertilizer management system",
+      p6: "Ticketing website",
     },
     // Certifications
     certifications: {
