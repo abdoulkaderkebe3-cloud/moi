@@ -80,12 +80,17 @@ export default function Projects() {
             <p className="text-center text-slate-500 dark:text-gray-400">
               React, TypeScript
             </p>
-            <img
-              src={billetterieImg}
-              alt="Aperçu du site de billetterie"
-              className="h-full rounded-lg mt-4"
-              loading="lazy"
-            />
+            <a
+              href="https://trans-campus.com/onboarding"
+              target="_blank"
+            >
+              <img
+                src={billetterieImg}
+                alt="Aperçu du site de billetterie"
+                className="h-full rounded-lg mt-4"
+                loading="lazy"
+              />
+            </a>
           </Card>
 
           <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
