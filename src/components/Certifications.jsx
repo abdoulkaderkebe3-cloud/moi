@@ -6,6 +6,7 @@ import GradualBlur from "./GradualBlur";
 import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.jpg"
 import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.jpg"
 import cert6 from "../assets/images/png/photo_2026-05-25_17-12-56.jpg"
+import vibeathon from "../assets/images/png/certificat-vibeathon-2026.png"
 import { useLang } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 
@@ -128,6 +129,13 @@ export default function Certifications() {
             scrollbarColor: 'rgba(139, 92, 246, 0.4) rgba(237, 233, 254, 0.5)'
           }}
         >
+          <img
+            src={vibeathon}
+            alt="Certification Vibeathon 2026"
+            loading="lazy"
+            className="w-full mb-12 rounded-xl shadow-lg hover:shadow-violet-500/10 transition-all duration-300 hover:scale-[1.01]"
+          />
+
           <img
             src={cert6}
             alt="Certification"
