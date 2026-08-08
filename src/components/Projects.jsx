@@ -1,12 +1,17 @@
-import CardSwap, { Card } from "./CardSwap";
-import burgerImg from "../assets/images/png/burger-house.png";
-import algoImg from "../assets/images/png/site-algo.png";
-import generatorImg from "../assets/images/png/generateur.png";
-import billetterieImg from "../assets/images/png/Screenshot 2026-07-26 003449.png";
+import { lazy, Suspense } from "react";
+import { Card } from "./Card";
+import burgerImg from "../assets/images/png/burger-house.webp";
+import algoImg from "../assets/images/png/site-algo.webp";
+import generatorImg from "../assets/images/png/generateur.webp";
+import billetterieImg from "../assets/images/png/billetterie-preview.webp";
 import { useLang } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 
-const dailymuse = "/dailymuse-preview.png";
+// Lazy-load CardSwap: keeps gsap's swap animation out of the critical
+// bundle for this purely decorative card carousel.
+const CardSwap = lazy(() => import("./CardSwap"));
+
+const dailymuse = "/dailymuse-preview.webp";
 
 export default function Projects() {
   const { t } = useLang();
@@ -47,6 +52,7 @@ export default function Projects() {
           </h1>
         </div>
 
+        <Suspense fallback={null}>
         <CardSwap
           cardDistance={80}
           verticalDistance={110}
@@ -153,6 +159,7 @@ export default function Projects() {
           </Card>
 
         </CardSwap>
+        </Suspense>
       </div>
     </motion.section>
   );

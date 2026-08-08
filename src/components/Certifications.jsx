@@ -1,12 +1,9 @@
 import { useEffect, useRef } from "react";
 import GradualBlur from "./GradualBlur";
-// import cert1 from "../../public/Screenshot 2026-03-01 164744.png"
-// import cert2 from "../../public/Screenshot 2026-03-01 164822.png"
-// import cert3 from "../../public/Screenshot 2026-03-01 164843.png"
-import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.jpg"
-import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.jpg"
-import cert6 from "../assets/images/png/photo_2026-05-25_17-12-56.jpg"
-import vibeathon from "../assets/images/png/certificat-vibeathon-2026.png"
+import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.webp"
+import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.webp"
+import cert6 from "../assets/images/png/photo_2026-05-25_17-12-56.webp"
+import vibeathon from "../assets/images/png/certificat-vibeathon-2026.webp"
 import { useLang } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 

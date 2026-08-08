@@ -1,15 +1,9 @@
-import React, { Children, cloneElement, forwardRef, isValidElement, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Children, cloneElement, isValidElement, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Card } from './Card';
 
-export const Card = forwardRef(({ customClass, ...rest }, ref) => (
-  <div
-    ref={ref}
-    {...rest}
-    className={`absolute top-1/2 left-1/2 rounded-xl border border-white bg-black overflow-hidden [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] ${customClass ?? ''} ${rest.className ?? ''}`.trim()}
-  />
-));
-Card.displayName = 'Card';
+export { Card };
 
 const makeSlot = (i, distX, distY, total) => ({
   x: i * distX,

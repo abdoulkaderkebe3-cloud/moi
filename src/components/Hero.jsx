@@ -1,8 +1,12 @@
+import { lazy, Suspense } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import LightRays from './LightRays';
 import ShinyText from './ShinyText';
 import { useLang } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
+
+// Lazy-load LightRays: keeps the WebGL engine (ogl) out of the critical
+// bundle so the hero text paints before the background effect streams in.
+const LightRays = lazy(() => import('./LightRays'));
 
 export default function Hero({ loading }) {
   const { t } = useLang();
@@ -40,16 +44,18 @@ export default function Hero({ loading }) {
       id="accueil"
       className="relative h-screen w-full bg-white dark:bg-black text-slate-900 dark:text-white overflow-hidden"
     >
-      <LightRays
-        raysOrigin="top-center"
-        raysColor={isDark ? "#ffffff" : "#6366f1"}
-        raysSpeed={1}
-        lightSpread={0.7}
-        rayLength={2}
-        followMouse={true}
-        mouseInfluence={0.10}
-        className={`absolute inset-0 w-full h-full ${isDark ? "" : "opacity-30"}`}
-      />
+      <Suspense fallback={null}>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor={isDark ? "#ffffff" : "#6366f1"}
+          raysSpeed={1}
+          lightSpread={0.7}
+          rayLength={2}
+          followMouse={true}
+          mouseInfluence={0.10}
+          className={`absolute inset-0 w-full h-full ${isDark ? "" : "opacity-30"}`}
+        />
+      </Suspense>
 
       {!loading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
-import portraitImg from "../assets/images/png/kader-portrait.jpg";
+import portraitImg from "../assets/images/png/kader-portrait.webp";
 
 import { useLang } from "../context/LanguageContext";
 

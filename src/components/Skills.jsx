@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import figmaIcon from "../assets/images/svg/devicon_figma.svg";
 import javaIcon from "../assets/images/svg/devicon_java.svg";
 import tailwindIcon from "../assets/images/svg/devicon_tailwindcss.svg";
@@ -17,7 +17,10 @@ import postegre from "../assets/images/svg/devicon_postgresql-wordmark.svg";
 import uml from "../assets/images/svg/material-icon-theme_uml.svg";
 import dbeaver from "../assets/images/svg/Vector (2).svg";
 import { useLang } from "../context/LanguageContext";
-import BlobCursor from "./BlobCursor";
+
+// Lazy-load BlobCursor: keeps gsap's cursor-trail logic out of the
+// critical bundle since it's a purely decorative, desktop-only effect.
+const BlobCursor = lazy(() => import("./BlobCursor"));
 
 export default function Skills() {
   const { t } = useLang();
@@ -73,20 +76,22 @@ export default function Skills() {
 
       {/* Blob Cursor Background Effect - Desktop only */}
       {!isMobile && (
-        <BlobCursor
-          blobType="circle"
-          fillColor="#8b5cf6"
-          trailCount={1}
-          sizes={[40]}
-          innerSizes={[0]}
-          opacities={[0.5]}
-          shadowColor="rgba(139, 92, 246, 0.8)"
-          shadowOffsetX={0}
-          shadowOffsetY={0}
-          shadowBlur={20}
-          useFilter={false}
-          zIndex={0}
-        />
+        <Suspense fallback={null}>
+          <BlobCursor
+            blobType="circle"
+            fillColor="#8b5cf6"
+            trailCount={1}
+            sizes={[40]}
+            innerSizes={[0]}
+            opacities={[0.5]}
+            shadowColor="rgba(139, 92, 246, 0.8)"
+            shadowOffsetX={0}
+            shadowOffsetY={0}
+            shadowBlur={20}
+            useFilter={false}
+            zIndex={0}
+          />
+        </Suspense>
       )}
 
       {/* Title */}

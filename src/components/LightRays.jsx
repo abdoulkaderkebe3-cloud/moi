@@ -58,6 +58,7 @@ const LightRays = ({
 
   useEffect(() => {
     if (!containerRef.current) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     observerRef.current = new IntersectionObserver(
       entries => {
