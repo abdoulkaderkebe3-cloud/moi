@@ -2,8 +2,8 @@ import { lazy, Suspense } from "react";
 import { Card } from "./Card";
 import burgerImg from "../assets/images/png/burger-house.webp";
 import algoImg from "../assets/images/png/site-algo.webp";
-import generatorImg from "../assets/images/png/generateur.webp";
 import billetterieImg from "../assets/images/png/billetterie-preview.webp";
+import visoImg from "../assets/images/png/viso-studio.webp";
 import { useLang } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 
@@ -121,18 +121,18 @@ export default function Projects() {
 
           <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
             <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
-              {t.projects.p3}
+              {t.projects.p7}
             </h3>
             <p className="text-center text-slate-500 dark:text-gray-400">
-              HTML, CSS, JS
+              React, TypeScript, TailwindCSS
             </p>
             <a
-              href="https://abdoulkaderkebe3-cloud.github.io/generateur-de-citation/"
+              href="https://viso-studio.com"
               target="_blank"
             >
               <img
-                src={generatorImg}
-                alt="Aperçu du générateur de citations"
+                src={visoImg}
+                alt="Aperçu du site Viso Studio"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />

@@ -67,10 +67,10 @@ const translations = {
       hint: "Cliquez sur les images pour en savoir plus.",
       p1: "Site de burger",
       p2: "Site d'apprentissage d'algorithme",
-      p3: "Générateur de citation",
       p4: "application web de question reponse",
       p5: "Système de gestion d'engrais",
       p6: "Site de billetterie",
+      p7: "Site vitrine Viso Studio",
     },
     // Certifications
     certifications: {
@@ -161,10 +161,10 @@ const translations = {
       hint: "Click on the images to learn more.",
       p1: "Burger website",
       p2: "Algorithm learning website",
-      p3: "Quote generator",
       p4: "Web Q&A application",
       p5: "Fertilizer management system",
       p6: "Ticketing website",
+      p7: "Viso Studio showcase website",
     },
     // Certifications
     certifications: {
