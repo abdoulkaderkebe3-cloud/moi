@@ -196,24 +196,27 @@ export default function Skills() {
         </div>
       </div>
 
-      {/* Classic Grid (Old Design - Mobile only) */}
-      <div className="md:hidden w-full max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4 px-4 z-10">
+      {/* Circular Badge Grid (Mobile only) */}
+      <div className="md:hidden w-full max-w-md mx-auto grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-7 px-4 z-10">
         {techs.map((tech, index) => (
           <motion.div
             key={index}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedSkill(tech)}
-            className={`flex flex-col items-center justify-center p-4 rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer ${selectedSkill?.name === tech.name
-              ? "bg-violet-100 dark:bg-violet-900/40 border-violet-400 dark:border-violet-500 shadow-md shadow-violet-200/50 dark:shadow-indigo-900/30"
-              : "bg-violet-50 dark:bg-slate-800 border-violet-100 dark:border-slate-700 hover:border-violet-300 dark:hover:border-violet-500/50"
-              }`}
+            className="flex flex-col items-center justify-center gap-2.5 cursor-pointer"
           >
-            <img
-              src={tech.icon}
-              alt={tech.name}
-              className="w-12 h-12 mb-3 object-contain"
-            />
-            <span className="text-slate-700 dark:text-white text-sm font-semibold text-center">{tech.name}</span>
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center bg-violet-50 dark:bg-white/5 shadow-sm border border-violet-100 dark:border-white/10"
+            >
+              <img
+                src={tech.icon}
+                alt={tech.name}
+                className="w-8 h-8 object-contain"
+              />
+            </div>
+            <span className="text-slate-700 dark:text-white text-xs font-semibold text-center leading-tight">
+              {tech.name}
+            </span>
           </motion.div>
         ))}
       </div>

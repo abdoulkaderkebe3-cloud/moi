@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Github, Linkedin, LineChartIcon, Languages } from "lucide-react";
 import logo from "../assets/images/svg/noun-mind-5663275.svg";
@@ -41,6 +41,13 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   const links = [
     { name: t.nav.home, href: "#accueil" },
     { name: t.nav.about, href: "#a-propos" },
@@ -53,7 +60,8 @@ export default function Navbar() {
   ];
 
   return (
-    <motion.nav
+    <>
+      <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
@@ -142,44 +150,76 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+      </motion.nav>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="lg:hidden bg-white/97 dark:bg-slate-950/95 backdrop-blur-md border-t border-violet-100 dark:border-white/5 overflow-y-auto overflow-x-hidden max-h-[85vh] w-full">
-          <div className="px-4 sm:px-6 py-6 flex flex-col gap-3">
-            {links.map((link, i) => (
-              <a
-                key={i}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className="py-3 px-4 rounded-md hover:bg-violet-50 dark:hover:bg-indigo-500/20 hover:text-violet-700 dark:hover:text-indigo-300 transition text-slate-700 dark:text-white text-base font-medium"
-              >
-                {link.name}
-              </a>
-            ))}
-            <div className="mt-4 pt-4 border-t border-violet-100 dark:border-white/10">
-              <p className="text-xs font-medium uppercase tracking-widest text-violet-400 dark:text-slate-500 mb-3 text-center">
-                {t.nav.follow}
-              </p>
-              <div className="flex justify-center gap-2">
-                {socialLinks.map(({ href, label, Icon }) => (
+      {/* Mobile off-canvas menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setMenuOpen(false)}
+              className="lg:hidden fixed inset-0 z-40 bg-slate-900/50 dark:bg-black/70 backdrop-blur-[2px]"
+            />
+            <motion.div
+              key="drawer"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="lg:hidden fixed inset-y-0 left-0 z-50 w-[78%] max-w-xs bg-white dark:bg-slate-950 shadow-2xl flex flex-col"
+            >
+              {/* Drawer header */}
+              <div className="flex items-center gap-3 px-5 py-4 border-b border-violet-100 dark:border-white/10">
+                <span className="flex items-center justify-center h-10 w-10 rounded-2xl bg-violet-50 dark:bg-white/10 ring-1 ring-violet-200 dark:ring-white/20 overflow-hidden">
+                  <img src={logo} alt="Logo Kader Dev" className="h-6 w-6 object-contain dark:invert" />
+                </span>
+                <span className="font-bold text-slate-800 dark:text-white">Kader Dev</span>
+              </div>
+
+              {/* Links */}
+              <div className="flex flex-col overflow-y-auto">
+                {links.map((link, i) => (
                   <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    key={i}
+                    href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    aria-label={label}
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-50 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 ring-1 ring-violet-200 dark:ring-white/10 transition hover:bg-violet-100 dark:hover:bg-indigo-500/15 hover:text-violet-700 dark:hover:text-indigo-200 hover:ring-violet-400 dark:hover:ring-indigo-400/25"
+                    className="px-5 py-4 border-b border-violet-50 dark:border-white/5 text-slate-700 dark:text-white text-base font-medium hover:bg-violet-50 dark:hover:bg-indigo-500/10 hover:text-violet-700 dark:hover:text-indigo-300 transition"
                   >
-                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                    {link.name}
                   </a>
                 ))}
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </motion.nav>
+
+              {/* Socials footer */}
+              <div className="mt-auto px-5 py-6 border-t border-violet-100 dark:border-white/10">
+                <p className="text-xs font-medium uppercase tracking-widest text-violet-400 dark:text-slate-500 mb-3 text-center">
+                  {t.nav.follow}
+                </p>
+                <div className="flex justify-center gap-2">
+                  {socialLinks.map(({ href, label, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMenuOpen(false)}
+                      aria-label={label}
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-50 dark:bg-white/6 text-slate-600 dark:text-slate-300 ring-1 ring-violet-200 dark:ring-white/10 transition hover:bg-violet-100 dark:hover:bg-indigo-500/15 hover:text-violet-700 dark:hover:text-indigo-200 hover:ring-violet-400 dark:hover:ring-indigo-400/25"
+                    >
+                      <Icon className="h-5 w-5" strokeWidth={1.75} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
