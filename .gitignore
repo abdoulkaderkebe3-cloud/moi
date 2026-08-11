@@ -25,3 +25,6 @@ dist-ssr
 
 .vercel
 .env*.local
+
+# Copie de travail imbriquee (clone du meme depot), ne doit pas etre suivie
+mon-porfolio/
