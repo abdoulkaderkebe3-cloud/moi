@@ -34,8 +34,8 @@ export default function CVSection() {
         <motion.a
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          href="/Abdoul_Kader_KEBE.docx"
-          download="CV_Abdoul_Kader_KEBE.docx"
+          href="/CV-Abdoul-Kader-KEBE.pdf"
+          download="CV-Abdoul-Kader-KEBE.pdf"
           className="inline-flex items-center gap-3 px-8 py-4 bg-violet-600 hover:bg-violet-700 text-white rounded-full font-medium text-lg transition-colors shadow-lg shadow-violet-500/30"
         >
           <Download className="w-6 h-6" />

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useLang } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
+import SceneErrorBoundary from './SceneErrorBoundary';
 
 // La scène 3D est chargée à la demande : elle entraîne three, fiber et drei,
 // soit 1,1 Mo de JS, plus le modèle. Rien de tout ça ne doit partir tant que le
@@ -189,11 +190,14 @@ export default function NewContact() {
             borderRadius: '24px', // optionnel pour éviter que la 3D ne déborde sous l'écran
           }}
         >
-          {/* Montée seulement à l'approche de la section, jamais au chargement. */}
+          {/* Montée seulement à l'approche de la section, jamais au chargement,
+              et isolée : si le WebGL échoue, la section reste debout. */}
           {sceneMounted && (
-            <Suspense fallback={<SceneFallback />}>
-              <CarScene active={isNear} />
-            </Suspense>
+            <SceneErrorBoundary fallback={null}>
+              <Suspense fallback={<SceneFallback />}>
+                <CarScene active={isNear} />
+              </Suspense>
+            </SceneErrorBoundary>
           )}
         </div>
       </div>
