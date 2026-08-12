@@ -25,7 +25,9 @@ export default function LoadingScreen() {
     requestAnimationFrame(tick);
 
     return () => {
-      document.body.style.overflow = "auto";
+      // Rendre la main au CSS, surtout pas "auto" : un body en overflow auto
+      // devient conteneur de défilement et casse tout `position: sticky`.
+      document.body.style.overflow = "";
     };
   }, []);
 

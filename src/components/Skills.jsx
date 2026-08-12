@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import figmaIcon from "../assets/images/svg/devicon_figma.svg";
 import javaIcon from "../assets/images/svg/devicon_java.svg";
 import tailwindIcon from "../assets/images/svg/devicon_tailwindcss.svg";
@@ -22,49 +22,126 @@ import { useLang } from "../context/LanguageContext";
 // critical bundle since it's a purely decorative, desktop-only effect.
 const BlobCursor = lazy(() => import("./BlobCursor"));
 
+// Géométrie d'une keycap. Le volume est construit en tranches horizontales
+// empilées : chaque tranche monte en Z, rétrécit et s'arrondit un peu plus que
+// la précédente. C'est ce qui donne les flancs galbés et les coins ronds d'une
+// vraie touche, là où 4 faces planes ne produisent qu'une boîte carrée.
+// Empreinte visuelle du clavier incliné à l'échelle 1, mesurée dans le
+// navigateur, et hauteur occupée au-dessus de lui dans la section.
+const KB_W = 855;
+const KB_H = 420;
+const HEADROOM = 500;
+
+const KEY_SIZE = 132; // côté d'une touche, en px
+const KEY_HEIGHT = 40; // hauteur totale du volume, en px
+const KEY_TAPER = 14; // rétrécissement du sommet par rapport à la base, en px
+const KEY_SLICES = 18; // plus il y en a, plus les flancs sont lisses
+const KEY_RADIUS_BOTTOM = 36;
+const KEY_RADIUS_TOP = 26;
+
+// Accroche décorative en arrière-plan du clavier.
+const BACKDROP_TEXT = "du back Java au front React, je construis des produits qui durent";
+
+// `hotkey` : lettre du clavier physique qui enfonce la touche. Toutes distinctes,
+// choisies proches du nom de la techno pour rester devinables.
+const TECHS = [
+  // Rangée 1
+  { name: "Figma", key: "figma", hotkey: "F", level: "advanced", color: "#FF6B6B", icon: figmaIcon, textColor: "text-white" },
+  { name: "Java", key: "java", hotkey: "J", level: "advanced", color: "#FF9500", icon: javaIcon, textColor: "text-white" },
+  { name: "Tailwind CSS", key: "tailwind", hotkey: "W", level: "expert", color: "#0F172A", icon: tailwindIcon, textColor: "text-white" },
+  { name: "React", key: "react", hotkey: "R", level: "expert", color: "#20232A", icon: reactIcon, textColor: "text-white" },
+  // Rangée 2
+  { name: "TypeScript", key: "typescript", hotkey: "T", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white" },
+  { name: "GitHub", key: "github", hotkey: "B", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white" },
+  { name: "Git", key: "git", hotkey: "G", level: "expert", color: "#F34F29", icon: gitIcon, textColor: "text-white" },
+  { name: "HTML5", key: "html", hotkey: "H", level: "expert", color: "#E34C26", icon: htmlIcon, textColor: "text-white" },
+  // Rangée 3
+  { name: "CSS3", key: "css", hotkey: "C", level: "expert", color: "#264BDD", icon: cssIcon, textColor: "text-white" },
+  { name: "JavaScript", key: "javascript", hotkey: "S", level: "expert", color: "#F7DF1E", icon: jsIcon, textColor: "text-slate-900" },
+  { name: "Spring Boot", key: "springboot", hotkey: "O", level: "advanced", color: "#77B900", icon: springBootIcon, textColor: "text-white" },
+  { name: "Angular", key: "angular", hotkey: "A", level: "intermediate", color: "#DD0031", icon: angularIcon, textColor: "text-white" },
+  // Rangée 4
+  { name: "Framer Motion", key: "framer", hotkey: "M", level: "advanced", color: "#8B5CF6", icon: framerIcon, textColor: "text-white" },
+  { name: "PostgreSQL", key: "postgres", hotkey: "P", level: "advanced", color: "#336791", icon: postegre, textColor: "text-white" },
+  { name: "UML", key: "uml", hotkey: "U", level: "advanced", color: "#FFB81C", icon: uml, textColor: "text-slate-900" },
+  { name: "DBeaver", key: "dbeaver", hotkey: "D", level: "advanced", color: "#1E90FF", icon: dbeaver, textColor: "text-white" },
+];
+
 export default function Skills() {
   const { t } = useLang();
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [keyboardScale, setKeyboardScale] = useState(0.6);
+  const [pressedKey, setPressedKey] = useState(null);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+
+      // Le clavier est contraint par la hauteur restante, pas seulement par la
+      // largeur : des breakpoints Tailwind ne suffisent donc pas. KB_W/KB_H sont
+      // l'empreinte visuelle mesurée du clavier incliné à l'échelle 1, HEADROOM
+      // la place prise au-dessus par le titre et le bloc de description.
+      const byWidth = (window.innerWidth - 120) / KB_W;
+      const byHeight = (window.innerHeight - HEADROOM) / KB_H;
+      setKeyboardScale(Math.max(0.3, Math.min(0.9, byWidth, byHeight)));
     };
 
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const techs = [
-    // Row 1
-    { name: "Figma", key: "figma", level: "advanced", color: "#FF6B6B", icon: figmaIcon, textColor: "text-white" },
-    { name: "Java", key: "java", level: "advanced", color: "#FF9500", icon: javaIcon, textColor: "text-white" },
-    { name: "Tailwind CSS", key: "tailwind", level: "expert", color: "#0F172A", icon: tailwindIcon, textColor: "text-white" },
-    { name: "React", key: "react", level: "expert", color: "#20232A", icon: reactIcon, textColor: "text-white" },
-    { name: "TypeScript", key: "typescript", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white" },
-    { name: "GitHub", key: "github", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white" },
-    // Row 2
-    { name: "Git", key: "git", level: "expert", color: "#F34F29", icon: gitIcon, textColor: "text-white" },
-    { name: "HTML5", key: "html", level: "expert", color: "#E34C26", icon: htmlIcon, textColor: "text-white" },
-    { name: "CSS3", key: "css", level: "expert", color: "#264BDD", icon: cssIcon, textColor: "text-white" },
-    { name: "JavaScript", key: "javascript", level: "expert", color: "#F7DF1E", icon: jsIcon, textColor: "text-slate-900" },
-    { name: "Spring Boot", key: "springboot", level: "advanced", color: "#77B900", icon: springBootIcon, textColor: "text-white" },
-    { name: "Angular", key: "angular", level: "intermediate", color: "#DD0031", icon: angularIcon, textColor: "text-white" },
-    // Row 3
-    { name: "Framer Motion", key: "framer", level: "advanced", color: "#8B5CF6", icon: framerIcon, textColor: "text-white" },
-    { name: "PostgreSQL", key: "postgres", level: "advanced", color: "#336791", icon: postegre, textColor: "text-white" },
-    { name: "UML", key: "uml", level: "advanced", color: "#FFB81C", icon: uml, textColor: "text-slate-900" },
-    { name: "DBeaver", key: "dbeaver", level: "advanced", color: "#1E90FF", icon: dbeaver, textColor: "text-white" }
-  ];
+  // "press a key" : une lettre du clavier physique enfonce la touche associée.
+  // L'écoute n'est active que quand la section est à l'écran, sinon on
+  // capterait les frappes de l'utilisateur partout ailleurs sur le site.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
 
-  const row1 = techs.slice(0, 6);
-  const row2 = techs.slice(6, 12);
-  const row3 = techs.slice(12, 16);
+    let visible = false;
+    let timer;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(section);
+
+    const handleKeyDown = (event) => {
+      if (!visible || event.metaKey || event.ctrlKey || event.altKey) return;
+      const el = event.target;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable)) return;
+
+      const letter = event.key.toUpperCase();
+      const tech = TECHS.find((item) => item.hotkey === letter);
+      if (!tech) return;
+
+      setSelectedSkill(tech);
+      setPressedKey(letter);
+      clearTimeout(timer);
+      timer = setTimeout(() => setPressedKey(null), 220);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("keydown", handleKeyDown);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const techs = TECHS;
+
+  // Pavé 4x4 décalé, plus proche de la référence que 6/6/4.
+  const rows = [techs.slice(0, 4), techs.slice(4, 8), techs.slice(8, 12), techs.slice(12, 16)];
 
   return (
     <motion.section
       id="compétences"
+      ref={sectionRef}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -94,9 +171,21 @@ export default function Skills() {
         </Suspense>
       )}
 
+      {/* Accroche décorative, inclinée pour suivre la perspective du clavier.
+          Sous la grille (z-0) et non sélectionnable. */}
+      <div
+        aria-hidden="true"
+        className="hidden lg:block absolute -left-8 xl:left-4 top-1/2 -translate-y-1/2 z-0 pointer-events-none max-w-88"
+        style={{ transform: "translateY(-50%) rotate(-58deg)" }}
+      >
+        <p className="text-3xl xl:text-4xl font-light leading-[1.6] tracking-tight text-slate-900/10 dark:text-white/15">
+          {BACKDROP_TEXT}
+        </p>
+      </div>
+
       {/* Title */}
-      <div className="text-center mb-16 relative z-10 w-full">
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+      <div className="text-center mb-10 relative z-10 w-full">
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-3">
           {t.skills.title} <span className="text-violet-600 dark:text-violet-500">{t.skills.titleHighlight}</span>
         </h2>
         <p className="text-xl font-normal text-slate-500 dark:text-gray-400">
@@ -105,7 +194,9 @@ export default function Skills() {
       </div>
 
       {/* Selected Skill Display */}
-      <div className="w-full max-w-2xl mx-auto mb-12 relative min-h-[110px] flex items-center justify-center z-10 text-center px-4">
+      {/* Hauteur figée en desktop : sans ça, une description de 1 ou 2 lignes
+          change la hauteur du bloc et fait sauter le clavier au survol. */}
+      <div className="w-full max-w-2xl mx-auto mb-6 relative min-h-40 sm:min-h-32 md:min-h-0 md:h-32 flex items-center justify-center z-10 text-center px-4">
         <AnimatePresence mode="wait">
           {!selectedSkill ? (
             <motion.p
@@ -141,58 +232,48 @@ export default function Skills() {
       </div>
 
       {/* Isometric Keyboard Wrapper (Desktop/Tablet only) */}
+      {/* La hauteur réservée suit l'empreinte réelle du clavier incliné. Laissé
+          au flux normal, il occuperait 420px de layout pour 230px à l'écran et
+          repousserait tout hors de vue sur les écrans peu hauts. */}
       <div
-        className="hidden md:flex w-full overflow-visible justify-center py-10"
+        className="hidden md:block relative w-full overflow-visible"
         style={{
           perspective: "1200px",
+          height: `${Math.round(KB_H * keyboardScale)}px`,
         }}
         onMouseLeave={() => setSelectedSkill(null)}
       >
         <div
-          className="scale-[0.33] min-[420px]:scale-[0.4] min-[520px]:scale-[0.5] sm:scale-[0.62] md:scale-[0.78] lg:scale-[0.95] xl:scale-100 origin-center transition-all duration-300 relative flex flex-col gap-0 items-center"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center transition-all duration-300 flex flex-col gap-3 items-center"
           style={{
             transform: "rotateX(55deg) rotateY(0deg) rotateZ(-30deg)",
             transformStyle: "preserve-3d",
+            scale: String(keyboardScale),
           }}
         >
-          {/* Row 1 */}
-          <div className="flex gap-0 justify-center pl-0" style={{ transformStyle: "preserve-3d" }}>
-            {row1.map(tech => (
-              <KeyCap
-                key={tech.name}
-                tech={tech}
-                active={selectedSkill?.name === tech.name}
-                onHover={() => setSelectedSkill(tech)}
-                onClick={() => setSelectedSkill(tech)}
-              />
-            ))}
-          </div>
-
-          {/* Row 2 */}
-          <div className="flex gap-0 justify-center pl-8" style={{ transformStyle: "preserve-3d" }}>
-            {row2.map(tech => (
-              <KeyCap
-                key={tech.name}
-                tech={tech}
-                active={selectedSkill?.name === tech.name}
-                onHover={() => setSelectedSkill(tech)}
-                onClick={() => setSelectedSkill(tech)}
-              />
-            ))}
-          </div>
-
-          {/* Row 3 */}
-          <div className="flex gap-0 justify-center pl-16" style={{ transformStyle: "preserve-3d" }}>
-            {row3.map(tech => (
-              <KeyCap
-                key={tech.name}
-                tech={tech}
-                active={selectedSkill?.name === tech.name}
-                onHover={() => setSelectedSkill(tech)}
-                onClick={() => setSelectedSkill(tech)}
-              />
-            ))}
-          </div>
+          {rows.map((row, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="flex gap-3 justify-center"
+              style={{
+                transformStyle: "preserve-3d",
+                // Décalage d'une demi-touche par rangée : c'est ce qui donne
+                // la diagonale de la référence.
+                paddingLeft: `${(rowIndex * (KEY_SIZE + 12)) / 2}px`,
+              }}
+            >
+              {row.map(tech => (
+                <KeyCap
+                  key={tech.name}
+                  tech={tech}
+                  active={selectedSkill?.name === tech.name}
+                  pressed={pressedKey === tech.hotkey}
+                  onHover={() => setSelectedSkill(tech)}
+                  onClick={() => setSelectedSkill(tech)}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -224,7 +305,7 @@ export default function Skills() {
   );
 }
 
-function KeyCap({ tech, active, onHover, onClick }) {
+function KeyCap({ tech, active, pressed, onHover, onClick }) {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
@@ -236,13 +317,21 @@ function KeyCap({ tech, active, onHover, onClick }) {
   return (
     <div
       role="button"
+      tabIndex={0}
       aria-label={tech.name}
       onMouseEnter={onHover}
+      onFocus={onHover}
       onClick={handleClick}
-      className="relative cursor-pointer select-none"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
+      className="relative cursor-pointer select-none outline-none"
       style={{
-        width: "110px",
-        height: "110px",
+        width: `${KEY_SIZE}px`,
+        height: `${KEY_SIZE}px`,
         transformStyle: "preserve-3d",
       }}
     >
@@ -255,7 +344,7 @@ function KeyCap({ tech, active, onHover, onClick }) {
           z: -18,
           transition: { duration: 0.12, ease: "easeOut" }
         }}
-        animate={isClicked ? {
+        animate={isClicked || pressed ? {
           x: [0, -1, 1, -1, 1, 0],
           z: -28,
           transition: { duration: 0.15 }
@@ -264,52 +353,59 @@ function KeyCap({ tech, active, onHover, onClick }) {
           z: active ? -18 : 0
         }}
       >
+        {/* Corps galbé : tranches empilées de la base vers le sommet. */}
+        {Array.from({ length: KEY_SLICES }).map((_, i) => {
+          const t = i / (KEY_SLICES - 1); // 0 = base, 1 = sommet
+          // Progression non linéaire : les flancs rentrent surtout près du haut,
+          // comme le galbe d'une keycap moulée.
+          const curve = Math.pow(t, 1.45);
+          return (
+            <div
+              key={i}
+              className="absolute"
+              style={{
+                inset: `${curve * KEY_TAPER}px`,
+                borderRadius: `${KEY_RADIUS_BOTTOM - t * (KEY_RADIUS_BOTTOM - KEY_RADIUS_TOP)}px`,
+                backgroundColor: tech.color,
+                transform: `translateZ(${t * KEY_HEIGHT}px)`,
+                // Voile noir dégressif plutôt qu'un filter : même assombrissement
+                // progressif, sans créer 200 contextes de filtrage.
+                boxShadow: `inset 0 0 0 200px rgba(0,0,0,${(0.5 - t * 0.42).toFixed(3)})`,
+              }}
+            />
+          );
+        })}
 
-
-        {/* 3D Depth Sides (Extrusion) */}
+        {/* Face supérieure, posée au sommet du galbe. */}
         <div
-          className="absolute inset-0 rounded-xl"
+          className={`absolute flex items-center justify-center ${tech.textColor}`}
           style={{
+            inset: `${KEY_TAPER}px`,
+            borderRadius: `${KEY_RADIUS_TOP}px`,
             backgroundColor: tech.color,
-            transform: "translateZ(-24px)",
-            boxShadow: `
-              0 2px 0 ${tech.color}ee,
-              0 4px 0 ${tech.color}dd,
-              0 6px 0 ${tech.color}cc,
-              0 8px 0 ${tech.color}bb,
-              0 10px 0 ${tech.color}aa,
-              0 12px 0 ${tech.color}99,
-              0 14px 0 ${tech.color}88,
-              0 16px 0 ${tech.color}77,
-              0 18px 0 ${tech.color}66,
-              0 20px 0 ${tech.color}55,
-              0 22px 0 ${tech.color}44,
-              0 24px 0 ${tech.color}33
-            `,
-            filter: "brightness(0.72)",
-          }}
-        />
-
-        {/* Top Face */}
-        <div
-          className={`absolute inset-0 rounded-xl flex flex-col items-center justify-center p-3 border border-black/5 dark:border-white/20 shadow-inner ${tech.textColor}`}
-          style={{
-            backgroundColor: tech.color,
-            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0.18) 100%)",
-            transform: "translateZ(0px)",
+            backgroundImage:
+              "linear-gradient(155deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.10) 38%, rgba(0,0,0,0.06) 62%, rgba(0,0,0,0.20) 100%)",
+            transform: `translateZ(${KEY_HEIGHT}px)`,
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -5px 12px rgba(0,0,0,0.22)",
           }}
         >
-          <div className="absolute inset-2.5 rounded-lg border border-black/5 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+          {/* Cuvette centrale : creux de la touche, plus marqué vers le bas. */}
+          <div
+            className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_50%_30%,rgba(255,255,255,0.22)_0%,transparent_58%),radial-gradient(ellipse_at_50%_112%,rgba(0,0,0,0.20)_0%,transparent_55%)]"
+            style={{ borderRadius: `${KEY_RADIUS_TOP}px` }}
+          />
 
-          {/* Icon & Label */}
+          {/* Lettre du raccourci, discrète, comme la légende d'une vraie touche. */}
+          <span className="absolute top-2 left-3 text-[11px] font-bold tracking-wider opacity-40">
+            {tech.hotkey}
+          </span>
+
           <img
             src={tech.icon}
             alt=""
-            className={`w-10 h-10 object-contain mb-2 ${tech.name === "Spring Boot" ? "invert brightness-[1.25]" : ""}`}
+            className={`w-16 h-16 object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] ${tech.name === "Spring Boot" ? "invert brightness-[1.25]" : ""}`}
           />
-          <span className="text-[11px] font-extrabold uppercase tracking-wide opacity-85 truncate max-w-full">
-            {tech.name === "Tailwind CSS" ? "Tailwind" : tech.name === "Framer Motion" ? "Framer" : tech.name}
-          </span>
         </div>
       </motion.div>
     </div>
