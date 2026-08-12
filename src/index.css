@@ -10,6 +10,17 @@
   animation: marquee 35s linear infinite;
 }
 
+/* Apparition du descriptif de compétence. Relancée à chaque changement de
+   `key`, donc un seul texte est monté à la fois, même en survol rapide. */
+@keyframes skill-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@utility animate-skill-in {
+  animation: skill-in 140ms ease-out;
+}
+
 
 
 /* `clip` et non `hidden` : `hidden` fait de ces éléments un conteneur de
