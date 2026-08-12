@@ -65,7 +65,6 @@ export default function NewContact() {
 
   const sectionBg = isDark ? '#020617' : '#f5f3ff';
   const sectionColor = isDark ? '#fff' : '#1e1b4b';
-  const questionHighlightColor = isDark ? '#94a3b8' : '#a78bfa';
 
   return (
     <motion.section

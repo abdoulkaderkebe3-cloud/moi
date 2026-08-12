@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import ShinyText from './ShinyText';
 import { useLang } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
@@ -11,33 +11,7 @@ const LightRays = lazy(() => import('./LightRays'));
 export default function Hero({ loading }) {
   const { t } = useLang();
   const { theme } = useTheme();
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 200]);
   const isDark = theme === "dark";
-
-  const sentenceVariants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.035,
-        delayChildren: 0.6,
-      },
-    },
-  };
-
-  const letterVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 14,
-        stiffness: 100,
-      },
-    },
-  };
 
   return (
     <section
