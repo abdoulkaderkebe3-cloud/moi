@@ -26,29 +26,28 @@ const BlobCursor = lazy(() => import("./BlobCursor"));
 // empilées : chaque tranche monte en Z, rétrécit et s'arrondit un peu plus que
 // la précédente. C'est ce qui donne les flancs galbés et les coins ronds d'une
 // vraie touche, là où 4 faces planes ne produisent qu'une boîte carrée.
-// Empreinte visuelle du clavier incliné à l'échelle 1, mesurée dans le
-// navigateur, et hauteur occupée au-dessus de lui dans la section.
-const KB_W = 855;
-const KB_H = 420;
-const HEADROOM = 500;
+const KEY_SIZE = 150; // côté d'une touche, en px
+const KEY_HEIGHT = 45; // hauteur totale du volume, en px
+const KEY_TAPER = 16; // rétrécissement du sommet par rapport à la base, en px
+const KEY_SLICES = 12; // plus il y en a, plus les flancs sont lisses, mais 16
+// touches x N tranches font autant d'éléments 3D à composer à chaque frame
+const KEY_RADIUS_BOTTOM = 41;
+const KEY_RADIUS_TOP = 30;
 
-// Le clavier est contraint par la hauteur restante, pas seulement par la largeur :
-// des breakpoints Tailwind ne suffisent donc pas. KB_W/KB_H sont l'empreinte
-// visuelle mesurée du clavier incliné à l'échelle 1, HEADROOM la place prise
-// au-dessus par le titre et le bloc de description.
+// Empreinte visuelle du clavier incliné à l'échelle 1 : mesurée dans le
+// navigateur pour une touche de 132px, puis rapportée à KEY_SIZE. HEADROOM est
+// la place occupée au-dessus de lui par le titre et le bloc de description.
+const KB_W = Math.round(855 * (KEY_SIZE / 132));
+const KB_H = Math.round(420 * (KEY_SIZE / 132));
+const HEADROOM = 450;
+
+// Le clavier est contraint par la hauteur restante, pas seulement par la
+// largeur : des breakpoints Tailwind ne suffiraient donc pas.
 function computeKeyboardScale() {
   const byWidth = (window.innerWidth - 120) / KB_W;
   const byHeight = (window.innerHeight - HEADROOM) / KB_H;
   return Math.max(0.3, Math.min(0.9, byWidth, byHeight));
 }
-
-const KEY_SIZE = 132; // côté d'une touche, en px
-const KEY_HEIGHT = 40; // hauteur totale du volume, en px
-const KEY_TAPER = 14; // rétrécissement du sommet par rapport à la base, en px
-const KEY_SLICES = 12; // plus il y en a, plus les flancs sont lisses, mais 16
-// touches x N tranches font autant d'éléments 3D à composer à chaque frame
-const KEY_RADIUS_BOTTOM = 36;
-const KEY_RADIUS_TOP = 26;
 
 // Accroche décorative en arrière-plan du clavier.
 const BACKDROP_TEXT = "du back Java au front React, je construis des produits qui durent";
@@ -150,7 +149,7 @@ export default function Skills() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="min-h-screen bg-white dark:bg-slate-900 py-24 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
+      className="min-h-screen bg-white dark:bg-slate-900 py-16 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
     >
       {/* Background Subtle Glows */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.04)_0%,rgba(0,0,0,0)_60%)] dark:bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.08)_0%,rgba(0,0,0,0)_60%)] pointer-events-none" />
@@ -188,7 +187,7 @@ export default function Skills() {
       </div>
 
       {/* Title */}
-      <div className="text-center mb-10 relative z-10 w-full">
+      <div className="text-center mb-6 relative z-10 w-full">
         <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-3">
           {t.skills.title} <span className="text-violet-600 dark:text-violet-500">{t.skills.titleHighlight}</span>
         </h2>
@@ -200,7 +199,7 @@ export default function Skills() {
       {/* Selected Skill Display */}
       {/* Hauteur figée en desktop : sans ça, une description de 1 ou 2 lignes
           change la hauteur du bloc et fait sauter le clavier au survol. */}
-      <div className="w-full max-w-2xl mx-auto mb-6 relative min-h-40 sm:min-h-32 md:min-h-0 md:h-32 flex items-center justify-center z-10 text-center px-4">
+      <div className="w-full max-w-2xl mx-auto mb-2 relative min-h-40 sm:min-h-32 md:min-h-0 md:h-28 flex items-center justify-center z-10 text-center px-4">
         {/* Un seul bloc monté à la fois, animé par une keyframe CSS relancée au
             changement de `key`. Avec AnimatePresence, un survol plus rapide que
             la transition laissait coexister plusieurs textes superposés, ce qui
@@ -396,7 +395,7 @@ function KeyCap({ tech, active, pressed, onHover, onClick }) {
           <img
             src={tech.icon}
             alt=""
-            className={`w-16 h-16 object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] ${tech.name === "Spring Boot" ? "invert brightness-[1.25]" : ""}`}
+            className={`w-18 h-18 object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] ${tech.name === "Spring Boot" ? "invert brightness-[1.25]" : ""}`}
           />
         </div>
       </div>
