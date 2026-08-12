@@ -48,7 +48,10 @@ export default function About() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       ref={sectionRef}
       id="a-propos"
-      className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white px-6 md:px-20 py-20 flex items-center scroll-mt-24"
+      // `relative` est requis par le useScroll ci-dessus : sur un conteneur en
+      // position statique, framer-motion ne peut pas calculer l'offset de
+      // défilement et avertit en console.
+      className="relative min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white px-6 md:px-20 py-20 flex items-center scroll-mt-24"
     >
       <div className="overflow-hidden w-full">
         <div className="max-w-6xl w-full mx-auto grid md:grid-cols-2 gap-12 items-center">

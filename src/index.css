@@ -29,6 +29,9 @@
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+  /* Conteneur de défilement par défaut de framer-motion (useScroll) : en
+     position statique, il ne peut pas mesurer d'offset relatif et avertit. */
+  position: relative;
 }
 
 body {
