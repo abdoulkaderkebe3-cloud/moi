@@ -28,3 +28,10 @@ dist-ssr
 
 # Copie de travail imbriquee (clone du meme depot), ne doit pas etre suivie
 mon-porfolio/
+
+# Fichiers de continuite Claude Code : notes de travail internes, ce depot
+# public est consulte par des recruteurs
+CLAUDE.md
+PROGRESS.md
+DECISIONS.md
+NEXT_SESSION.md
