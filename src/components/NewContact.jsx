@@ -1,67 +1,56 @@
-import React, { Suspense, useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Html, Environment } from '@react-three/drei';
-import { motion, useInView } from 'framer-motion';
-import * as THREE from 'three';
+import { Suspense, lazy, useRef, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useLang } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
 
-// Pre-load the massive 3D model en local pour des performances monstres (CDN Vercel)
-useGLTF.preload("/ToyCar.glb");
+// La scène 3D est chargée à la demande : elle entraîne three, fiber et drei,
+// soit 1,1 Mo de JS, plus le modèle. Rien de tout ça ne doit partir tant que le
+// visiteur n'approche pas de cette section, tout en bas de la page.
+const CarScene = lazy(() => import('./CarScene'));
 
-// ✅ Eviter les re-render inutiles (React.memo)
-const CarModel = React.memo(() => {
-  const { scene } = useGLTF("/ToyCar.glb");
-  const meshRef = useRef();
-
-  // Cloner la scène pour éviter des conflits si réutilisée
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
-
-  // Centrage automatique et calcul de la taille
-  useMemo(() => {
-    const box = new THREE.Box3().setFromObject(clonedScene);
-    const center = box.getCenter(new THREE.Vector3());
-    // On déplace le modèle pour que son centre soit à 0,0,0
-    clonedScene.position.set(-center.x, -center.y, -center.z);
-  }, [clonedScene]);
-
-  // ✅ Animation cinématique ultra-fluide (lent et majestueux pour masquer toute perception de lag)
-  useFrame((_, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.12;
-    }
-  });
-
-  return (
-    <group position={[0, -0.5, 0]}> {/* Décalé un peu pour compenser la taille colossale */}
-      <primitive
-        ref={meshRef}
-        object={clonedScene}
-        // ✅ SCALE COLOSSAL: passage au maximum recommandé (30).
-        scale={[40, 40, 40]}
-        rotation={[0, -Math.PI / 4, 0]}
-      />
-    </group>
-  );
-});
-
-// ✅ Loader pendant le chargement du modèle
-const CanvasLoader = () => (
-  <Html center>
-    <div style={{ color: '#7c3aed', fontSize: '14px', fontWeight: 400, letterSpacing: '1px' }}>
-      Loading 3D...
-    </div>
-  </Html>
+const SceneFallback = () => (
+  <div
+    style={{
+      position: 'absolute',
+      inset: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#7c3aed',
+      fontSize: '14px',
+      letterSpacing: '1px',
+    }}
+  >
+    Loading 3D...
+  </div>
 );
 
 export default function NewContact() {
   const { t } = useLang();
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  // ✅ Permet de détecter si la section Contact est visible à l'écran
   const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { margin: "200px" });
+  // `isNear` déclenche le chargement de la 3D et pilote sa boucle de rendu.
+  // `sceneMounted` ne redescend jamais : une fois la scène montée on la garde,
+  // la démonter détruirait le contexte WebGL à chaque aller-retour de scroll.
+  const [isNear, setIsNear] = useState(false);
+  const [sceneMounted, setSceneMounted] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsNear(entry.isIntersecting);
+        if (entry.isIntersecting) setSceneMounted(true);
+      },
+      { rootMargin: "400px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const sectionBg = isDark ? '#020617' : '#f5f3ff';
   const sectionColor = isDark ? '#fff' : '#1e1b4b';
@@ -200,27 +189,12 @@ export default function NewContact() {
             borderRadius: '24px', // optionnel pour éviter que la 3D ne déborde sous l'écran
           }}
         >
-          {/* THREE.JS Scene Directe */}
-          <Canvas
-            style={{ position: 'absolute', inset: 0, zIndex: 1 }}
-            dpr={1}
-            // ✅ STOCKEZ LA PERF: Si on scrolle plus haut, on coupe complètement l'animation 3D ("demand" = pause).
-            frameloop={isInView ? "always" : "demand"}
-            camera={{ position: [0, 0, 4.5], fov: 40 }}
-            gl={{ preserveDrawingBuffer: false, alpha: true, antialias: true, powerPreference: 'high-performance' }}
-          >
-            {/* ✅ Désactiver les options coûteuses (ombres très simples ou désactivées) */}
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[5, 10, -5]} intensity={1.5} />
-            <directionalLight position={[-5, 5, 5]} intensity={0.7} />
-
-            {/* ✅ Suspense pour charger le modèle */}
-            <Suspense fallback={<CanvasLoader />}>
-              <CarModel />
-              {/* Environment allégé avec résolution très faible pour économiser la mémoire vidéo (VRAM) */}
-              <Environment preset="forest" background={false} resolution={256} />
+          {/* Montée seulement à l'approche de la section, jamais au chargement. */}
+          {sceneMounted && (
+            <Suspense fallback={<SceneFallback />}>
+              <CarScene active={isNear} />
             </Suspense>
-          </Canvas>
+          )}
         </div>
       </div>
     </motion.section>

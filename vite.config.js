@@ -9,9 +9,13 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
+        // three / fiber / drei ne sont volontairement pas listés ici : un chunk
+        // manuel est rattaché à l'entrée, donc Vite lui injecte un
+        // <link rel="modulepreload"> et le télécharge dès l'ouverture du site.
+        // Laissé à Rollup, il suit l'import dynamique de CarScene et n'arrive
+        // qu'à l'approche de la section Contact.
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-motion': ['framer-motion', 'gsap'],
         },
       },
