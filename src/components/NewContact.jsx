@@ -2,7 +2,6 @@ import { Suspense, lazy, useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useLang } from "../context/LanguageContext";
-import { useTheme } from "../context/ThemeContext";
 import SceneErrorBoundary from './SceneErrorBoundary';
 
 // La scène 3D est chargée à la demande : elle entraîne three, fiber et drei,
@@ -18,7 +17,7 @@ const SceneFallback = () => (
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: '#7c3aed',
+      color: 'var(--color-accent)',
       fontSize: '14px',
       letterSpacing: '1px',
     }}
@@ -27,20 +26,35 @@ const SceneFallback = () => (
   </div>
 );
 
+// La scène coûte 2,25 Mo à l'arrivée dans la section : 1 Mo de moteur three,
+// 1 Mo de modèle et 205 Ko d'environnement. C'est tenable en wifi, beaucoup
+// moins sur un forfait mobile lent, où le téléchargement bloque le défilement
+// au moment précis où le visiteur atteint le formulaire de contact. On la
+// remplace alors par rien du tout, la section restant lisible sans elle.
+// `navigator.connection` n'existe pas sur Safari : dans le doute, on charge.
+function connexionTropLente() {
+  const c = navigator.connection;
+  if (!c) return false;
+  if (c.saveData) return true;
+  return ["slow-2g", "2g", "3g"].includes(c.effectiveType);
+}
+
 export default function NewContact() {
   const { t } = useLang();
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
   const containerRef = useRef(null);
   // `isNear` déclenche le chargement de la 3D et pilote sa boucle de rendu.
   // `sceneMounted` ne redescend jamais : une fois la scène montée on la garde,
   // la démonter détruirait le contexte WebGL à chaque aller-retour de scroll.
   const [isNear, setIsNear] = useState(false);
   const [sceneMounted, setSceneMounted] = useState(false);
+  // Évalué une seule fois, à la création de l'état : la qualité de la connexion
+  // ne change quasiment jamais en cours de visite, et un effet qui poserait cet
+  // état déclencherait un second rendu pour rien.
+  const [scene3dAutorisee] = useState(() => !connexionTropLente());
 
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || !scene3dAutorisee) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -51,10 +65,10 @@ export default function NewContact() {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [scene3dAutorisee]);
 
-  const sectionBg = isDark ? '#020617' : '#f5f3ff';
-  const sectionColor = isDark ? '#fff' : '#1e1b4b';
+  const sectionBg = '#000000';
+  const sectionColor = '#ffffff';
 
   return (
     <motion.section
@@ -102,8 +116,9 @@ export default function NewContact() {
             zIndex: 2,
           }}
         >
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3.2vw, 2.2rem)', fontWeight: 600, margin: 0, color: isDark ? '#94a3b8' : '#4f46e5' }}>
-            {t.contact.question}{' '}{t.contact.questionHighlight}
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3.2vw, 2.2rem)', fontWeight: 600, margin: 0, color: 'rgba(255,255,255,0.55)' }}>
+            {t.contact.question}{' '}
+            <span style={{ color: 'var(--color-accent)' }}>{t.contact.questionHighlight}</span>
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -113,7 +128,7 @@ export default function NewContact() {
                 fontSize: 'clamp(3rem, 7vw, 6.5rem)',
                 fontWeight: 900,
                 lineHeight: 1,
-                background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
+                background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-strong) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -135,7 +150,7 @@ export default function NewContact() {
                 gap: '0.75rem', 
                 textDecoration: 'none', 
                 cursor: 'pointer',
-                color: isDark ? '#a78bfa' : '#6366f1',
+                color: 'var(--color-accent)',
                 alignSelf: 'flex-end',
                 marginTop: '1.5rem'
               }}
@@ -156,8 +171,8 @@ export default function NewContact() {
                   width: 'clamp(2rem, 3.5vw, 3rem)',
                   height: 'clamp(2rem, 3.5vw, 3rem)',
                   borderRadius: '50%',
-                  border: `2px solid ${isDark ? '#a78bfa' : '#6366f1'}`,
-                  color: isDark ? '#a78bfa' : '#6366f1',
+                  border: '2px solid var(--color-accent)',
+                  color: 'var(--color-accent)',
                 }}
                 animate={{ 
                   y: [0, -3, 0],
@@ -177,6 +192,10 @@ export default function NewContact() {
         </motion.div>
 
         {/* ── RIGHT: 3D Car ── */}
+        {/* Sur connexion lente le conteneur n'est pas rendu du tout : réservé et
+            vide, il laisserait un trou de 650 px au milieu de la section. Sans
+            lui, le texte occupe simplement toute la largeur. */}
+        {scene3dAutorisee && (
         <div
           style={{
             // ✅ La voiture doit prendre environ 40 à 50% de la largeur
@@ -200,6 +219,7 @@ export default function NewContact() {
             </SceneErrorBoundary>
           )}
         </div>
+        )}
       </div>
     </motion.section>
   );

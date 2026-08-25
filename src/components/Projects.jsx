@@ -22,11 +22,11 @@ export default function Projects() {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       id="projets"
-      className="min-h-screen bg-violet-50 dark:bg-slate-950 text-slate-900 dark:text-white px-6 md:px-20 py-24"
+      className="min-h-screen bg-black text-white px-6 md:px-20 py-24"
     >
       <h2 className="text-4xl md:text-5xl text-center  mb-16 font-semibold">
-        <span className="text-slate-900 dark:text-white">{t.projects.title}</span>{" "}
-        <span className="text-violet-600 dark:text-violet-500">{t.projects.titleHighlight}</span>
+        <span className="text-white">{t.projects.title}</span>{" "}
+        <span className="text-accent">{t.projects.titleHighlight}</span>
       </h2>
 
       <div
@@ -35,18 +35,18 @@ export default function Projects() {
       >
 
         <div className="max-w-xl text-center lg:text-left z-10">
-          <h1 className="text-2xl md:text-3xl font-bold leading-relaxed text-slate-800 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold leading-relaxed text-white">
             {t.projects.description1}{" "}
-            <span className="text-violet-600 dark:text-violet-400">{t.projects.description1Highlight}</span>{" "}
+            <span className="text-accent">{t.projects.description1Highlight}</span>{" "}
             {t.projects.description1End}
-            <span className="block mt-4 text-xl font-medium text-slate-700 dark:text-white">
+            <span className="block mt-4 text-xl font-medium text-white">
               {t.projects.description2}{" "}
-              <span className="text-violet-600 dark:text-violet-500">{t.projects.description2Highlight}</span>,
+              <span className="text-accent">{t.projects.description2Highlight}</span>,
             </span>
-            <span className="block text-xl font-medium text-slate-700 dark:text-white">
+            <span className="block text-xl font-medium text-white">
               {t.projects.description3}
             </span>
-            <span className="block text-slate-400 dark:text-gray-400 mt-6 text-lg font-normal">
+            <span className="block text-white/40 mt-6 text-lg font-normal">
               {t.projects.hint}
             </span>
           </h1>
@@ -59,11 +59,11 @@ export default function Projects() {
           delay={3000}
           pauseOnHover={true}
         >
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
-            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
+          <Card className="bg-black border border-line rounded-xl shadow-xl shadow-black/60 hover:border-accent/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-accent">
               {t.projects.p1}
             </h3>
-            <p className="text-center text-slate-500 dark:text-gray-400">
+            <p className="text-center text-white/50">
               React, TailwindCSS
             </p>
             <a
@@ -79,11 +79,11 @@ export default function Projects() {
             </a>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
-            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
+          <Card className="bg-black border border-line rounded-xl shadow-xl shadow-black/60 hover:border-accent/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-accent">
               {t.projects.p6}
             </h3>
-            <p className="text-center text-slate-500 dark:text-gray-400">
+            <p className="text-center text-white/50">
               React, TypeScript
             </p>
             <a
@@ -99,11 +99,11 @@ export default function Projects() {
             </a>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
-            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
+          <Card className="bg-black border border-line rounded-xl shadow-xl shadow-black/60 hover:border-accent/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-accent">
               {t.projects.p2}
             </h3>
-            <p className="text-center text-slate-500 dark:text-gray-400">
+            <p className="text-center text-white/50">
               HTML, CSS, JS, Bootstrap
             </p>
             <a
@@ -119,11 +119,11 @@ export default function Projects() {
             </a>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
-            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
+          <Card className="bg-black border border-line rounded-xl shadow-xl shadow-black/60 hover:border-accent/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-accent">
               {t.projects.p7}
             </h3>
-            <p className="text-center text-slate-500 dark:text-gray-400">
+            <p className="text-center text-white/50">
               React, TypeScript, TailwindCSS
             </p>
             <a
@@ -138,11 +138,11 @@ export default function Projects() {
               />
             </a>
           </Card>
-          <Card className="bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-500/20 rounded-xl shadow-md hover:shadow-lg hover:shadow-violet-200/60 dark:hover:shadow-indigo-950/40 hover:border-violet-300 dark:hover:border-violet-500/40 transition-colors transition-shadow duration-300">
-            <h3 className="text-center text-xl font-bold text-violet-600 dark:text-violet-400">
+          <Card className="bg-black border border-line rounded-xl shadow-xl shadow-black/60 hover:border-accent/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-accent">
               {t.projects.p4}
             </h3>
-            <p className="text-center text-slate-500 dark:text-gray-400">
+            <p className="text-center text-white/50">
               react,nestjs
             </p>
             <a

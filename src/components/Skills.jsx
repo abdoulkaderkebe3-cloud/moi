@@ -83,7 +83,32 @@ export default function Skills() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [keyboardScale, setKeyboardScale] = useState(computeKeyboardScale);
   const [pressedKey, setPressedKey] = useState(null);
+  // Le clavier construit 16 touches de 13 éléments chacune, tous en
+  // `preserve-3d`, soit plus de 200 calques que le navigateur compose. Payé au
+  // premier rendu alors que la section est au troisième écran, ce coût retarde
+  // l'affichage du hero. Une fois monté on le garde : le démonter et le
+  // reconstruire à chaque aller-retour de scroll coûterait plus cher encore.
+  const [keyboardMounted, setKeyboardMounted] = useState(false);
   const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setKeyboardMounted(true);
+          observer.disconnect();
+        }
+      },
+      // Assez tôt pour que les touches et leurs seize icônes soient prêtes
+      // avant que la section n'entre dans le champ.
+      { rootMargin: "600px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -149,22 +174,22 @@ export default function Skills() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="min-h-screen bg-white dark:bg-slate-900 py-16 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
+      className="min-h-screen bg-black py-16 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
     >
       {/* Background Subtle Glows */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.04)_0%,rgba(0,0,0,0)_60%)] dark:bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.08)_0%,rgba(0,0,0,0)_60%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--accent-rgb)/0.07)_0%,rgba(0,0,0,0)_60%)] pointer-events-none" />
 
       {/* Blob Cursor Background Effect - Desktop only */}
       {!isMobile && (
         <Suspense fallback={null}>
           <BlobCursor
             blobType="circle"
-            fillColor="#8b5cf6"
+            fillColor="var(--color-accent)"
             trailCount={1}
             sizes={[40]}
             innerSizes={[0]}
             opacities={[0.5]}
-            shadowColor="rgba(139, 92, 246, 0.8)"
+            shadowColor="rgb(var(--accent-rgb) / 0.8)"
             shadowOffsetX={0}
             shadowOffsetY={0}
             shadowBlur={20}
@@ -181,17 +206,17 @@ export default function Skills() {
         className="hidden lg:block absolute -left-8 xl:left-4 top-1/2 -translate-y-1/2 z-0 pointer-events-none max-w-88"
         style={{ transform: "translateY(-50%) rotate(-58deg)" }}
       >
-        <p className="text-3xl xl:text-4xl font-light leading-[1.6] tracking-tight text-slate-900/10 dark:text-white/15">
+        <p className="text-3xl xl:text-4xl font-light leading-[1.6] tracking-tight text-white/15">
           {BACKDROP_TEXT}
         </p>
       </div>
 
       {/* Title */}
       <div className="text-center mb-6 relative z-10 w-full">
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-3">
-          {t.skills.title} <span className="text-violet-600 dark:text-violet-500">{t.skills.titleHighlight}</span>
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">
+          {t.skills.title} <span className="text-accent">{t.skills.titleHighlight}</span>
         </h2>
-        <p className="text-xl font-normal text-slate-500 dark:text-gray-400">
+        <p className="text-xl font-normal text-white/50">
           {t.skills.subtitle}
         </p>
       </div>
@@ -205,7 +230,7 @@ export default function Skills() {
             la transition laissait coexister plusieurs textes superposés, ce qui
             donnait l'impression que l'affichage se bloquait. */}
         {!selectedSkill ? (
-          <p className="animate-skill-in text-lg font-medium text-slate-400 dark:text-gray-500">
+          <p className="animate-skill-in text-lg font-medium text-white/40">
             ⌨️ {t.skills.placeholder}
           </p>
         ) : (
@@ -213,10 +238,10 @@ export default function Skills() {
             key={selectedSkill.key}
             className="animate-skill-in flex flex-col items-center justify-center w-full"
           >
-            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+            <h3 className="text-3xl font-bold text-white mb-2">
               {selectedSkill.name}
             </h3>
-            <p className="text-lg text-slate-600 dark:text-gray-300 leading-relaxed">
+            <p className="text-lg text-white/70 leading-relaxed">
               {t.skills.descriptions[selectedSkill.key]}
             </p>
           </div>
@@ -235,6 +260,7 @@ export default function Skills() {
         }}
         onMouseLeave={() => setSelectedSkill(null)}
       >
+        {keyboardMounted && (
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center transition-all duration-300 flex flex-col gap-3 items-center"
           style={{
@@ -267,6 +293,7 @@ export default function Skills() {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* Circular Badge Grid (Mobile only) */}
@@ -279,15 +306,17 @@ export default function Skills() {
             className="flex flex-col items-center justify-center gap-2.5 cursor-pointer"
           >
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center bg-violet-50 dark:bg-white/5 shadow-sm border border-violet-100 dark:border-white/10"
+              className="w-16 h-16 rounded-full flex items-center justify-center bg-surface border border-line"
             >
               <img
                 src={tech.icon}
                 alt={tech.name}
+                loading="lazy"
+                decoding="async"
                 className="w-8 h-8 object-contain"
               />
             </div>
-            <span className="text-slate-700 dark:text-white text-xs font-semibold text-center leading-tight">
+            <span className="text-white text-xs font-semibold text-center leading-tight">
               {tech.name}
             </span>
           </motion.div>

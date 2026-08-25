@@ -58,7 +58,7 @@ function LocalEnvironment() {
 
 const CanvasLoader = () => (
   <Html center>
-    <div style={{ color: '#7c3aed', fontSize: '14px', fontWeight: 400, letterSpacing: '1px' }}>
+    <div style={{ color: 'var(--color-accent)', fontSize: '14px', fontWeight: 400, letterSpacing: '1px' }}>
       Loading 3D...
     </div>
   </Html>

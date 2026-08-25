@@ -79,8 +79,8 @@ const translations = {
     },
     // Contact
     contact: {
-      question: "Avez-vous un",
-      questionHighlight: "projet\u00a0?",
+      question: "Votre projet mérite mieux",
+      questionHighlight: "qu'une belle carrosserie.",
       cta: "Discutons-en",
     },
     // CV
@@ -173,8 +173,8 @@ const translations = {
     },
     // Contact
     contact: {
-      question: "Do you have a",
-      questionHighlight: "project\u00a0?",
+      question: "Your project deserves more",
+      questionHighlight: "than good looks.",
       cta: "Let's talk",
     },
     // CV

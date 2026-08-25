@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import ShinyText from './ShinyText';
 import { useLang } from "../context/LanguageContext";
-import { useTheme } from "../context/ThemeContext";
 
 // Lazy-load LightRays: keeps the WebGL engine (ogl) out of the critical
 // bundle so the hero text paints before the background effect streams in.
@@ -10,24 +9,22 @@ const LightRays = lazy(() => import('./LightRays'));
 
 export default function Hero({ loading }) {
   const { t } = useLang();
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
 
   return (
     <section
       id="accueil"
-      className="relative h-screen w-full bg-white dark:bg-black text-slate-900 dark:text-white overflow-hidden"
+      className="relative h-screen w-full bg-black text-white overflow-hidden"
     >
       <Suspense fallback={null}>
         <LightRays
           raysOrigin="top-center"
-          raysColor={isDark ? "#ffffff" : "#6366f1"}
+          raysColor="#ffffff"
           raysSpeed={1}
           lightSpread={0.7}
           rayLength={2}
           followMouse={true}
           mouseInfluence={0.10}
-          className={`absolute inset-0 w-full h-full ${isDark ? "" : "opacity-30"}`}
+          className="absolute inset-0 w-full h-full"
         />
       </Suspense>
 
@@ -37,8 +34,8 @@ export default function Hero({ loading }) {
             text="Kebe Abdoul Kader"
             speed={3}
             delay={0.5}
-            color={isDark ? "#b5b5b5" : "#1e293b"}
-            shineColor={isDark ? "#ffffff" : "#6366f1"}
+            color="#b5b5b5"
+            shineColor="#ffffff"
             spread={120}
             direction="left"
             yoyo={true}
@@ -54,7 +51,7 @@ export default function Hero({ loading }) {
               stiffness: 90,
               delay: 0.6
             }}
-            className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-gray-400 tracking-widest text-center px-4"
+            className="text-base sm:text-lg md:text-xl text-white/50 tracking-widest text-center px-4"
           >
             {t.hero.role}
           </motion.p>

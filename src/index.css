@@ -1,5 +1,27 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
+
+/* Palette du site : le noir du hero (`bg-black`) sur toutes les sections, et un
+   seul accent. Les trois noirs différents d'avant découpaient la page en bandes
+   visibles au scroll, un seul noir la rend continue.
+   Tout ce qui est coloré passe par `accent` : changer la couleur du site tient
+   à cette ligne et non à un balayage des composants.
+   `surface` et `line` sont les seuls éclaircissements autorisés. Exprimés en
+   blanc translucide, ils marquent les cartes et les séparations sans jamais
+   introduire un deuxième fond. */
+@theme {
+  --color-accent: #e3d5c0;
+  --color-accent-strong: #c9b79c;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-line: rgba(255, 255, 255, 0.10);
+}
+
+/* Composantes RVB du même accent, pour les halos et dégradés qui doivent en
+   moduler l'opacité : `rgb(var(--accent-rgb) / 0.35)`. Une couleur hexadécimale
+   ne se module pas, d'où ce doublon, à garder synchronisé avec
+   `--color-accent`. C'est la seule autre place où l'accent est écrit. */
+:root {
+  --accent-rgb: 227 213 192;
+}
 
 @keyframes marquee {
   from { transform: translateX(0); }

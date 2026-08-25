@@ -1,7 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 import { LanguageProvider } from "./context/LanguageContext";
-import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
 import ScrollProgress from "./components/ScrollProgress";
 import Hero from "./components/Hero";
@@ -14,7 +13,6 @@ import LoadingScreen from "./components/LoadingScreen";
 
 // Lazy-load heavy components (3D model, video, large images)
 const NewContact = lazy(() => import("./components/NewContact"));
-const CVSection = lazy(() => import("./components/CVSection"));
 const Certifications = lazy(() => import("./components/Certifications"));
 
 function App() {
@@ -52,7 +50,7 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider>
+    <>
       <LanguageProvider>
         <AnimatePresence>
           {loading && <LoadingScreen key="loading" />}
@@ -67,11 +65,10 @@ function App() {
         <Suspense fallback={null}>
           <Certifications />
           <NewContact />
-          <CVSection />
         </Suspense>
         <Footer />
       </LanguageProvider>
-    </ThemeProvider>
+    </>
   );
 }
 

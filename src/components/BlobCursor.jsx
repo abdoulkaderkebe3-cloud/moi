@@ -3,7 +3,7 @@ import gsap from "gsap";
 
 export default function BlobCursor({
   blobType = "circle",
-  fillColor = "#8b5cf6",
+  fillColor = "var(--color-accent)",
   trailCount = 3,
   sizes = [60, 125, 75],
   innerSizes = [20, 35, 25],

@@ -1,12 +1,9 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import logo from "../assets/images/svg/noun-mind-5663275.svg";
-import { useTheme } from "../context/ThemeContext";
 
 export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -42,7 +39,7 @@ export default function LoadingScreen() {
         position: "fixed",
         inset: 0,
         zIndex: 9999,
-        background: isDark ? "#000" : "#ffffff",
+        background: "#000",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -59,15 +56,14 @@ export default function LoadingScreen() {
           width: 72,
           height: 72,
           borderRadius: 20,
-          background: isDark ? "rgba(255,255,255,0.04)" : "rgba(139, 92, 246, 0.08)",
-          border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(139, 92, 246, 0.2)",
+          background: "rgba(255,255,255,0.04)",
+          border: "1px solid rgba(255,255,255,0.08)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           marginBottom: 40,
-          boxShadow: isDark
-            ? "0 0 60px rgba(99, 102, 241, 0.12), 0 0 120px rgba(99, 102, 241, 0.06)"
-            : "0 0 60px rgba(139, 92, 246, 0.15), 0 0 120px rgba(139, 92, 246, 0.08)",
+          boxShadow:
+            "0 0 60px rgb(var(--accent-rgb) / 0.12), 0 0 120px rgb(var(--accent-rgb) / 0.06)",
         }}
       >
         <motion.img
@@ -77,7 +73,7 @@ export default function LoadingScreen() {
             width: 40,
             height: 40,
             objectFit: "contain",
-            filter: isDark ? "invert(1)" : "none",
+            filter: "invert(1)",
           }}
           animate={{ rotate: [0, 4, -4, 0] }}
           transition={{
@@ -110,7 +106,7 @@ export default function LoadingScreen() {
             style={{
               fontSize: "clamp(28px, 5vw, 42px)",
               fontWeight: 700,
-              color: isDark ? "#fff" : "#4c1d95",
+              color: "#fff",
               letterSpacing: "-0.02em",
               display: "inline-block",
             }}
@@ -151,8 +147,8 @@ export default function LoadingScreen() {
         style={{
           marginTop: 16,
           fontSize: 12,
-          color: isDark ? "#fff" : "#7c3aed",
-          fontWeight: isDark ? 500 : 600,
+          color: "var(--color-accent)",
+          fontWeight: 500,
           letterSpacing: "0.15em",
           fontVariantNumeric: "tabular-nums",
         }}

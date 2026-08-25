@@ -375,7 +375,7 @@ const CardSwap = ({
         <button
           onClick={handlePrev}
           disabled={isAnimating}
-          className="group flex items-center justify-center w-12 h-12 rounded-full border border-violet-500/30 bg-slate-950/80 text-violet-400 hover:text-white hover:border-violet-500 hover:bg-violet-600/50 backdrop-blur-md transition-all duration-300 active:scale-90 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shadow-lg shadow-violet-950/50"
+          className="group flex items-center justify-center w-12 h-12 rounded-full border border-line bg-black/80 text-accent hover:text-black hover:border-accent hover:bg-accent backdrop-blur-md transition-all duration-300 active:scale-90 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shadow-lg shadow-black/60"
           aria-label="Projet précédent"
         >
           <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-0.5" />
@@ -383,7 +383,7 @@ const CardSwap = ({
         <button
           onClick={handleNext}
           disabled={isAnimating}
-          className="group flex items-center justify-center w-12 h-12 rounded-full border border-violet-500/30 bg-slate-950/80 text-violet-400 hover:text-white hover:border-violet-500 hover:bg-violet-600/50 backdrop-blur-md transition-all duration-300 active:scale-90 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shadow-lg shadow-violet-950/50"
+          className="group flex items-center justify-center w-12 h-12 rounded-full border border-line bg-black/80 text-accent hover:text-black hover:border-accent hover:bg-accent backdrop-blur-md transition-all duration-300 active:scale-90 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shadow-lg shadow-black/60"
           aria-label="Projet suivant"
         >
           <ChevronRight size={24} className="transition-transform group-hover:translate-x-0.5" />

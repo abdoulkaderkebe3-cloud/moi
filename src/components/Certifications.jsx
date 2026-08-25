@@ -103,17 +103,17 @@ export default function Certifications() {
   return (
     <section
       id="certifications"
-      className="bg-white dark:bg-slate-950 py-24 scroll-mt-24"
+      className="bg-black py-24 scroll-mt-24"
     >
       <motion.h2
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-center text-4xl md:text-5xl font-semibold text-slate-900 dark:text-white mb-16"
+        className="text-center text-4xl md:text-5xl font-semibold text-white mb-16"
       >
         {t.certifications.title}{" "}
-        <span className="text-violet-600 dark:text-violet-500">
+        <span className="text-accent">
           {t.certifications.titleHighlight}
         </span>
       </motion.h2>
@@ -137,11 +137,11 @@ export default function Certifications() {
                   : `calc(var(--card-h) * -${OVERLAP})`,
             }}
           >
-            <div className="stack-card-inner origin-top mx-auto w-full max-w-5xl overflow-hidden rounded-2xl border border-violet-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-sm will-change-transform">
+            <div className="stack-card-inner origin-top mx-auto w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-black shadow-xl shadow-black/60 will-change-transform">
               {/* Deux colonnes en desktop : l'image seule laissait de grandes
                   bandes vides de chaque côté sur les grands écrans. */}
               <div className="grid md:grid-cols-[1.5fr_1fr]">
-                <div className="flex items-center justify-center bg-violet-50/70 dark:bg-slate-950/40 p-3 md:p-5">
+                <div className="flex items-center justify-center bg-surface p-3 md:p-5">
                   <img
                     src={cert.src}
                     alt={cert.alt}
@@ -153,23 +153,23 @@ export default function Certifications() {
                   />
                 </div>
 
-                <div className="flex flex-col justify-center gap-3 border-t border-violet-100 p-6 md:border-t-0 md:border-l md:p-8 dark:border-white/10">
-                  <h3 className="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white">
+                <div className="flex flex-col justify-center gap-3 border-t border-line p-6 md:border-t-0 md:border-l md:p-8">
+                  <h3 className="text-xl md:text-2xl font-semibold text-white">
                     {cert.title}
                   </h3>
                   {cert.issuer && (
-                    <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="text-sm leading-relaxed text-white/50">
                       {cert.issuer}
                     </p>
                   )}
                   <div className="flex flex-wrap items-center gap-2">
                     {cert.award && (
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 ring-1 ring-amber-300/70 dark:bg-amber-400/15 dark:text-amber-300 dark:ring-amber-400/30">
+                      <span className="rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent ring-1 ring-accent/30">
                         {cert.award}
                       </span>
                     )}
                     {cert.year && (
-                      <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+                      <span className="rounded-full bg-surface px-3 py-1 text-xs font-medium text-white/60 ring-1 ring-line">
                         {cert.year}
                       </span>
                     )}

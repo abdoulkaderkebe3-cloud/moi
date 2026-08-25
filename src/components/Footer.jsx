@@ -5,7 +5,7 @@ import { useLang } from "../context/LanguageContext";
 export default function Footer() {
   const { t } = useLang();
   return (
-    <footer id="footer" className="bg-violet-700 dark:bg-slate-950 text-violet-200 dark:text-gray-400 py-10 border-t border-violet-600 dark:border-white/10 ">
+    <footer id="footer" className="bg-black text-white/50 py-10 border-t border-line">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -23,13 +23,13 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-6">
-          <a href="https://github.com/abdoulkaderkebe3-cloud" className="hover:text-white dark:hover:text-indigo-400 transition" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/abdoulkaderkebe3-cloud" className="hover:text-accent transition" target="_blank" rel="noopener noreferrer">
             <Github />
           </a>
-          <a href="https://www.linkedin.com/in/abdoul-kader-kebe-047b1b383/" className="hover:text-white dark:hover:text-indigo-400 transition" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/in/abdoul-kader-kebe-047b1b383/" className="hover:text-accent transition" target="_blank" rel="noopener noreferrer">
             <Linkedin />
           </a>
-          <a href="https://linktr.ee/la_marasse" className="hover:text-white dark:hover:text-indigo-400 transition" target="_blank" rel="noopener noreferrer">
+          <a href="https://linktr.ee/kvder" className="hover:text-accent transition" target="_blank" rel="noopener noreferrer">
             <LineChartIcon/>
           </a>
         </div>
