@@ -32,11 +32,19 @@ const SceneFallback = () => (
 // au moment précis où le visiteur atteint le formulaire de contact. On la
 // remplace alors par rien du tout, la section restant lisible sans elle.
 // `navigator.connection` n'existe pas sur Safari : dans le doute, on charge.
+//
+// `3g` a été retiré du seuil le 27/08. `effectiveType` ne décrit pas la
+// technologie réseau mais la latence et le débit mesurés : une connexion
+// correcte avec de la latence, ce qui est la norme ici, est classée `3g`. La
+// voiture disparaissait donc pour une grande partie des visiteurs, alors que
+// l'accroche de la section la désigne explicitement. Restent écartés les cas
+// où le coût est réellement prohibitif : 2g, et l'économie de données, qui est
+// un choix délibéré du visiteur.
 function connexionTropLente() {
   const c = navigator.connection;
   if (!c) return false;
   if (c.saveData) return true;
-  return ["slow-2g", "2g", "3g"].includes(c.effectiveType);
+  return ["slow-2g", "2g"].includes(c.effectiveType);
 }
 
 export default function NewContact() {
