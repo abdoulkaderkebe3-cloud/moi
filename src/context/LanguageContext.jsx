@@ -79,8 +79,8 @@ const translations = {
     },
     // Contact
     contact: {
-      question: "Votre projet mérite mieux",
-      questionHighlight: "qu'une belle carrosserie.",
+      question: "Un bon site ne coûte pas. Il rapporte",
+      questionHighlight: "de quoi s'offrir cette voiture.",
       cta: "Discutons-en",
     },
     // CV
@@ -173,8 +173,8 @@ const translations = {
     },
     // Contact
     contact: {
-      question: "Your project deserves more",
-      questionHighlight: "than good looks.",
+      question: "A good site is not a cost. It earns you",
+      questionHighlight: "enough for that car.",
       cta: "Let's talk",
     },
     // CV
