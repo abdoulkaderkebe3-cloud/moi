@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kvder.com/sitemap.xml
