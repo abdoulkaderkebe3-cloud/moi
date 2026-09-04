@@ -5,6 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
 
+    <!-- Styles critiques, en ligne pour ne dépendre d'aucune requête.
+         Le fond noir évite le flash blanc avant que la feuille de style
+         arrive, et les règles du hero statique reproduisent au pixel ce que
+         React affichera, pour que la bascule ne se voie pas.
+         La pile de polices est celle de Tailwind, sinon le texte change de
+         chasse au moment où React prend la main. -->
+    <style>
+      /* `scrollbar-gutter` réserve la place de la barre de défilement dès la
+         première peinture. Sans elle, la page ne fait qu'un écran tant que
+         React n'a pas démarré, la barre apparaît ensuite et décale le titre
+         centré de 7 px sur desktop. */
+      html { scrollbar-gutter: stable; }
+      html, body { margin: 0; background: #000; }
+
+      #hero-statique {
+        position: absolute;
+        inset: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 1rem;
+        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      }
+
+      /* Même dégradé que ShinyText, figé sur sa première image (150% center),
+         donc la reprise par React ne provoque aucun saut de couleur. */
+      #hero-statique-nom {
+        display: inline-block;
+        margin-bottom: 1rem;
+        /* Taille ET interligne repris de Tailwind : text-4xl vaut 2.25rem sur
+           2.5rem, et text-5xl et au-delà passent à un interligne de 1. Sans
+           cette seconde valeur le titre statique était 14 px plus haut et
+           retombait de 7 px au montage de React. */
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        background-image: linear-gradient(120deg, #b5b5b5 0%, #b5b5b5 35%,
+          #ffffff 50%, #b5b5b5 65%, #b5b5b5 100%);
+        background-size: 200% auto;
+        background-position: 150% center;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Réservé mais non peint : le rôle apparaît en fondu côté React. Sans ce
+         bloc, le nom serait centré seul et remonterait à la bascule. */
+      #hero-statique-role {
+        visibility: hidden;
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        letter-spacing: 0.1em;
+      }
+
+      @media (min-width: 640px) {
+        #hero-statique-nom { font-size: 3rem; line-height: 1; }
+        #hero-statique-role { font-size: 1.125rem; line-height: 1.75rem; }
+      }
+      @media (min-width: 768px) {
+        #hero-statique-nom { font-size: 3.75rem; line-height: 1; }
+        #hero-statique-role { font-size: 1.25rem; line-height: 1.75rem; }
+      }
+      @media (min-width: 1024px) {
+        #hero-statique-nom { font-size: 4.5rem; line-height: 1; }
+      }
+    </style>
+
     <title>Kebe Abdoul Kader | Développeur Full Stack à Abidjan</title>
     <meta name="description" content="Développeur Full Stack à Abidjan, Java Spring Boot et React. 2e place au Vibeathon Côte d'Ivoire 2026. Mes projets, mes compétences et mes certifications." />
     <meta name="author" content="Kebe Abdoul Kader" />
@@ -68,7 +141,18 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Squelette du hero, peint avant que React démarre. C'est lui qui porte
+         désormais le LCP : le titre s'affiche à la première peinture au lieu
+         d'attendre le démarrage de l'application. React vide ce conteneur au
+         premier rendu, le remplacement est donc instantané et sans doublon.
+         `aria-hidden` évite qu'un lecteur d'écran annonce deux fois le nom
+         pendant la bascule. -->
+    <div id="root">
+      <div id="hero-statique" aria-hidden="true">
+        <span id="hero-statique-nom">Kebe Abdoul Kader</span>
+        <p id="hero-statique-role">Développeur Full Stack</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -7,7 +7,7 @@ import { useLang } from "../context/LanguageContext";
 // bundle so the hero text paints before the background effect streams in.
 const LightRays = lazy(() => import('./LightRays'));
 
-export default function Hero({ loading }) {
+export default function Hero() {
   const { t } = useLang();
 
   return (
@@ -28,8 +28,9 @@ export default function Hero({ loading }) {
         />
       </Suspense>
 
-      {!loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
+      {/* Ce bloc prend la place du squelette statique d'index.html, au même
+          endroit et à la même taille : la bascule ne doit pas se voir. */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
           <ShinyText
             text="Kebe Abdoul Kader"
             speed={3}
@@ -55,8 +56,7 @@ export default function Hero({ loading }) {
           >
             {t.hero.role}
           </motion.p>
-        </div>
-      )}
+      </div>
     </section>
   );
 }
