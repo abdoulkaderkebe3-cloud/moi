@@ -22,7 +22,7 @@ export default function Projects() {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       id="projets"
-      className="min-h-screen bg-black text-white px-6 md:px-20 py-24"
+      className="min-h-screen bg-black text-white px-6 md:px-20 py-24 scroll-mt-24"
     >
       <h2 className="text-4xl md:text-5xl text-center  mb-16 font-semibold">
         <span className="text-white">{t.projects.title}</span>{" "}

@@ -5,7 +5,7 @@ import { useLang } from "../context/LanguageContext";
 export default function Footer() {
   const { t } = useLang();
   return (
-    <footer id="footer" className="bg-black text-white/50 py-10 border-t border-line">
+    <footer id="footer" className="bg-black text-white/50 py-10 border-t border-line scroll-mt-24">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

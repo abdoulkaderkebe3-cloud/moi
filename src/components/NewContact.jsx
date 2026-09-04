@@ -89,6 +89,10 @@ export default function NewContact() {
       style={{
         width: '100%',
         minHeight: '100vh',
+        // Équivalent du `scroll-mt-24` des autres sections. La navbar est
+        // fixe et recouvrait le haut du bloc quand on cliquait « Contact ».
+        // Ici en style en ligne, cette section n'utilisant pas Tailwind.
+        scrollMarginTop: '6rem',
         background: sectionBg,
         color: sectionColor,
         display: 'flex',

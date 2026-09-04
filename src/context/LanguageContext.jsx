@@ -10,7 +10,6 @@ const translations = {
       projects: "Projets",
       certifications: "Certifications",
       services: "Services",
-      cv: "CV",
       contact: "Contact",
       footer: "Footer",
       follow: "Suivez-moi",
@@ -110,13 +109,6 @@ const translations = {
       questionHighlight: "de quoi s'offrir cette voiture.",
       cta: "Discutons-en",
     },
-    // CV
-    cv: {
-      title: "Mon",
-      titleHighlight: "Curriculum Vitae",
-      description: "Consultez mon parcours détaillé, mes compétences et mes expériences en téléchargeant mon CV.",
-      button: "Télécharger mon CV",
-    },
     // Footer
     footer: {
       rights: "Tous droits réservés.",
@@ -131,7 +123,6 @@ const translations = {
       projects: "Projects",
       certifications: "Certifications",
       services: "Services",
-      cv: "CV",
       contact: "Contact",
       footer: "Footer",
       follow: "Follow me",
@@ -230,13 +221,6 @@ const translations = {
       question: "A good site is not a cost. It earns you",
       questionHighlight: "enough for that car.",
       cta: "Let's talk",
-    },
-    // CV
-    cv: {
-      title: "My",
-      titleHighlight: "Resume",
-      description: "Check out my detailed background, skills, and professional experiences by downloading my resume.",
-      button: "Download Resume",
     },
     // Footer
     footer: {
