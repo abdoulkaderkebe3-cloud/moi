@@ -14,6 +14,7 @@ import LoadingScreen from "./components/LoadingScreen";
 // Lazy-load heavy components (3D model, video, large images)
 const NewContact = lazy(() => import("./components/NewContact"));
 const Certifications = lazy(() => import("./components/Certifications"));
+const Services = lazy(() => import("./components/Services"));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -64,6 +65,7 @@ function App() {
         <Projects />
         <Suspense fallback={null}>
           <Certifications />
+          <Services />
           <NewContact />
         </Suspense>
         <Footer />

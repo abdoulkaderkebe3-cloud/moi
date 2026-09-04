@@ -54,6 +54,7 @@ export default function Navbar() {
     { name: t.nav.skills, href: "#compétences" },
     { name: t.nav.projects, href: "#projets" },
     { name: t.nav.certifications, href: "#certifications" },
+    { name: t.nav.services, href: "#services" },
     { name: t.nav.contact, href: "#contact" },
     { name: t.nav.footer, href: "#footer" },
   ];

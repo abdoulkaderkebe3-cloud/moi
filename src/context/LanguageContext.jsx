@@ -9,6 +9,7 @@ const translations = {
       skills: "Compétences",
       projects: "Projets",
       certifications: "Certifications",
+      services: "Services",
       cv: "CV",
       contact: "Contact",
       footer: "Footer",
@@ -77,6 +78,32 @@ const translations = {
       title: "Mes",
       titleHighlight: "Certifications",
     },
+    // Services
+    services: {
+      title: "Mes",
+      titleHighlight: "Services",
+      intro:
+        "Je travaille en freelance et je reste ouvert aux stages. Voici ce sur quoi je peux intervenir, seul ou dans votre équipe.",
+      cta: "Parlons de votre projet",
+      items: {
+        training: {
+          title: "Formation en développement web",
+          text: "Ateliers en groupe ou accompagnement individuel, des bases HTML, CSS et JavaScript jusqu'à React et Spring Boot. J'anime déjà ces sessions au Club des Développeurs de mon université.",
+        },
+        apps: {
+          title: "Applications web sur mesure",
+          text: "De la base de données à l'interface : modèle PostgreSQL, API REST en Java et Spring Boot, front en React ou Angular. Un seul interlocuteur sur toute la chaîne.",
+        },
+        interfaces: {
+          title: "Sites vitrines et interfaces",
+          text: "Des interfaces pensées pour le mobile d'abord, sobres et rapides. Maquette, intégration, mise en ligne et suivi. Ce site en est un exemple.",
+        },
+        ai: {
+          title: "Développement assisté par IA",
+          text: "J'orchestre des agents IA pour livrer plus vite, en gardant la main sur l'architecture et sur ce qui part en production. C'est cette méthode qui m'a valu la 2e place au Vibeathon 2026.",
+        },
+      },
+    },
     // Contact
     contact: {
       question: "Un bon site ne coûte pas. Il rapporte",
@@ -103,6 +130,7 @@ const translations = {
       skills: "Skills",
       projects: "Projects",
       certifications: "Certifications",
+      services: "Services",
       cv: "CV",
       contact: "Contact",
       footer: "Footer",
@@ -170,6 +198,32 @@ const translations = {
     certifications: {
       title: "My",
       titleHighlight: "Certifications",
+    },
+    // Services
+    services: {
+      title: "My",
+      titleHighlight: "Services",
+      intro:
+        "I work as a freelancer and I am open to internships. Here is what I can take on, on my own or inside your team.",
+      cta: "Let's talk about your project",
+      items: {
+        training: {
+          title: "Web development training",
+          text: "Group workshops or one-on-one coaching, from HTML, CSS and JavaScript basics up to React and Spring Boot. I already run these sessions at my university Developers Club.",
+        },
+        apps: {
+          title: "Custom web applications",
+          text: "From the database to the interface: PostgreSQL data model, REST API in Java and Spring Boot, front end in React or Angular. One person across the whole chain.",
+        },
+        interfaces: {
+          title: "Showcase sites and interfaces",
+          text: "Interfaces designed for mobile first, clean and fast. Mockup, integration, deployment and follow-up. This very site is an example.",
+        },
+        ai: {
+          title: "AI-assisted development",
+          text: "I orchestrate AI agents to ship faster, while keeping control of the architecture and of what goes to production. This method earned me 2nd place at Vibeathon 2026.",
+        },
+      },
     },
     // Contact
     contact: {
