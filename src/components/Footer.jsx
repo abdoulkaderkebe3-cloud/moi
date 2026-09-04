@@ -20,21 +20,6 @@ export default function Footer() {
           <p className="text-sm mt-2">
             © {new Date().getFullYear()} {t.footer.rights}
           </p>
-          {/* Attribution requise par la licence CC BY du Noun Project, d'où
-              vient le dessin du favicon. Elle était auparavant incrustée dans
-              le SVG lui-même, ce qui le rendait non carré et illisible. */}
-          <p className="text-xs mt-1 text-white/30">
-            {t.footer.iconCredit}{" "}
-            <a
-              href="https://thenounproject.com/creator/vectorstall/"
-              target="_blank"
-              rel="noopener noreferrer license"
-              className="underline underline-offset-2 hover:text-accent transition"
-            >
-              Vectorstall
-            </a>
-            , The Noun Project (CC BY)
-          </p>
         </div>
 
         <div className="flex gap-6">

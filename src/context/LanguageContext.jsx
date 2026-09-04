@@ -22,7 +22,7 @@ const translations = {
     about: {
       title: "À propos",
       titleSuffix: "de moi",
-      text: "Étudiant en MIAGE et responsable du développement front-end chez Viso-Studio, je construis des applications web en Java/Spring Boot et React. Ma particularité : je travaille en binôme avec des agents IA, que j'orchestre pour livrer plus vite sans jamais lâcher la maîtrise de l'architecture ni de la qualité du code.\n\nCette approche m'a valu la 2e place au Vibeathon Côte d'Ivoire 2026 avec EcoWatt, un système de prises intelligentes qui réduit la facture d'électricité, dont j'étais lead technique.\n\nJe suis aussi Président du Club des Développeurs de mon université, où j'anime des ateliers autour du développement.",
+      text: "Je code en binôme avec des agents IA. Ils écrivent vite, je garde la main sur l'architecture et sur ce qui part en production. Étudiant en MIAGE et responsable du développement front-end chez Viso-Studio, je construis des applications web en Java/Spring Boot et React.\n\nCette approche m'a valu la 2e place au Vibeathon Côte d'Ivoire 2026 avec EcoWatt, un système de prises intelligentes qui réduit la facture d'électricité, dont j'étais lead technique.\n\nJe suis aussi Président du Club des Développeurs de mon université, où j'anime des ateliers autour du développement.",
     },
     // Skills
     skills: {
@@ -93,7 +93,6 @@ const translations = {
     // Footer
     footer: {
       rights: "Tous droits réservés.",
-      iconCredit: "Icône",
     },
   },
   en: {
@@ -117,7 +116,7 @@ const translations = {
     about: {
       title: "About",
       titleSuffix: "me",
-      text: "A MIAGE student and front-end development lead at Viso-Studio, I build web applications with Java/Spring Boot and React. What sets me apart: I work side by side with AI agents, orchestrating them to ship faster without ever losing control of the architecture or the quality of the code.\n\nThis approach earned me 2nd place at Vibeathon Côte d'Ivoire 2026 with EcoWatt, a smart plug system that cuts electricity bills, where I was the technical lead.\n\nI am also President of the Developers Club at my university, where I host workshops around software development.",
+      text: "I code side by side with AI agents. They write fast, I keep control of the architecture and of what ships to production. A MIAGE student and front-end development lead at Viso-Studio, I build web applications with Java/Spring Boot and React.\n\nThis approach earned me 2nd place at Vibeathon Côte d'Ivoire 2026 with EcoWatt, a smart plug system that cuts electricity bills, where I was the technical lead.\n\nI am also President of the Developers Club at my university, where I host workshops around software development.",
     },
     // Skills
     skills: {
@@ -188,7 +187,6 @@ const translations = {
     // Footer
     footer: {
       rights: "All rights reserved.",
-      iconCredit: "Icon",
     },
   },
 };
