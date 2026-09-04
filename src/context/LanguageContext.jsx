@@ -93,6 +93,7 @@ const translations = {
     // Footer
     footer: {
       rights: "Tous droits réservés.",
+      iconCredit: "Icône",
     },
   },
   en: {
@@ -187,6 +188,7 @@ const translations = {
     // Footer
     footer: {
       rights: "All rights reserved.",
+      iconCredit: "Icon",
     },
   },
 };
