@@ -33,13 +33,9 @@ export default function Hero() {
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
           <ShinyText
             text="Kebe Abdoul Kader"
-            speed={3}
-            delay={0.5}
             color="#b5b5b5"
             shineColor="#ffffff"
             spread={120}
-            direction="left"
-            yoyo={true}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4"
           />
 

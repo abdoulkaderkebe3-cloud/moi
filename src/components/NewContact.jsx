@@ -1,5 +1,6 @@
 import { Suspense, lazy, useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { RevealGroup, RevealItem, RevealTitle } from './Reveal';
 import { ArrowUpRight } from 'lucide-react';
 import { useLang } from "../context/LanguageContext";
 import SceneErrorBoundary from './SceneErrorBoundary';
@@ -53,8 +54,9 @@ export default function NewContact() {
   // `isNear` déclenche le chargement de la 3D et pilote sa boucle de rendu.
   // `sceneMounted` ne redescend jamais : une fois la scène montée on la garde,
   // la démonter détruirait le contexte WebGL à chaque aller-retour de scroll.
-  const [isNear, setIsNear] = useState(false);
+  const [isOnScreen, setIsOnScreen] = useState(false);
   const [sceneMounted, setSceneMounted] = useState(false);
+  const sceneRef = useRef(null);
   // Évalué une seule fois, à la création de l'état : la qualité de la connexion
   // ne change quasiment jamais en cours de visite, et un effet qui poserait cet
   // état déclencherait un second rendu pour rien.
@@ -64,26 +66,35 @@ export default function NewContact() {
     const el = containerRef.current;
     if (!el || !scene3dAutorisee) return;
 
+    // Montage 400 px avant l'arrivée, pour que la voiture soit prête...
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsNear(entry.isIntersecting);
-        if (entry.isIntersecting) setSceneMounted(true);
+        if (entry.isIntersecting) {
+          setSceneMounted(true);
+          observer.disconnect();
+        }
       },
       { rootMargin: "400px" }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+
+    // ...mais rendu seulement quand la scène est réellement à l'écran. Avec la
+    // marge de 400 px, three.js tournait encore pendant tout le bas de la
+    // section Services.
+    const onScreen = new IntersectionObserver(([entry]) => setIsOnScreen(entry.isIntersecting));
+    if (sceneRef.current) onScreen.observe(sceneRef.current);
+
+    return () => {
+      observer.disconnect();
+      onScreen.disconnect();
+    };
   }, [scene3dAutorisee]);
 
   const sectionBg = '#000000';
   const sectionColor = '#ffffff';
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+    <section
       id="contact"
       ref={containerRef}
       style={{
@@ -114,11 +125,7 @@ export default function NewContact() {
         }}
       >
         {/* ── LEFT: Text ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
+        <RevealGroup
           style={{
             flex: '1 1 40%', // ✅ Texte à gauche
             minWidth: '280px',
@@ -128,12 +135,13 @@ export default function NewContact() {
             zIndex: 2,
           }}
         >
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3.2vw, 2.2rem)', fontWeight: 600, margin: 0, color: 'rgba(255,255,255,0.55)' }}>
-            {t.contact.question}{' '}
-            <span style={{ color: 'var(--color-accent)' }}>{t.contact.questionHighlight}</span>
-          </h2>
+          <RevealTitle
+            text={t.contact.question}
+            highlight={t.contact.questionHighlight}
+            style={{ fontSize: 'clamp(1.5rem, 3.2vw, 2.2rem)', fontWeight: 600, margin: 0, color: 'rgba(255,255,255,0.55)' }}
+          />
 
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <RevealItem style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <motion.span
               style={{
                 display: 'block',
@@ -199,9 +207,9 @@ export default function NewContact() {
                 <ArrowUpRight style={{ width: '60%', height: '60%', strokeWidth: 2.5 }} />
               </motion.div>
             </motion.a>
-          </div>
+          </RevealItem>
 
-        </motion.div>
+        </RevealGroup>
 
         {/* ── RIGHT: 3D Car ── */}
         {/* Sur connexion lente le conteneur n'est pas rendu du tout : réservé et
@@ -209,6 +217,7 @@ export default function NewContact() {
             lui, le texte occupe simplement toute la largeur. */}
         {scene3dAutorisee && (
         <div
+          ref={sceneRef}
           style={{
             // ✅ La voiture doit prendre environ 40 à 50% de la largeur
             flex: '1 1 45%',
@@ -226,13 +235,13 @@ export default function NewContact() {
           {sceneMounted && (
             <SceneErrorBoundary fallback={null}>
               <Suspense fallback={<SceneFallback />}>
-                <CarScene active={isNear} />
+                <CarScene active={isOnScreen} />
               </Suspense>
             </SceneErrorBoundary>
           )}
         </div>
         )}
       </div>
-    </motion.section>
+    </section>
   );
 }

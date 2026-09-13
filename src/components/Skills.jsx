@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { RevealGroup, RevealItem, RevealTitle } from "./Reveal";
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import figmaIcon from "../assets/images/svg/devicon_figma.svg";
 import javaIcon from "../assets/images/svg/devicon_java.svg";
@@ -52,6 +52,8 @@ function computeKeyboardScale() {
 // Accroche décorative en arrière-plan du clavier.
 const BACKDROP_TEXT = "du back Java au front React, je construis des produits qui durent";
 
+// `darkIcon` : logo dessiné en noir, invisible sur les pastilles sombres de la
+// grille mobile, où il est donc passé en blanc.
 // `hotkey` : lettre du clavier physique qui enfonce la touche. Toutes distinctes,
 // choisies proches du nom de la techno pour rester devinables.
 const TECHS = [
@@ -61,20 +63,20 @@ const TECHS = [
   { name: "Tailwind CSS", key: "tailwind", hotkey: "W", level: "expert", color: "#0F172A", icon: tailwindIcon, textColor: "text-white" },
   { name: "React", key: "react", hotkey: "R", level: "expert", color: "#20232A", icon: reactIcon, textColor: "text-white" },
   // Rangée 2
-  { name: "TypeScript", key: "typescript", hotkey: "T", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white" },
-  { name: "GitHub", key: "github", hotkey: "B", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white" },
-  { name: "Git", key: "git", hotkey: "G", level: "expert", color: "#F34F29", icon: gitIcon, textColor: "text-white" },
+  { name: "TypeScript", key: "typescript", hotkey: "T", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white", darkIcon: true },
+  { name: "GitHub", key: "github", hotkey: "B", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white", darkIcon: true },
+  { name: "Git", key: "git", hotkey: "G", level: "expert", color: "#F34F29", icon: gitIcon, textColor: "text-white", darkIcon: true },
   { name: "HTML5", key: "html", hotkey: "H", level: "expert", color: "#E34C26", icon: htmlIcon, textColor: "text-white" },
   // Rangée 3
   { name: "CSS3", key: "css", hotkey: "C", level: "expert", color: "#264BDD", icon: cssIcon, textColor: "text-white" },
   { name: "JavaScript", key: "javascript", hotkey: "S", level: "expert", color: "#F7DF1E", icon: jsIcon, textColor: "text-slate-900" },
-  { name: "Spring Boot", key: "springboot", hotkey: "O", level: "advanced", color: "#77B900", icon: springBootIcon, textColor: "text-white" },
+  { name: "Spring Boot", key: "springboot", hotkey: "O", level: "advanced", color: "#77B900", icon: springBootIcon, textColor: "text-white", darkIcon: true },
   { name: "Angular", key: "angular", hotkey: "A", level: "intermediate", color: "#DD0031", icon: angularIcon, textColor: "text-white" },
   // Rangée 4
   { name: "Framer Motion", key: "framer", hotkey: "M", level: "advanced", color: "#8B5CF6", icon: framerIcon, textColor: "text-white" },
   { name: "PostgreSQL", key: "postgres", hotkey: "P", level: "advanced", color: "#336791", icon: postegre, textColor: "text-white" },
   { name: "UML", key: "uml", hotkey: "U", level: "advanced", color: "#FFB81C", icon: uml, textColor: "text-slate-900" },
-  { name: "DBeaver", key: "dbeaver", hotkey: "D", level: "advanced", color: "#1E90FF", icon: dbeaver, textColor: "text-white" },
+  { name: "DBeaver", key: "dbeaver", hotkey: "D", level: "advanced", color: "#1E90FF", icon: dbeaver, textColor: "text-white", darkIcon: true },
 ];
 
 export default function Skills() {
@@ -167,13 +169,9 @@ export default function Skills() {
   const rows = [techs.slice(0, 4), techs.slice(4, 8), techs.slice(8, 12), techs.slice(12, 16)];
 
   return (
-    <motion.section
+    <section
       id="compétences"
       ref={sectionRef}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
       className="min-h-screen bg-black py-16 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
     >
       {/* Background Subtle Glows */}
@@ -213,12 +211,16 @@ export default function Skills() {
 
       {/* Title */}
       <div className="text-center mb-6 relative z-10 w-full">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">
-          {t.skills.title} <span className="text-accent">{t.skills.titleHighlight}</span>
-        </h2>
-        <p className="text-xl font-normal text-white/50">
-          {t.skills.subtitle}
-        </p>
+        <RevealTitle
+          text={t.skills.title}
+          highlight={t.skills.titleHighlight}
+          className="text-4xl md:text-5xl font-bold text-white mb-3"
+        />
+        <RevealGroup>
+          <RevealItem as="p" className="text-xl font-normal text-white/50">
+            {t.skills.subtitle}
+          </RevealItem>
+        </RevealGroup>
       </div>
 
       {/* Selected Skill Display */}
@@ -297,9 +299,14 @@ export default function Skills() {
       </div>
 
       {/* Circular Badge Grid (Mobile only) */}
-      <div className="md:hidden w-full max-w-md mx-auto grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-7 px-4 z-10">
+      {/* Décalage court (30 ms) : seize pastilles à 60 ms feraient attendre
+          presque une seconde la dernière. */}
+      <RevealGroup
+        stagger={0.03}
+        className="md:hidden w-full max-w-md mx-auto grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-7 px-4 z-10"
+      >
         {techs.map((tech, index) => (
-          <motion.div
+          <RevealItem
             key={index}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedSkill(tech)}
@@ -313,16 +320,16 @@ export default function Skills() {
                 alt={tech.name}
                 loading="lazy"
                 decoding="async"
-                className="w-8 h-8 object-contain"
+                className={`w-8 h-8 object-contain ${tech.darkIcon ? "brightness-0 invert" : ""}`}
               />
             </div>
             <span className="text-white text-xs font-semibold text-center leading-tight">
               {tech.name}
             </span>
-          </motion.div>
+          </RevealItem>
         ))}
-      </div>
-    </motion.section>
+      </RevealGroup>
+    </section>
   );
 }
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Github, Linkedin, LineChartIcon, Languages } from "lucide-react";
 import logo from "../assets/images/svg/noun-mind-5663275.svg";
 import { useLang } from "../context/LanguageContext";
+import { documentTop } from "../utils/documentTop";
 
 const socialLinks = [
   {
@@ -22,16 +23,112 @@ const socialLinks = [
   },
 ];
 
+// Dans l'ordre de la page. Sert à détecter l'arrivée d'une nouvelle section.
+const SECTION_IDS = ["accueil", "a-propos", "compétences", "projets", "certifications", "services", "contact", "footer"];
+// Le haut d'une section doit passer au-dessus de cette ligne pour devenir la
+// section courante, un peu sous la hauteur du header.
+const TOP_BAND = 120;
+// Durée d'affichage du header à l'arrivée d'une section.
+const SHOW_MS = 2500;
+
 export default function Navbar() {
   const { lang, toggleLang, t } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [focusInside, setFocusInside] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Le header se retire dès qu'on descend pour laisser la place au contenu, et
+  // revient seul quelques secondes à l'arrivée de chaque nouvelle section, pour
+  // rappeler où l'on est. La section courante est celle dont le haut a franchi
+  // le haut de l'écran. Les positions des sections sont mises en cache et
+  // relues seulement quand la page change de taille : lire huit
+  // `getBoundingClientRect` à chaque image forçait une mise en page complète
+  // pendant que les animations écrivaient leurs styles.
+  useEffect(() => {
+    const ids = SECTION_IDS;
+    let current = null;
+    let timer = null;
+    let frame = 0;
+    let tops = [];
+
+    const measure = () => {
+      // Les sections chargées en différé n'existent pas encore au montage, le
+      // ResizeObserver ci-dessous relance la mesure quand elles arrivent.
+      tops = ids
+        .map((id) => document.getElementById(id))
+        .filter(Boolean)
+        .map((el) => [el.id, documentTop(el)]);
+    };
+
+    const showBriefly = () => {
+      setHidden(false);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
+        setHidden(true);
+      }, SHOW_MS);
+    };
+
+    const update = () => {
+      frame = 0;
+      let active = null;
+      const line = window.scrollY + TOP_BAND;
+      for (const [id, top] of tops) {
+        if (top <= line) active = id;
+      }
+
+      if (window.scrollY < 80) {
+        current = active;
+        clearTimeout(timer);
+        timer = null;
+        setHidden(false);
+        return;
+      }
+      if (active !== current) {
+        current = active;
+        showBriefly();
+      } else if (timer === null) {
+        setHidden(true);
+      }
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    // Sur ordinateur, approcher la souris du haut de l'écran le fait revenir :
+    // la navigation ne doit jamais dépendre d'un défilement.
+    const onMouseMove = (e) => {
+      if (e.clientY < 24) showBriefly();
+    };
+
+    // Relevé initial : sans lui, la section de départ reste inconnue et le
+    // premier défilement dans le hero passerait pour une arrivée de section.
+    measure();
+    update();
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(document.body);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMouseMove);
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // Jamais caché pendant que le menu est ouvert ou qu'on navigue au clavier
+  // dedans : un lien qui a le focus doit rester visible.
+  const visible = !hidden || menuOpen || focusInside;
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,9 +160,16 @@ export default function Navbar() {
     <>
       <motion.nav
       initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+      animate={{ y: visible ? 0 : "-100%" }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      onFocus={() => setFocusInside(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setFocusInside(false);
+      }}
+      // Transition CSS limitée au fond, à la bordure et aux marges : un
+      // `transition-all` animerait aussi le transform écrit par framer-motion
+      // et ferait traîner l'entrée et la sortie du header.
+      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,padding,backdrop-filter] duration-300 ${scrolled
           ? "bg-black/85 backdrop-blur-md border-b border-line py-2.5 sm:py-3"
           : "bg-transparent border-b border-transparent shadow-none backdrop-blur-none py-4 sm:py-5"
         }`}

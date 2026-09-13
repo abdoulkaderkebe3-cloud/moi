@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { RevealGroup, RevealItem } from "./Reveal";
 import { Github, Linkedin, LineChartIcon} from "lucide-react";
 import { useLang } from "../context/LanguageContext";
 
@@ -6,23 +6,17 @@ export default function Footer() {
   const { t } = useLang();
   return (
     <footer id="footer" className="bg-black text-white/50 py-10 border-t border-line scroll-mt-24">
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6"
-      >
-        <div className="text-center md:text-left">
+      <RevealGroup className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <RevealItem className="text-center md:text-left">
           <h3 className="text-white text-xl font-semibold">
             Kebe Abdoul kader
           </h3>
           <p className="text-sm mt-2">
             © {new Date().getFullYear()} {t.footer.rights}
           </p>
-        </div>
+        </RevealItem>
 
-        <div className="flex gap-6">
+        <RevealItem className="flex gap-6">
           <a href="https://github.com/abdoulkaderkebe3-cloud" className="hover:text-accent transition" target="_blank" rel="noopener noreferrer">
             <Github />
           </a>
@@ -32,8 +26,8 @@ export default function Footer() {
           <a href="https://linktr.ee/kvder" className="hover:text-accent transition" target="_blank" rel="noopener noreferrer">
             <LineChartIcon/>
           </a>
-        </div>
-      </motion.div>
+        </RevealItem>
+      </RevealGroup>
     </footer>
   );
 }

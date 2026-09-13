@@ -1,14 +1,11 @@
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { documentTop } from "../utils/documentTop";
 import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.webp";
 import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.webp";
 import cert6 from "../assets/images/png/photo_2026-05-25_17-12-56.webp";
 import vibeathon from "../assets/images/png/certificat-vibeathon-2026.webp";
 import { useLang } from "../context/LanguageContext";
-import { motion } from "framer-motion";
-
-gsap.registerPlugin(ScrollTrigger);
+import { RevealTitle } from "./Reveal";
 
 // Position collante de la première carte, sous la navbar.
 const STICKY_TOP = 96;
@@ -22,7 +19,7 @@ const SCALE_STEP = 0.04;
 const OVERLAP = 0.1;
 
 // width/height : réservent le ratio avant chargement, donc pas de saut de
-// layout qui décalerait les mesures de ScrollTrigger.
+// layout qui décalerait les plages de l'empilement.
 const CERTIFICATIONS = [
   {
     src: vibeathon,
@@ -67,37 +64,44 @@ export default function Certifications() {
   const { t } = useLang();
   const containerRef = useRef(null);
 
+  // Chaque carte recouverte rétrécit entre le moment où elle se colle et celui
+  // où la dernière se colle. L'animation est en CSS (`.pile-carte` dans
+  // index.css), jouée sur la position de défilement de la page ; ce code ne
+  // fait que calculer ses deux bornes, une fois, puis à chaque changement de
+  // taille. Avant, GSAP ScrollTrigger recalculait à chaque défilement, partout
+  // sur la page, même à l'autre bout du site.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const mm = gsap.matchMedia();
-
-    // Sans l'empilement animé, les cartes restent simplement collantes.
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const cards = gsap.utils.toArray(".stack-card", el);
-      const last = cards[cards.length - 1];
-
-      cards.slice(0, -1).forEach((card, i) => {
-        const depth = cards.length - 1 - i;
-
-        gsap.to(card.querySelector(".stack-card-inner"), {
-          scale: 1 - depth * SCALE_STEP,
-          ease: "none",
-          scrollTrigger: {
-            trigger: card,
-            start: `top ${STICKY_TOP + i * STACK_STEP}px`,
-            endTrigger: last,
-            end: `top ${STICKY_TOP + (cards.length - 1) * STACK_STEP}px`,
-            scrub: true,
-          },
-        });
+    const measure = () => {
+      const cards = [...el.querySelectorAll(".stack-card")];
+      // Position de repos de chaque carte, avant tout collage : on cumule les
+      // hauteurs dans le flux, le chevauchement négatif compris. Un
+      // `offsetTop` sur un élément collé renverrait sa position collée.
+      let y = documentTop(el);
+      const restTops = cards.map((card) => {
+        const top = y;
+        y += card.offsetHeight + parseFloat(getComputedStyle(card).marginBottom || "0");
+        return top;
       });
+      const last = cards.length - 1;
+      const end = restTops[last] - (STICKY_TOP + last * STACK_STEP);
 
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-    });
+      cards.forEach((card, i) => {
+        const inner = card.querySelector(".stack-card-inner");
+        if (i === last) return;
+        const start = restTops[i] - (STICKY_TOP + i * STACK_STEP);
+        inner.style.setProperty("--pile-debut", `${Math.round(start)}px`);
+        inner.style.setProperty("--pile-fin", `${Math.round(end)}px`);
+        inner.style.setProperty("--pile-echelle", String(1 - (last - i) * SCALE_STEP));
+      });
+    };
 
-    return () => mm.revert();
+    measure();
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(document.body);
+    return () => resizeObserver.disconnect();
   }, []);
 
   return (
@@ -105,18 +109,11 @@ export default function Certifications() {
       id="certifications"
       className="bg-black py-24 scroll-mt-24"
     >
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      <RevealTitle
+        text={t.certifications.title}
+        highlight={t.certifications.titleHighlight}
         className="text-center text-4xl md:text-5xl font-semibold text-white mb-16"
-      >
-        {t.certifications.title}{" "}
-        <span className="text-accent">
-          {t.certifications.titleHighlight}
-        </span>
-      </motion.h2>
+      />
 
       {/* --card-h pilote la hauteur de l'image ET le chevauchement, pour que
           les deux restent cohérents à toutes les tailles d'écran. */}
@@ -137,7 +134,7 @@ export default function Certifications() {
                   : `calc(var(--card-h) * -${OVERLAP})`,
             }}
           >
-            <div className="stack-card-inner origin-top mx-auto w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-black shadow-xl shadow-black/60 will-change-transform">
+            <div className={`stack-card-inner origin-top mx-auto w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-black shadow-xl shadow-black/60 ${i < CERTIFICATIONS.length - 1 ? "pile-carte" : ""}`}>
               {/* Deux colonnes en desktop : l'image seule laissait de grandes
                   bandes vides de chaque côté sur les grands écrans. */}
               <div className="grid md:grid-cols-[1.5fr_1fr]">

@@ -76,7 +76,99 @@
       @media (min-width: 1024px) {
         #hero-statique-nom { font-size: 4.5rem; line-height: 1; }
       }
+
+      /* ── Intro ──────────────────────────────────────────────────────────
+         Un personnage pousse le rideau noir et découvre le nom, puis toute la
+         scène remonte et libère le hero. Écrite ici plutôt qu'en React pour
+         être peinte à la première image : l'ancien écran de chargement, qui
+         attendait l'application, repoussait le LCP à 2,4 s.
+         Tout est en transform, joué par le compositeur, et la fin de chaque
+         animation laisse la scène hors écran : si le script plante, l'intro
+         disparaît quand même.
+         ⚠️ L'accent est écrit en dur ici, la feuille Tailwind n'est pas encore
+         chargée à ce moment. À garder synchronisé avec `--color-accent`. */
+      #intro {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        overflow: hidden;
+        background: #e3d5c0;
+        cursor: pointer;
+        /* Hauteur du personnage, bornée par la largeur sur mobile, et sa
+           largeur tirée du rapport de son dessin (220 sur 300). */
+        --pousseur-h: clamp(170px, min(42vh, 72vw), 340px);
+        --pousseur-l: calc(var(--pousseur-h) * 0.734);
+        animation: intro-sortie 700ms cubic-bezier(0.76, 0, 0.24, 1) 2250ms forwards;
+      }
+      #intro.intro-passee {
+        animation: intro-sortie-rapide 450ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+      }
+      /* Moins d'animations demandé : pas
+         d'intro du tout, la classe est posée dans le head avant la peinture. */
+      .sans-intro #intro { display: none; }
+      @media (prefers-reduced-motion: reduce) { #intro { display: none; } }
+      /* Pas de défilement sous la scène. `scrollbar-gutter` garde la place de
+         la barre, donc rien ne bouge au déverrouillage. */
+      .intro-joue { overflow: hidden; }
+
+      #intro-nom {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        color: #000;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-size: clamp(4.5rem, 24vw, 15rem);
+        font-weight: 900;
+        line-height: 0.82;
+        letter-spacing: -0.05em;
+        text-transform: uppercase;
+      }
+
+      /* Le rideau part de gauche à droite. Le personnage est son enfant, collé
+         à son bord gauche : il avance donc exactement avec lui, sans second
+         minutage à tenir en phase. La course dépasse l'écran de la largeur du
+         personnage pour qu'il sorte en entier. */
+      #intro-rideau {
+        position: absolute;
+        inset: 0;
+        background: #000;
+        animation: intro-pousse 1700ms cubic-bezier(0.55, 0.05, 0.4, 1) 200ms forwards;
+      }
+      #intro-pousseur {
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        height: var(--pousseur-h);
+        transform: translateY(-38%);
+      }
+      #intro-pousseur svg { display: block; height: 100%; width: auto; overflow: visible; }
+
+      /* Pas de marche : chaque jambe pivote sur la hanche, en opposition, et
+         le buste suit d'un léger tangage. */
+      #intro .jambe, #intro .buste { transform-box: view-box; transform-origin: 100px 180px; }
+      #intro .jambe-arriere { animation: intro-pas 440ms ease-in-out infinite alternate; }
+      #intro .jambe-avant { animation: intro-pas 440ms ease-in-out -440ms infinite alternate-reverse; }
+      #intro .buste { animation: intro-effort 220ms ease-in-out infinite alternate; }
+
+      @keyframes intro-pousse { to { transform: translateX(calc(100vw + var(--pousseur-l))); } }
+      @keyframes intro-pas { from { transform: rotate(-9deg); } to { transform: rotate(11deg); } }
+      @keyframes intro-effort { to { transform: translate(-2px, 3px); } }
+      @keyframes intro-sortie { to { transform: translateY(-100%); } }
+      @keyframes intro-sortie-rapide { to { transform: translateY(-100%); } }
     </style>
+    <script>
+      // Avant la première peinture : décide si l'intro se joue. Elle rejoue à
+      // chaque chargement, choix de Kader, sauf si moins d'animations est demandé.
+      (function () {
+        var html = document.documentElement;
+        var reduit = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+        html.classList.add(reduit ? "sans-intro" : "intro-joue");
+      })();
+    </script>
 
     <title>Kebe Abdoul Kader | Développeur Full Stack à Abidjan</title>
     <meta name="description" content="Développeur Full Stack à Abidjan, Java Spring Boot et React. 2e place au Vibeathon Côte d'Ivoire 2026. Mes projets, mes compétences et mes certifications." />
@@ -141,6 +233,86 @@
     </script>
   </head>
   <body>
+    <!-- Intro. Hors de #root, sinon React la viderait au montage.
+         `aria-hidden` : décor pur, le nom est déjà annoncé par le hero. -->
+    <div id="intro" aria-hidden="true">
+      <p id="intro-nom"><span>Kader</span><span>Kebe</span></p>
+      <div id="intro-rideau">
+        <div id="intro-pousseur">
+          <!-- Dessin original, penché contre le bord du rideau : les mains
+               touchent le bord droit du cadre (x = 220). Membres tracés en deux
+               passes, contour noir puis couleur, pour un trait régulier. -->
+          <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g class="jambe jambe-arriere">
+              <path d="M100 180 L74 228 L50 270" stroke="#000" stroke-width="27" />
+              <path d="M100 180 L74 228 L50 270" stroke="#6d7fa0" stroke-width="21" />
+              <path d="M34 262 h26 c10 0 16 6 16 14 v4 h-48 c-3 -9 0 -18 6 -18z" fill="#fff" stroke="#000" stroke-width="3" />
+              <path d="M30 276 h46" stroke="#000" stroke-width="3" />
+            </g>
+            <g class="jambe jambe-avant">
+              <path d="M104 182 L140 226 L128 270" stroke="#000" stroke-width="27" />
+              <path d="M104 182 L140 226 L128 270" stroke="#6d7fa0" stroke-width="21" />
+              <path d="M112 262 h26 c10 0 16 6 16 14 v4 h-48 c-3 -9 0 -18 6 -18z" fill="#fff" stroke="#000" stroke-width="3" />
+              <path d="M108 276 h46" stroke="#000" stroke-width="3" />
+            </g>
+            <g class="buste">
+              <path d="M150 104 L184 124 L208 112" stroke="#000" stroke-width="17" />
+              <path d="M150 104 L184 124 L208 112" stroke="#6b3f26" stroke-width="11" />
+              <path d="M150 104 L162 111" stroke="#000" stroke-width="22" /><path d="M150 104 L162 111" stroke="#fafafa" stroke-width="16" />
+              <rect x="204" y="102" width="10" height="19" rx="5" fill="#6b3f26" stroke="#000" stroke-width="2.5" />
+
+              <path d="M160 92 L170 78" stroke="#000" stroke-width="13" />
+              <path d="M160 92 L170 78" stroke="#6b3f26" stroke-width="7" />
+              <path d="M138 92 C150 86 168 92 176 104 L130 196 C116 198 96 190 88 178 Z" fill="#fafafa" stroke="#000" stroke-width="3" />
+              <text x="120" y="150" transform="rotate(28 130 145)" fill="#000" font-family="ui-monospace, monospace" font-size="15" font-weight="700" stroke="none">&lt;/&gt;</text>
+
+              <circle cx="184" cy="60" r="22" fill="#6b3f26" stroke="#000" stroke-width="3" />
+              <path d="M162 58 C159 40 172 34 186 34 C200 34 209 42 206 53 C196 47 184 48 176 52 C170 55 166 58 163 61 Z" fill="#111" stroke="#000" stroke-width="2" />
+              <ellipse cx="175" cy="63" rx="4" ry="6" fill="#6b3f26" stroke="#000" stroke-width="2.5" />
+              <path d="M193 51 l9 3 M195 59 l6 1.5 M199 72 h6" stroke="#000" stroke-width="2.5" />
+              <path d="M166 38 c-3 5 -4 8 -1 10 c3 1 5 -2 3 -6 z" fill="#fff" stroke="#000" stroke-width="2" />
+              <path d="M213 38 l8 -6 M216 49 l10 -2" stroke="#000" stroke-width="2.5" />
+
+              <path d="M160 112 L190 131 L213 124" stroke="#000" stroke-width="18" />
+              <path d="M160 112 L190 131 L213 124" stroke="#6b3f26" stroke-width="12" />
+              <path d="M160 112 L172 119" stroke="#000" stroke-width="23" /><path d="M160 112 L172 119" stroke="#fafafa" stroke-width="17" />
+              <rect x="207" y="113" width="10" height="20" rx="5" fill="#6b3f26" stroke="#000" stroke-width="2.5" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Clic, toucher, touche ou molette : l'intro remonte tout de suite. Elle
+      // se retire du DOM à la fin de sa sortie, et un minuteur de secours la
+      // retire quoi qu'il arrive, pour ne jamais laisser la page verrouillée.
+      (function () {
+        var intro = document.getElementById("intro");
+        var html = document.documentElement;
+        if (!intro || !html.classList.contains("intro-joue")) {
+          if (intro) intro.remove();
+          return;
+        }
+        var fini = false;
+        function terminer() {
+          if (fini) return;
+          fini = true;
+          intro.remove();
+          html.classList.remove("intro-joue");
+          ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (type) {
+            window.removeEventListener(type, passer);
+          });
+        }
+        function passer() { intro.classList.add("intro-passee"); }
+        intro.addEventListener("animationend", function (e) {
+          if (e.target === intro) terminer();
+        });
+        ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (type) {
+          window.addEventListener(type, passer, { passive: true, once: true });
+        });
+        setTimeout(terminer, 3600);
+      })();
+    </script>
     <!-- Squelette du hero, peint avant que React démarre. C'est lui qui porte
          désormais le LCP : le titre s'affiche à la première peinture au lieu
          d'attendre le démarrage de l'application. React vide ce conteneur au

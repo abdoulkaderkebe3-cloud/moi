@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { Renderer, Program, Triangle, Mesh } from 'ogl';
+import { isScrolling } from '../utils/scrollActivity';
 
 const DEFAULT_COLOR = '#ffffff';
 
@@ -53,7 +54,13 @@ const LightRays = ({
   const animationIdRef = useRef(null);
   const meshRef = useRef(null);
   const cleanupFunctionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  // `started` ne redescend jamais : le contexte WebGL est créé à la première
+  // apparition puis gardé. Avant, chaque sortie d'écran le détruisait
+  // (`loseContext`) et chaque retour le recréait, ce qui saccadait le
+  // défilement autour du hero. Hors champ, seule la boucle s'arrête.
+  const [started, setStarted] = useState(false);
+  const visibleRef = useRef(false);
+  const loopRef = useRef(null);
   const observerRef = useRef(null);
 
   useEffect(() => {
@@ -63,7 +70,14 @@ const LightRays = ({
     observerRef.current = new IntersectionObserver(
       entries => {
         const entry = entries[0];
-        setIsVisible(entry.isIntersecting);
+        visibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          setStarted(true);
+          // Reprise de la boucle si le rendu est déjà prêt et à l'arrêt.
+          if (loopRef.current && !animationIdRef.current) {
+            animationIdRef.current = requestAnimationFrame(loopRef.current);
+          }
+        }
       },
       { threshold: 0.1 }
     );
@@ -79,7 +93,7 @@ const LightRays = ({
   }, []);
 
   useEffect(() => {
-    if (!isVisible || !containerRef.current) return;
+    if (!started || !containerRef.current) return;
 
     if (cleanupFunctionRef.current) {
       cleanupFunctionRef.current();
@@ -94,7 +108,9 @@ const LightRays = ({
       if (!containerRef.current) return;
 
       const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
+        // Densité 1 : des rayons flous ne gagnent rien à être calculés en 2x,
+        // et le shader couvre tout l'écran, soit quatre fois moins de pixels.
+        dpr: 1,
         alpha: true
       });
       rendererRef.current = renderer;
@@ -239,7 +255,7 @@ void main() {
       const updatePlacement = () => {
         if (!containerRef.current || !renderer) return;
 
-        renderer.dpr = Math.min(window.devicePixelRatio, 2);
+        renderer.dpr = 1;
 
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
         renderer.setSize(wCSS, hCSS);
@@ -255,12 +271,26 @@ void main() {
         uniforms.rayDir.value = dir;
       };
 
+      let lastFrame = 0;
+      let elapsed = 0;
       const loop = t => {
-        if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
+        if (!rendererRef.current || !uniformsRef.current || !meshRef.current || !visibleRef.current) {
+          animationIdRef.current = null;
           return;
         }
 
-        uniforms.iTime.value = t * 0.001;
+        // Pendant un défilement, on garde la boucle mais on saute le rendu.
+        // Le temps de l'effet n'avance que sur les images rendues, sinon les
+        // rayons feraient un saut à la reprise.
+        const dt = lastFrame ? Math.min(t - lastFrame, 50) : 0;
+        lastFrame = t;
+        if (isScrolling(t)) {
+          animationIdRef.current = requestAnimationFrame(loop);
+          return;
+        }
+        elapsed += dt;
+
+        uniforms.iTime.value = elapsed * 0.001;
 
         if (followMouse && mouseInfluence > 0.0) {
           const smoothing = 0.92;
@@ -280,6 +310,7 @@ void main() {
         }
       };
 
+      loopRef.current = loop;
       window.addEventListener('resize', updatePlacement);
       updatePlacement();
       animationIdRef.current = requestAnimationFrame(loop);
@@ -311,6 +342,7 @@ void main() {
         rendererRef.current = null;
         uniformsRef.current = null;
         meshRef.current = null;
+        loopRef.current = null;
       };
     };
 
@@ -323,7 +355,7 @@ void main() {
       }
     };
   }, [
-    isVisible,
+    started,
     raysOrigin,
     raysColor,
     raysSpeed,

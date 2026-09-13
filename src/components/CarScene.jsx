@@ -1,5 +1,6 @@
-import React, { Suspense, useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { Suspense, useRef, useMemo, useEffect } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { isScrolling } from '../utils/scrollActivity';
 import { useGLTF, Html, Environment, OrbitControls, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -25,9 +26,11 @@ const CarModel = React.memo(function CarModel() {
 
   // Rotation lente et continue du modèle lui-même. L'utilisateur, lui, fait
   // pivoter la caméra via OrbitControls : les deux se composent sans conflit.
+  // Delta borné : après une pause (défilement, hors écran), la voiture reprend
+  // sa rotation au lieu de sauter d'un coup.
   useFrame((_, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.12;
+      meshRef.current.rotation.y += Math.min(delta, 1 / 30) * 0.12;
     }
   });
 
@@ -64,16 +67,33 @@ const CanvasLoader = () => (
   </Html>
 );
 
+// Pilote du rendu. La scène est en mode « à la demande » : on redemande une
+// image à chaque rafraîchissement, sauf hors champ et pendant un défilement.
+// OrbitControls redemande lui-même des images quand on fait tourner la
+// voiture au doigt, donc la prise en main reste fluide.
+function RenderDriver({ active }) {
+  const invalidate = useThree((state) => state.invalidate);
+  useEffect(() => {
+    if (!active) return;
+    let frame = requestAnimationFrame(function tick(now) {
+      if (!isScrolling(now)) invalidate();
+      frame = requestAnimationFrame(tick);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [active, invalidate]);
+  return null;
+}
+
 export default function CarScene({ active = true }) {
   return (
     <Canvas
       style={{ position: 'absolute', inset: 0, zIndex: 1 }}
       dpr={1}
-      // Hors champ, on coupe la boucle de rendu au lieu de tourner dans le vide.
-      frameloop={active ? 'always' : 'demand'}
+      frameloop="demand"
       camera={{ position: [0, 0, 4.5], fov: 40 }}
       gl={{ preserveDrawingBuffer: false, alpha: true, antialias: true, powerPreference: 'high-performance' }}
     >
+      <RenderDriver active={active} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, -5]} intensity={1.5} />
       <directionalLight position={[-5, 5, 5]} intensity={0.7} />

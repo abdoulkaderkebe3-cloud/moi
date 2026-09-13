@@ -1,12 +1,11 @@
-import { motion, useScroll } from "framer-motion";
-
+// Barre de progression de lecture. Animée en CSS par `animation-timeline:
+// scroll()` (voir `.barre-progression` dans index.css) : elle n'exécute plus
+// aucun JavaScript au défilement.
 export default function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-
   return (
-    <motion.div
-      style={{ scaleX: scrollYProgress }}
-      className="fixed top-0 left-0 right-0 h-1 bg-accent origin-left z-99"
+    <div
+      aria-hidden="true"
+      className="barre-progression fixed top-0 left-0 right-0 h-1 bg-accent origin-left z-99"
     />
   );
 }

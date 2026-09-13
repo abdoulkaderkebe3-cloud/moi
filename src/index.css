@@ -43,6 +43,123 @@
   animation: skill-in 140ms ease-out;
 }
 
+/* ── Animations pilotées par le défilement ─────────────────────────────────
+   Tout ce qui suit le scroll passe ici en CSS (`animation-timeline`) plutôt
+   qu'en framer-motion ou GSAP. Le navigateur les joue alors sur le thread de
+   composition : aucun JavaScript, aucune mesure de position à chaque image.
+   Mesuré le 12/09 sur téléphone simulé (4x CPU) : 60 % du temps d'image
+   partait dans les callbacks d'animation JS, dont un tiers en mise en page
+   forcée.
+   Seules des propriétés composées sont animées (`opacity`, `translate`,
+   `scale`). Sans prise en charge (Firefox, Safari avant 26) ou si le visiteur
+   demande moins d'animations, rien ne s'applique et le contenu reste
+   simplement visible. */
+
+@keyframes st-entree { from { opacity: 0.25; translate: 0 80px; scale: 0.92; } }
+@keyframes st-entree-fondu { from { opacity: 0.25; } }
+@keyframes st-sortie { to { opacity: 0.2; scale: 0.94; } }
+@keyframes st-sortie-fondu { to { opacity: 0.2; } }
+@keyframes barre-progression { from { scale: 0 1; } to { scale: 1 1; } }
+@keyframes pile-reduit { to { scale: var(--pile-echelle, 1); } }
+@keyframes ap-image-m { 0% { opacity: 0; translate: 0 40px; } 50% { opacity: 1; } 60%, 100% { opacity: 1; translate: 0 0; } }
+@keyframes ap-image-d { 0% { opacity: 0; translate: -40px 0; } 50% { opacity: 1; } 100% { opacity: 1; translate: 0 0; } }
+@keyframes ap-texte-m { 0%, 10% { opacity: 0; translate: 0 40px; } 60% { opacity: 1; } 70%, 100% { opacity: 1; translate: 0 0; } }
+@keyframes ap-texte-d { 0% { opacity: 0; translate: 40px 0; } 50% { opacity: 1; } 100% { opacity: 1; translate: 0 0; } }
+@keyframes ap-mot { from { opacity: 0; } to { opacity: 1; } }
+
+/* Copie floue du texte d'À propos, sous les mots nets. Invisible par défaut :
+   elle n'apparaît que là où l'animation mot par mot est prise en charge. */
+.ap-texte-flou { display: none; }
+@keyframes texte-brillant {
+  0%, 100% { background-position: 150% center; }
+  42.86%, 50% { background-position: -50% center; }
+  92.86% { background-position: 150% center; }
+}
+
+/* Barre de progression : vide sans prise en charge, c'est un décor. */
+.barre-progression { scale: 0 1; }
+
+@supports (animation-timeline: scroll()) {
+  .barre-progression {
+    animation: barre-progression linear both;
+    animation-timeline: scroll(root block);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Transitions entre sections. Entrée : du haut de la section au bas de
+       l'écran jusqu'à 35 % du haut. Sortie : de son bas à 60 % de l'écran
+       jusqu'au haut. `backwards` et `forwards` : hors de leur plage, les
+       animations ne s'appliquent pas, donc aucune section ne reste en calque
+       composé une fois arrivée, et les `sticky` internes restent intacts. */
+    .st-entree, .st-entree-fondu {
+      animation: st-entree linear backwards;
+      animation-timeline: view();
+      animation-range: cover 0% cover 65vh;
+      transform-origin: 50% 0%;
+    }
+    .st-entree-fondu { animation-name: st-entree-fondu; }
+    .st-sortie, .st-sortie-fondu {
+      animation: st-sortie linear forwards;
+      animation-timeline: view();
+      animation-range: cover calc(100% - 60vh) cover 100%;
+      transform-origin: 50% 0%;
+    }
+    .st-sortie-fondu { animation-name: st-sortie-fondu; }
+
+    /* Empilement des certifications. Les bornes sont des positions de
+       défilement de la page, calculées par Certifications.jsx à chaque
+       changement de taille. Sans prise en charge, les cartes restent
+       simplement collantes. */
+    .pile-carte {
+      animation: pile-reduit linear both;
+      animation-timeline: scroll(root block);
+      animation-range: var(--pile-debut, 0px) var(--pile-fin, 0px);
+    }
+
+    /* À propos : photo et texte arrivent pendant que la section monte, de son
+       haut à 90 % de l'écran jusqu'à son bas au milieu. */
+    .ap-section { view-timeline-name: --apropos; }
+    .ap-image, .ap-texte {
+      animation: ap-image-m linear both;
+      animation-timeline: --apropos;
+      animation-range: cover 10vh cover calc(100% - 50vh);
+    }
+    .ap-texte { animation-name: ap-texte-m; }
+    @media (min-width: 768px) {
+      .ap-image { animation-name: ap-image-d; }
+      .ap-texte { animation-name: ap-texte-d; }
+    }
+
+    /* Texte d'À propos, mot par mot. La plage de chaque mot est posée par
+       About.jsx en pixels depuis l'entrée du bloc dans l'écran. Active
+       seulement quand le bloc est à l'écran (`.ap-actif`), et `backwards` :
+       un mot déjà net n'est plus animé et quitte son calque. */
+    .ap-texte-mots { view-timeline-name: --texte-apropos; }
+    .ap-texte-flou {
+      display: block;
+      opacity: 0.1;
+      filter: blur(4px);
+    }
+    .ap-actif .ap-mot {
+      animation: ap-mot linear backwards;
+      animation-timeline: --texte-apropos;
+      animation-range: cover var(--mot-debut, 0px) cover var(--mot-fin, 0px);
+    }
+  }
+}
+
+/* Reflet du nom dans le hero : même trajet que l'ancien ShinyText (aller en
+   3 s, pause 0,5 s, retour, pause), mais en CSS au lieu d'un callback JS à
+   chaque image. Mis en pause dès que le hero sort de l'écran. */
+.texte-brillant {
+  background-position: 150% center;
+  animation: texte-brillant 7s linear infinite;
+}
+.texte-brillant[data-pause="true"] { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .texte-brillant { animation: none; }
+}
+
 
 
 /* `clip` et non `hidden` : `hidden` fait de ces éléments un conteneur de

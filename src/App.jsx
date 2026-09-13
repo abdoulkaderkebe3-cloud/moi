@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { MotionConfig } from "framer-motion";
 import { LanguageProvider } from "./context/LanguageContext";
 import Navbar from "./components/Navbar";
 import ScrollProgress from "./components/ScrollProgress";
@@ -8,6 +9,7 @@ import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Footer from "./components/Footer";
+import SectionTransition from "./components/SectionTransition";
 
 // Lazy-load heavy components (3D model, video, large images)
 const NewContact = lazy(() => import("./components/NewContact"));
@@ -21,19 +23,27 @@ const Services = lazy(() => import("./components/Services"));
 function App() {
   return (
     <LanguageProvider>
+      {/* `reducedMotion="user"` coupe les déplacements de toutes les animations
+          framer-motion quand le visiteur a demandé moins de mouvement dans son
+          système, en gardant les fondus. GSAP et WebGL le gèrent déjà de leur
+          côté. */}
+      <MotionConfig reducedMotion="user">
       <ScrollProgress />
       <Navbar />
-      <Hero />
+      {/* Le hero n'a pas d'entrée, il est déjà à l'écran à l'ouverture. Le
+          footer n'a pas de sortie, rien ne vient après lui. */}
+      <SectionTransition enter={false}><Hero /></SectionTransition>
       <Marquee />
-      <About />
-      <Skills />
-      <Projects />
+      <SectionTransition><About /></SectionTransition>
+      <SectionTransition><Skills /></SectionTransition>
+      <SectionTransition><Projects /></SectionTransition>
       <Suspense fallback={null}>
-        <Certifications />
-        <Services />
-        <NewContact />
+        <SectionTransition motion="fade"><Certifications /></SectionTransition>
+        <SectionTransition><Services /></SectionTransition>
+        <SectionTransition><NewContact /></SectionTransition>
       </Suspense>
-      <Footer />
+      <SectionTransition exit={false}><Footer /></SectionTransition>
+      </MotionConfig>
     </LanguageProvider>
   );
 }

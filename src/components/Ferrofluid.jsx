@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
+import { isScrolling } from '../utils/scrollActivity';
 
 const MAX_COLORS = 8;
 
@@ -230,7 +231,9 @@ const Ferrofluid = ({
     const renderer = new Renderer({
       dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
       alpha: true,
-      antialias: true
+      // Un seul triangle plein écran : aucune arête à lisser, l'anticrénelage
+      // ne ferait que multiplier le travail du GPU.
+      antialias: false
     });
     rendererRef.current = renderer;
     const gl = renderer.gl;
@@ -304,9 +307,17 @@ const Ferrofluid = ({
       canvas.addEventListener('pointermove', onPointerMove);
     }
 
+    // Le temps de l'effet n'avance que sur les images rendues : figé pendant
+    // un défilement ou hors écran, il reprend là où il s'était arrêté.
+    let lastFrame = 0;
+    let elapsed = 0;
     const loop = t => {
       rafRef.current = requestAnimationFrame(loop);
-      uniforms.iTime.value = t * 0.001;
+      const frameDt = lastFrame ? Math.min(t - lastFrame, 50) : 0;
+      lastFrame = t;
+      if (pausedRef.current || isScrolling(t)) return;
+      elapsed += frameDt;
+      uniforms.iTime.value = elapsed * 0.001;
       if (mouseDampening > 0) {
         if (!lastTimeRef.current) lastTimeRef.current = t;
         const dt = (t - lastTimeRef.current) / 1000;
