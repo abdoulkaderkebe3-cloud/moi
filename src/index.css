@@ -78,15 +78,20 @@
 
 /* Hero : une hauteur d'écran par défaut, 160vh avec le zoom au défilement. */
 .hero-zoom { height: 100vh; }
-/* Les rayons grossissent d'abord à pleine intensité, puis se floutent et
-   s'éteignent sur la fin. Le nom reste lisible pendant la première moitié. */
+/* Les rayons grossissent d'abord à pleine intensité, puis s'éteignent sur la
+   fin. Le nom reste lisible pendant la première moitié.
+   Seulement `scale`, `opacity` et `translate`, gérés par le compositeur. Le
+   flou (`filter: blur`) et la réduction du nom ont été retirés le 13/09 : le
+   hero saccadait sur téléphone. Un flou plein écran se recalcule à chaque
+   image sur un écran à haute densité, et réduire un texte dont le reflet
+   (`texte-brillant`) s'anime force à le redessiner à chaque image. */
 @keyframes hero-zoom-fond {
-  45% { opacity: 1; filter: blur(0); }
-  to { opacity: 0; scale: 1.8; filter: blur(10px); }
+  45% { opacity: 1; }
+  to { opacity: 0; scale: 1.8; }
 }
 @keyframes hero-zoom-contenu {
   40% { opacity: 1; }
-  to { opacity: 0; scale: 0.8; translate: 0 -10vh; }
+  to { opacity: 0; translate: 0 -10vh; }
 }
 
 /* Projet phare (ProjetPhare.jsx). Par défaut, l'état final : image plein
@@ -131,8 +136,7 @@
   @media (prefers-reduced-motion: no-preference) {
     /* Zoom du hero sur les 100 premiers vh de défilement, pendant que son
        contenu est collé. Le hero est en haut de page, la timeline du
-       document suffit. Le flou n'arrive qu'après 45 % : un flou animé plein
-       écran coûte cher sur mobile. */
+       document suffit. */
     /* 160vh et non 200vh : la suite de la page remonte pendant les 40
        derniers vh du zoom. À 200vh, le fond éteint laissait un écran presque
        entier de noir avant le bandeau. */

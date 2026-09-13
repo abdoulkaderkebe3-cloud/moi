@@ -13,8 +13,8 @@ export default function Hero() {
   return (
     // Zoom au défilement (façon motion.dev « scroll zoom hero ») : la section
     // fait 160vh là où les timelines de défilement sont prises en charge, son
-    // contenu reste collé en haut pendant que les rayons grossissent, se
-    // floutent et s'estompent, et que le nom recule. Tout est joué en CSS
+    // contenu reste collé en haut pendant que les rayons grossissent et
+    // s'estompent, et que le nom monte en s'effaçant. Tout est joué en CSS
     // (`.hero-zoom*` dans index.css), sans JS par image. Sans prise en charge
     // ou avec `prefers-reduced-motion`, le hero garde sa hauteur d'écran.
     <section
