@@ -82,7 +82,7 @@ const translations = {
       title: "Mes",
       titleHighlight: "Services",
       intro:
-        "Je travaille en freelance et je reste ouvert aux stages. Voici ce sur quoi je peux intervenir, seul ou dans votre équipe.",
+        "Un site, une application ou une équipe à faire monter en compétence : je prends le projet de l'idée à la mise en ligne, seul ou avec vos équipes.",
       cta: "Parlons de votre projet",
       items: {
         training: {
@@ -195,7 +195,7 @@ const translations = {
       title: "My",
       titleHighlight: "Services",
       intro:
-        "I work as a freelancer and I am open to internships. Here is what I can take on, on my own or inside your team.",
+        "A website, an app, or a team to upskill: I take the project from idea to launch, on my own or alongside your team.",
       cta: "Let's talk about your project",
       items: {
         training: {
