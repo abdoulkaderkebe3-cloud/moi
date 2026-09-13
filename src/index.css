@@ -136,16 +136,23 @@
   @media (prefers-reduced-motion: no-preference) {
     /* Zoom du hero sur les 100 premiers vh de défilement, pendant que son
        contenu est collé. Le hero est en haut de page, la timeline du
-       document suffit. */
-    /* 160vh et non 200vh : la suite de la page remonte pendant les 40
+       document suffit.
+       160vh et non 200vh : la suite de la page remonte pendant les 40
        derniers vh du zoom. À 200vh, le fond éteint laissait un écran presque
-       entier de noir avant le bandeau. */
-    .hero-zoom { height: 160vh; }
-    .hero-zoom-fond, .hero-zoom-contenu {
-      animation: hero-zoom-fond linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0px 100vh;
+       entier de noir avant le bandeau.
+       Réservé aux écrans à souris : sur téléphone il saccadait encore après
+       le retrait du flou (retour de Kader le 13/09), le hero y reste un
+       écran fixe. */
+    @media (hover: hover) and (pointer: fine) {
+      .hero-zoom { height: 160vh; }
+      .hero-zoom-fond, .hero-zoom-contenu {
+        animation: hero-zoom-fond linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0px 100vh;
+      }
+      .hero-zoom-contenu { animation-name: hero-zoom-contenu; animation-range: 0px 65vh; }
     }
+
     /* Projet phare : piste de 240vh, scène collée pendant 140vh de
        défilement. Ouverture sur 70 %, texte sur la fin, puis un temps de
        lecture avant que Projets remonte. */
@@ -163,8 +170,6 @@
     .pp-titre { animation-name: pp-titre; }
     .pp-indice { animation-name: pp-indice; }
     .pp-texte { animation-name: pp-texte; }
-
-    .hero-zoom-contenu { animation-name: hero-zoom-contenu; animation-range: 0px 65vh; }
 
     /* Transitions entre sections. Entrée : du haut de la section au bas de
        l'écran jusqu'à 35 % du haut. Sortie : de son bas à 60 % de l'écran

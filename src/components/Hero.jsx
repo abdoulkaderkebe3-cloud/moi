@@ -15,8 +15,9 @@ export default function Hero() {
     // fait 160vh là où les timelines de défilement sont prises en charge, son
     // contenu reste collé en haut pendant que les rayons grossissent et
     // s'estompent, et que le nom monte en s'effaçant. Tout est joué en CSS
-    // (`.hero-zoom*` dans index.css), sans JS par image. Sans prise en charge
-    // ou avec `prefers-reduced-motion`, le hero garde sa hauteur d'écran.
+    // (`.hero-zoom*` dans index.css), sans JS par image. Sans prise en charge,
+    // avec `prefers-reduced-motion` ou sur écran tactile, le hero garde sa
+    // hauteur d'écran.
     <section
       id="accueil"
       className="hero-zoom relative w-full bg-black text-white"
