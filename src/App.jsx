@@ -10,6 +10,7 @@ import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Footer from "./components/Footer";
 import SectionTransition from "./components/SectionTransition";
+import ProjetPhare from "./components/ProjetPhare";
 
 // Lazy-load heavy components (3D model, video, large images)
 const NewContact = lazy(() => import("./components/NewContact"));
@@ -30,15 +31,17 @@ function App() {
       <MotionConfig reducedMotion="user">
       <ScrollProgress />
       <Navbar />
-      {/* Le hero n'a pas d'entrée, il est déjà à l'écran à l'ouverture. Le
+      {/* Le hero n'a ni entrée ni sortie : il est déjà à l'écran à l'ouverture
+          et son zoom au défilement tient lieu de sortie. Le
           footer n'a ni entrée ni sortie : en bas de page, son haut ne monte
           jamais jusqu'au point où l'entrée se termine, il restait figé à
           mi-animation (à moitié transparent) et tremblait à chaque rebond de
           fin de défilement. */}
-      <SectionTransition enter={false}><Hero /></SectionTransition>
+      <SectionTransition enter={false} exit={false}><Hero /></SectionTransition>
       <Marquee />
       <SectionTransition><About /></SectionTransition>
       <SectionTransition><Skills /></SectionTransition>
+      <ProjetPhare />
       <SectionTransition><Projects /></SectionTransition>
       <Suspense fallback={null}>
         <SectionTransition motion="fade"><Certifications /></SectionTransition>

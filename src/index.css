@@ -76,6 +76,49 @@
   92.86% { background-position: 150% center; }
 }
 
+/* Hero : une hauteur d'écran par défaut, 160vh avec le zoom au défilement. */
+.hero-zoom { height: 100vh; }
+/* Les rayons grossissent d'abord à pleine intensité, puis se floutent et
+   s'éteignent sur la fin. Le nom reste lisible pendant la première moitié. */
+@keyframes hero-zoom-fond {
+  45% { opacity: 1; filter: blur(0); }
+  to { opacity: 0; scale: 1.8; filter: blur(10px); }
+}
+@keyframes hero-zoom-contenu {
+  40% { opacity: 1; }
+  to { opacity: 0; scale: 0.8; translate: 0 -10vh; }
+}
+
+/* Projet phare (ProjetPhare.jsx). Par défaut, l'état final : image plein
+   écran voilée, texte visible, titre d'entrée et indice masqués. */
+.pp-scene { height: 100vh; }
+.pp-titre, .pp-indice { display: none; }
+.pp-cadre { --pp-x: 8%; --pp-y: 22%; --pp-r: 20px; }
+@media (min-width: 768px) {
+  .pp-cadre { --pp-x: 29%; --pp-y: 21%; --pp-r: 24px; }
+}
+@keyframes pp-cadre {
+  from { clip-path: inset(var(--pp-y) var(--pp-x) round var(--pp-r)); }
+  70%, to { clip-path: inset(0 0 round 0px); }
+}
+/* Zoom ancré au-dessus de l'image : la carte de départ montre les chiffres
+   clés du tableau de bord plutôt que le milieu de la courbe. */
+.pp-media { transform-origin: 50% -20%; }
+@keyframes pp-media { from { scale: 1.35; } 70%, to { scale: 1; } }
+@keyframes pp-voile { 0%, 50% { opacity: 0; } 85%, to { opacity: 1; } }
+@keyframes pp-titre {
+  0%, 30% { opacity: 1; }
+  60%, to { opacity: 0; translate: 0 -28px; scale: 1.06; }
+}
+@keyframes pp-indice { from { opacity: 1; } 10%, to { opacity: 0; } }
+/* `visibility` bascule avec le fondu : le lien n'est ni cliquable ni
+   atteignable au clavier tant que le texte est invisible. */
+@keyframes pp-texte {
+  0%, 62% { opacity: 0; translate: 0 18px; visibility: hidden; }
+  63% { visibility: visible; }
+  85%, to { opacity: 1; translate: 0 0; visibility: visible; }
+}
+
 /* Barre de progression : vide sans prise en charge, c'est un décor. */
 .barre-progression { scale: 0 1; }
 
@@ -86,6 +129,39 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    /* Zoom du hero sur les 100 premiers vh de défilement, pendant que son
+       contenu est collé. Le hero est en haut de page, la timeline du
+       document suffit. Le flou n'arrive qu'après 45 % : un flou animé plein
+       écran coûte cher sur mobile. */
+    /* 160vh et non 200vh : la suite de la page remonte pendant les 40
+       derniers vh du zoom. À 200vh, le fond éteint laissait un écran presque
+       entier de noir avant le bandeau. */
+    .hero-zoom { height: 160vh; }
+    .hero-zoom-fond, .hero-zoom-contenu {
+      animation: hero-zoom-fond linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0px 100vh;
+    }
+    /* Projet phare : piste de 240vh, scène collée pendant 140vh de
+       défilement. Ouverture sur 70 %, texte sur la fin, puis un temps de
+       lecture avant que Projets remonte. */
+    .pp-piste { height: 240vh; view-timeline-name: --pp; }
+    .pp-scene { position: sticky; top: 0; }
+    .pp-titre { display: flex; }
+    .pp-indice { display: block; }
+    .pp-cadre, .pp-media, .pp-voile, .pp-titre, .pp-indice, .pp-texte {
+      animation: pp-cadre linear both;
+      animation-timeline: --pp;
+      animation-range: contain 0% contain 100%;
+    }
+    .pp-media { animation-name: pp-media; }
+    .pp-voile { animation-name: pp-voile; }
+    .pp-titre { animation-name: pp-titre; }
+    .pp-indice { animation-name: pp-indice; }
+    .pp-texte { animation-name: pp-texte; }
+
+    .hero-zoom-contenu { animation-name: hero-zoom-contenu; animation-range: 0px 65vh; }
+
     /* Transitions entre sections. Entrée : du haut de la section au bas de
        l'écran jusqu'à 35 % du haut. Sortie : de son bas à 60 % de l'écran
        jusqu'au haut. `backwards` et `forwards` : hors de leur plage, les

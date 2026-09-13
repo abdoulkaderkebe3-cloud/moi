@@ -11,10 +11,18 @@ export default function Hero() {
   const { t } = useLang();
 
   return (
+    // Zoom au défilement (façon motion.dev « scroll zoom hero ») : la section
+    // fait 160vh là où les timelines de défilement sont prises en charge, son
+    // contenu reste collé en haut pendant que les rayons grossissent, se
+    // floutent et s'estompent, et que le nom recule. Tout est joué en CSS
+    // (`.hero-zoom*` dans index.css), sans JS par image. Sans prise en charge
+    // ou avec `prefers-reduced-motion`, le hero garde sa hauteur d'écran.
     <section
       id="accueil"
-      className="relative h-screen w-full bg-black text-white overflow-hidden"
+      className="hero-zoom relative w-full bg-black text-white"
     >
+      <div className="sticky top-0 h-screen w-full overflow-clip">
+      <div className="hero-zoom-fond absolute inset-0">
       <Suspense fallback={null}>
         <LightRays
           raysOrigin="top-center"
@@ -27,10 +35,11 @@ export default function Hero() {
           className="absolute inset-0 w-full h-full"
         />
       </Suspense>
+      </div>
 
       {/* Ce bloc prend la place du squelette statique d'index.html, au même
           endroit et à la même taille : la bascule ne doit pas se voir. */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
+      <div className="hero-zoom-contenu absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
           <ShinyText
             text="Kebe Abdoul Kader"
             color="#b5b5b5"
@@ -52,6 +61,7 @@ export default function Hero() {
           >
             {t.hero.role}
           </motion.p>
+      </div>
       </div>
     </section>
   );
