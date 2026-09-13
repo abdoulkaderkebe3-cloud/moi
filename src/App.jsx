@@ -10,7 +10,6 @@ import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Footer from "./components/Footer";
 import SectionTransition from "./components/SectionTransition";
-import ProjetPhare from "./components/ProjetPhare";
 
 // Lazy-load heavy components (3D model, video, large images)
 const NewContact = lazy(() => import("./components/NewContact"));
@@ -41,7 +40,6 @@ function App() {
       <Marquee />
       <SectionTransition><About /></SectionTransition>
       <SectionTransition><Skills /></SectionTransition>
-      <ProjetPhare />
       <SectionTransition><Projects /></SectionTransition>
       <Suspense fallback={null}>
         <SectionTransition motion="fade"><Certifications /></SectionTransition>

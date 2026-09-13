@@ -71,14 +71,6 @@ const translations = {
       p5: "Système de gestion d'engrais",
       p6: "Site de billetterie",
       p7: "Site vitrine Viso Studio",
-      featured: {
-        label: "Projet phare",
-        award: "2e place au Vibeathon Côte d'Ivoire 2026",
-        description: "Un système de prises intelligentes qui réduit la facture d'électricité : l'IA coupe les appareils reportables aux heures de pointe et explique chaque décision. J'étais lead technique de l'équipe.",
-        cta: "Voir le projet",
-        hint: "Faites défiler",
-        alt: "Tableau de bord d'EcoWatt : consommation en temps réel, économies et décisions de l'IA",
-      },
     },
     // Certifications
     certifications: {
@@ -192,14 +184,6 @@ const translations = {
       p5: "Fertilizer management system",
       p6: "Ticketing website",
       p7: "Viso Studio showcase website",
-      featured: {
-        label: "Featured project",
-        award: "2nd place at Vibeathon Côte d'Ivoire 2026",
-        description: "A smart plug system that cuts electricity bills: the AI switches off deferrable appliances at peak hours and explains every decision. I was the team's technical lead.",
-        cta: "View the project",
-        hint: "Scroll down",
-        alt: "EcoWatt dashboard: real-time consumption, savings and AI decisions",
-      },
     },
     // Certifications
     certifications: {
