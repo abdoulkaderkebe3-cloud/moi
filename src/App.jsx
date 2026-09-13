@@ -31,7 +31,10 @@ function App() {
       <ScrollProgress />
       <Navbar />
       {/* Le hero n'a pas d'entrée, il est déjà à l'écran à l'ouverture. Le
-          footer n'a pas de sortie, rien ne vient après lui. */}
+          footer n'a ni entrée ni sortie : en bas de page, son haut ne monte
+          jamais jusqu'au point où l'entrée se termine, il restait figé à
+          mi-animation (à moitié transparent) et tremblait à chaque rebond de
+          fin de défilement. */}
       <SectionTransition enter={false}><Hero /></SectionTransition>
       <Marquee />
       <SectionTransition><About /></SectionTransition>
@@ -42,7 +45,7 @@ function App() {
         <SectionTransition><Services /></SectionTransition>
         <SectionTransition><NewContact /></SectionTransition>
       </Suspense>
-      <SectionTransition exit={false}><Footer /></SectionTransition>
+      <SectionTransition enter={false} exit={false}><Footer /></SectionTransition>
       </MotionConfig>
     </LanguageProvider>
   );

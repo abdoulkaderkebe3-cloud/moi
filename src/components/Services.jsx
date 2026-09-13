@@ -126,9 +126,15 @@ function RingCard({ service, index, angle, geometry, t }) {
   );
 }
 
-function ServicesRing({ sectionRef, t }) {
+// Réduction minimale de l'anneau : en dessous, le texte des cartes deviendrait
+// trop petit pour être lu sur un téléphone.
+const MIN_FIT = 0.78;
+
+function ServicesRing({ runRef, t }) {
   const [geometry, setGeometry] = useState(readGeometry);
   const [active, setActive] = useState(0);
+  const [fit, setFit] = useState(1);
+  const stageRef = useRef(null);
   const { radius, step } = geometry;
   const total = (SERVICES.length - 1) * step;
 
@@ -138,6 +144,24 @@ function ServicesRing({ sectionRef, t }) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // Sur un petit écran, la carte la plus haute peut dépasser la place laissée
+  // entre le haut et le repère de progression : l'anneau se réduit alors juste
+  // assez pour tenir, sans descendre sous MIN_FIT.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const measure = () => {
+      const tallest = Math.max(...[...stage.querySelectorAll("article")].map((card) => card.offsetHeight));
+      if (!tallest) return;
+      setFit(Math.max(MIN_FIT, Math.min(1, stage.clientHeight / (tallest + 16))));
+    };
+    measure();
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(stage);
+    stage.querySelectorAll("article").forEach((card) => resizeObserver.observe(card));
+    return () => resizeObserver.disconnect();
+  }, [geometry]);
+
   // La section fait plusieurs écrans de haut et son contenu reste collé : le
   // défilement parcouru pendant ce temps fait tourner l'anneau. Un petit
   // palier à chaque bout laisse la première et la dernière carte se poser.
@@ -145,7 +169,7 @@ function ServicesRing({ sectionRef, t }) {
   // `useScroll` avec une cible remesure la section à chaque image.
   const scrollYProgress = useMotionValue(0);
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = runRef.current;
     if (!el) return;
     let top = 0;
     let run = 1;
@@ -168,7 +192,7 @@ function ServicesRing({ sectionRef, t }) {
       window.removeEventListener("resize", measure);
       window.removeEventListener("scroll", update);
     };
-  }, [sectionRef, scrollYProgress]);
+  }, [runRef, scrollYProgress]);
   const rawAngle = useTransform(scrollYProgress, [0.06, 0.94], [0, total], { clamp: true });
   // Le ressort donne l'inertie de l'original : l'anneau rattrape la molette au
   // lieu de la suivre au pixel près.
@@ -195,12 +219,13 @@ function ServicesRing({ sectionRef, t }) {
   return (
     <>
       <div
-        className="relative w-full flex-1"
+        ref={stageRef}
+        className="relative min-h-0 w-full flex-1"
         style={{ perspective: radius }}
       >
         <motion.div
           className="absolute left-1/2 top-1/2 h-0 w-0"
-          style={{ rotateZ: tilt, transformStyle: "preserve-3d" }}
+          style={{ rotateZ: tilt, scale: fit, transformStyle: "preserve-3d" }}
         >
           <motion.div
             className="absolute left-0 top-0 h-0 w-0"
@@ -242,10 +267,45 @@ function ServicesRing({ sectionRef, t }) {
   );
 }
 
+// Hauteur d'écran utile à la mise en page. Mise à jour seulement quand la
+// largeur change ou que la hauteur varie franchement : sur mobile, la barre
+// d'adresse qui se replie au défilement change la hauteur de 60 à 100 px, et
+// basculer de mise en page à ce moment ferait sauter la section.
+function useLayoutHeight() {
+  const [height, setHeight] = useState(() =>
+    typeof window === "undefined" ? 900 : window.innerHeight
+  );
+  useEffect(() => {
+    let width = window.innerWidth;
+    let last = window.innerHeight;
+    const onResize = () => {
+      const h = window.innerHeight;
+      if (window.innerWidth !== width || Math.abs(h - last) > 150) {
+        width = window.innerWidth;
+        last = h;
+        setHeight(h);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return height;
+}
+
+// Sous cette hauteur, titre et phrase ne tiennent plus au-dessus de l'anneau
+// dans l'écran collé : ils défilent avant lui (iPhone SE, petits Android).
+const SHORT_HEIGHT = 760;
+// Sous celle-ci (téléphone en paysage), une carte ne tient même plus seule à
+// l'écran : on affiche la grille simple.
+const VERY_SHORT_HEIGHT = 520;
+
 export default function Services() {
   const { t } = useLang();
   const reduce = useReducedMotion();
+  const layoutHeight = useLayoutHeight();
+  const short = layoutHeight < SHORT_HEIGHT;
   const sectionRef = useRef(null);
+  const runRef = useRef(null);
   // `near` monte le fond quand la section approche, `visible` met son rendu en
   // pause dès qu'elle sort de l'écran : sans ça le shader tourne sur toute la
   // page et vide la batterie en arrière-plan.
@@ -339,9 +399,9 @@ export default function Services() {
     </a>
   );
 
-  // Moins d'animations demandé : pas d'anneau piloté par le défilement, on
-  // garde la grille statique d'origine.
-  if (reduce) {
+  // Moins d'animations demandé, ou écran trop bas pour l'anneau : grille
+  // statique d'origine.
+  if (reduce || layoutHeight < VERY_SHORT_HEIGHT) {
     return (
       <section
         ref={sectionRef}
@@ -369,20 +429,25 @@ export default function Services() {
 
   // Pas d'`overflow-hidden` sur la section : il en ferait un conteneur de
   // défilement et casserait le `sticky` de son contenu. C'est le bloc collé
-  // qui rogne.
+  // qui rogne. `runRef` porte la course de défilement de l'anneau : sur écran
+  // bas, le titre est posé avant elle et ne la rallonge pas.
   return (
-    <section
-      ref={sectionRef}
-      id="services"
-      className="relative bg-black scroll-mt-24"
-      style={{ height: `${100 + (SERVICES.length - 1) * 70}vh` }}
-    >
-      <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-6 pb-8 pt-24 md:px-20 md:pb-12">
-        {background}
-        <div className="relative flex flex-1 flex-col">
-          {header}
-          <ServicesRing sectionRef={sectionRef} t={t} />
-          <div className="mt-6 text-center">{cta}</div>
+    <section ref={sectionRef} id="services" className="relative bg-black scroll-mt-24">
+      {short && <div className="relative px-6 pb-2 pt-24 md:px-20">{header}</div>}
+      <div ref={runRef} style={{ height: `${100 + (SERVICES.length - 1) * 70}vh` }}>
+        {/* En haut, 80 px de marge au minimum : la navbar (69 px) redescend à
+            l'arrivée de chaque section et ne doit pas couvrir la carte. */}
+        <div
+          className={`sticky top-0 flex h-svh flex-col overflow-hidden px-6 pb-6 md:px-20 md:pb-12 ${
+            short ? "pt-20" : "pt-24"
+          }`}
+        >
+          {background}
+          <div className="relative flex min-h-0 flex-1 flex-col">
+            {!short && header}
+            <ServicesRing runRef={runRef} t={t} />
+            <div className="mt-5 text-center">{cta}</div>
+          </div>
         </div>
       </div>
     </section>
