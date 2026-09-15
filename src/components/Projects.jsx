@@ -149,7 +149,7 @@ export default function Projects() {
               React, TypeScript, TailwindCSS
             </p>
             <a
-              href="https://mariage-demo-kvder.vercel.app"
+              href="https://landry-stephanie.vercel.app"
               target="_blank"
             >
               <img
