@@ -4,7 +4,7 @@ import burgerImg from "../assets/images/png/burger-house.webp";
 import algoImg from "../assets/images/png/site-algo.webp";
 import billetterieImg from "../assets/images/png/billetterie-preview.webp";
 import visoImg from "../assets/images/png/viso-studio.webp";
-import mariageImg from "../assets/images/png/mariage-landry-stephanie.webp";
+import mariageImg from "../assets/images/png/mariage-demo.webp";
 import { useLang } from "../context/LanguageContext";
 import { RevealGroup, RevealItem, RevealTitle } from "./Reveal";
 
@@ -149,12 +149,12 @@ export default function Projects() {
               React, TypeScript, TailwindCSS
             </p>
             <a
-              href="https://landry-stephanie.vercel.app"
+              href="https://mariage-demo-kvder.vercel.app"
               target="_blank"
             >
               <img
                 src={mariageImg}
-                alt="Aperçu du site de mariage de Landry et Stéphanie"
+                alt="Aperçu d’un site d’invitation de mariage"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />
