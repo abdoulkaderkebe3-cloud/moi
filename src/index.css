@@ -55,10 +55,38 @@
    demande moins d'animations, rien ne s'applique et le contenu reste
    simplement visible. */
 
-@keyframes st-entree { from { opacity: 0.25; translate: 0 80px; scale: 0.92; } }
-@keyframes st-entree-fondu { from { opacity: 0.25; } }
-@keyframes st-sortie { to { opacity: 0.2; scale: 0.94; } }
-@keyframes st-sortie-fondu { to { opacity: 0.2; } }
+/* Recouvrement empile : la section qui arrive glisse par-dessus la
+   precedente comme une carte qu'on pose, celle qui part recule et
+   s'assombrit derriere. Le fond opaque, les coins arrondis et l'ombre portee
+   vers le haut sont ce qui fait lire le recouvrement ; sans eux le
+   deplacement seul passe inapercu, ce qui etait le cas de la version
+   precedente (80 px, opacite 0,25). */
+@keyframes st-entree {
+  from {
+    opacity: 0.3;
+    translate: 0 160px;
+    scale: 0.9;
+    border-radius: 36px 36px 0 0;
+    /* Le `inset` dessine le bord haut de la carte sur 1 px. C'est lui qui
+       rend le recouvrement visible quand deux sections noires se suivent :
+       l'echelle seule ne retire que 13 px de chaque cote sur un telephone de
+       390 px, et du noir qui glisse sur du noir ne se voit pas. En `inset`
+       plutot qu'en `border-top`, qui decalerait le contenu d'un pixel. */
+    box-shadow: 0 -34px 64px rgb(0 0 0 / 0.85), inset 0 1px 0 rgb(255 255 255 / 0.16);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    border-radius: 0;
+    box-shadow: 0 -34px 64px rgb(0 0 0 / 0), inset 0 1px 0 rgb(255 255 255 / 0);
+  }
+}
+@keyframes st-entree-fondu { from { opacity: 0.3; } }
+/* La sortante recule au lieu de simplement palir : c'est ce decalage vers
+   l'arriere qui donne la profondeur sous la carte qui arrive. */
+@keyframes st-sortie { to { opacity: 0.15; scale: 0.9; translate: 0 -40px; } }
+@keyframes st-sortie-fondu { to { opacity: 0.15; } }
 @keyframes barre-progression { from { scale: 0 1; } to { scale: 1 1; } }
 @keyframes pile-reduit { to { scale: var(--pile-echelle, 1); } }
 @keyframes ap-image-m { 0% { opacity: 0; translate: 0 40px; } 50% { opacity: 1; } 60%, 100% { opacity: 1; translate: 0 0; } }
@@ -94,6 +122,36 @@
   to { opacity: 0; translate: 0 -10vh; }
 }
 
+/* Projet phare (ProjetPhare.jsx). Par defaut, l'etat final : visuel plein
+   ecran voile, texte visible, titre d'entree et indice masques. */
+.pp-scene { height: 100vh; }
+.pp-titre, .pp-indice { display: none; }
+.pp-cadre { --pp-x: 8%; --pp-y: 22%; --pp-r: 20px; }
+@media (min-width: 768px) {
+  .pp-cadre { --pp-x: 29%; --pp-y: 21%; --pp-r: 24px; }
+}
+@keyframes pp-cadre {
+  from { clip-path: inset(var(--pp-y) var(--pp-x) round var(--pp-r)); }
+  70%, to { clip-path: inset(0 0 round 0px); }
+}
+/* Zoom avant sur la capture, ancre en haut : la carte de depart montre le
+   titre et les boutons du site plutot que le milieu de la page. */
+.pp-media { transform-origin: 50% 0%; }
+@keyframes pp-media { from { scale: 1.35; } 70%, to { scale: 1; } }
+@keyframes pp-voile { 0%, 50% { opacity: 0; } 85%, to { opacity: 1; } }
+@keyframes pp-titre {
+  0%, 30% { opacity: 1; }
+  60%, to { opacity: 0; translate: 0 -28px; scale: 1.06; }
+}
+@keyframes pp-indice { from { opacity: 1; } 10%, to { opacity: 0; } }
+/* `visibility` bascule avec le fondu : le lien n'est ni cliquable ni
+   atteignable au clavier tant que le texte est invisible. */
+@keyframes pp-texte {
+  0%, 62% { opacity: 0; translate: 0 18px; visibility: hidden; }
+  63% { visibility: visible; }
+  85%, to { opacity: 1; translate: 0 0; visibility: visible; }
+}
+
 /* Barre de progression : vide sans prise en charge, c'est un décor. */
 .barre-progression { scale: 0 1; }
 
@@ -123,6 +181,24 @@
       .hero-zoom-contenu { animation-name: hero-zoom-contenu; animation-range: 0px 65vh; }
     }
 
+        /* Projet phare : piste de 240vh, scene collee pendant 140vh de
+       defilement. Ouverture sur 70 %, texte sur la fin, puis un temps de
+       lecture avant que Projets remonte. */
+    .pp-piste { height: 240vh; view-timeline-name: --pp; }
+    .pp-scene { position: sticky; top: 0; }
+    .pp-titre { display: flex; }
+    .pp-indice { display: block; }
+    .pp-cadre, .pp-media, .pp-voile, .pp-titre, .pp-indice, .pp-texte {
+      animation: pp-cadre linear both;
+      animation-timeline: --pp;
+      animation-range: contain 0% contain 100%;
+    }
+    .pp-media { animation-name: pp-media; }
+    .pp-voile { animation-name: pp-voile; }
+    .pp-titre { animation-name: pp-titre; }
+    .pp-indice { animation-name: pp-indice; }
+    .pp-texte { animation-name: pp-texte; }
+
     /* Transitions entre sections. Entrée : du haut de la section au bas de
        l'écran jusqu'à 35 % du haut. Sortie : de son bas à 60 % de l'écran
        jusqu'au haut. `backwards` et `forwards` : hors de leur plage, les
@@ -134,12 +210,16 @@
       animation-range: cover 0% cover 65vh;
       transform-origin: 50% 0%;
     }
+    /* Le fond opaque est ce qui permet a la section d'en recouvrir une autre.
+       Pose sur `.st-entree` seul : `.st-entree-fondu` sert aux sections
+       mesurees par ScrollTrigger, qu'on ne veut pas toucher. */
+    .st-entree { background-color: #000; }
     .st-entree-fondu { animation-name: st-entree-fondu; }
     .st-sortie, .st-sortie-fondu {
       animation: st-sortie linear forwards;
       animation-timeline: view();
       animation-range: cover calc(100% - 60vh) cover 100%;
-      transform-origin: 50% 0%;
+      transform-origin: 50% 100%;
     }
     .st-sortie-fondu { animation-name: st-sortie-fondu; }
 

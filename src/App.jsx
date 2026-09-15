@@ -3,11 +3,13 @@ import { MotionConfig } from "framer-motion";
 import { LanguageProvider } from "./context/LanguageContext";
 import Navbar from "./components/Navbar";
 import ScrollProgress from "./components/ScrollProgress";
+import RetourEnHaut from "./components/RetourEnHaut";
 import Hero from "./components/Hero";
 import Marquee from "./components/Marquee";
 import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
+import ProjetPhare from "./components/ProjetPhare";
 import Footer from "./components/Footer";
 import SectionTransition from "./components/SectionTransition";
 
@@ -30,6 +32,7 @@ function App() {
       <MotionConfig reducedMotion="user">
       <ScrollProgress />
       <Navbar />
+      <RetourEnHaut />
       {/* Le hero n'a ni entrée ni sortie : il est déjà à l'écran à l'ouverture
           et son zoom au défilement tient lieu de sortie. Le
           footer n'a ni entrée ni sortie : en bas de page, son haut ne monte
@@ -40,6 +43,9 @@ function App() {
       <Marquee />
       <SectionTransition><About /></SectionTransition>
       <SectionTransition><Skills /></SectionTransition>
+      {/* Hors de `SectionTransition` : un transform sur l'ancetre ferait
+          grossir la scene collee en meme temps qu'elle s'ouvre. */}
+      <ProjetPhare />
       <SectionTransition><Projects /></SectionTransition>
       <Suspense fallback={null}>
         <SectionTransition motion="fade"><Certifications /></SectionTransition>

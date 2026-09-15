@@ -37,6 +37,10 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [focusInside, setFocusInside] = useState(false);
+  // Section courante, pour marquer le lien correspondant. Elle etait deja
+  // calculee pour decider quand ramener le header, elle n'etait simplement
+  // pas exposee.
+  const [activeId, setActiveId] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -83,6 +87,8 @@ export default function Navbar() {
       for (const [id, top] of tops) {
         if (top <= line) active = id;
       }
+
+      setActiveId(active);
 
       if (window.scrollY < 80) {
         current = active;
@@ -132,7 +138,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) setMenuOpen(false);
+      if (window.innerWidth >= 768) setMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -145,15 +151,15 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
+  // Barre du haut : « Accueil » doublonnait le logo, qui pointe deja sur
+  // #accueil ; « Footer » ne veut rien dire pour un visiteur ; « Contact » est
+  // desormais porte par le bouton d'action, a droite.
   const links = [
-    { name: t.nav.home, href: "#accueil" },
-    { name: t.nav.about, href: "#a-propos" },
-    { name: t.nav.skills, href: "#compétences" },
-    { name: t.nav.projects, href: "#projets" },
-    { name: t.nav.certifications, href: "#certifications" },
-    { name: t.nav.services, href: "#services" },
-    { name: t.nav.contact, href: "#contact" },
-    { name: t.nav.footer, href: "#footer" },
+    { name: t.nav.about, href: "#a-propos", id: "a-propos" },
+    { name: t.nav.skills, href: "#compétences", id: "compétences" },
+    { name: t.nav.projects, href: "#projets", id: "projets" },
+    { name: t.nav.certifications, href: "#certifications", id: "certifications" },
+    { name: t.nav.services, href: "#services", id: "services" },
   ];
 
   return (
@@ -178,7 +184,13 @@ export default function Navbar() {
         {/* Logo */}
         <a
           href="#accueil"
-          className="group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+          /* Masque pendant l'ouverture du tiroir : depuis qu'il sort par la
+             droite, il ne recouvre plus ce logo, et les deux se voyaient cote
+             a cote. `invisible` plutot que `hidden` pour ne pas decaler la
+             barre. Le logo du tiroir prend le relais. */
+          className={`group flex items-center rounded-2xl py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 ${
+            menuOpen ? "invisible" : ""
+          }`}
           aria-label="Accueil — Kader Dev"
         >
           <span className={`relative flex items-center justify-center overflow-hidden rounded-2xl bg-surface ring-1 ring-line transition-all duration-300 group-hover:bg-white/10 group-hover:ring-accent/60 group-hover:shadow-[0_0_20px_rgb(var(--accent-rgb)/0.35)] scale-100 group-hover:scale-105 ${scrolled ? "h-10 w-10 sm:h-11 sm:w-11" : "h-12 w-12 sm:h-14 sm:w-14"
@@ -192,18 +204,32 @@ export default function Navbar() {
           </span>
         </a>
 
-        {/* Desktop nav links */}
-        <div className="hidden lg:flex items-center gap-4 xl:gap-8 text-sm xl:text-base">
-          {links.map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              className="hover:text-accent transition relative group font-medium"
-            >
-              {link.name}
-              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-accent transition-all group-hover:w-full" />
-            </a>
-          ))}
+        {/* Desktop nav links. Seuil descendu a md : entre 768 et 1024 px il y
+            avait la place, et la barre n'affichait pourtant que le burger. */}
+        <div className="hidden md:flex items-center gap-3 lg:gap-4 xl:gap-8 text-sm xl:text-base">
+          {links.map((link) => {
+            const actif = activeId === link.id;
+            return (
+              <a
+                key={link.id}
+                href={link.href}
+                aria-current={actif ? "true" : undefined}
+                className={`relative group font-medium transition-colors duration-200 ${
+                  actif ? "text-accent" : "hover:text-accent"
+                }`}
+              >
+                {link.name}
+                {/* Le trait plein marque la section ou l'on se trouve, le trait
+                    qui se deploie repond au survol. Les deux partagent la meme
+                    ligne, donc l'actif ne bouge pas quand on le survole. */}
+                <span
+                  className={`absolute left-0 -bottom-1 h-[2px] bg-accent transition-all duration-300 ease-out ${
+                    actif ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </a>
+            );
+          })}
         </div>
 
         {/* Right section: socials + theme toggle + lang toggle + burger */}
@@ -235,11 +261,23 @@ export default function Navbar() {
             </span>
           </button>
 
+          {/* Bouton d'action. En lecture en Z, le coin haut-droit est la place
+              de l'action forte ; c'est le selecteur de langue qui l'occupait.
+              Masque sous md, ou le tiroir porte deja un lien Contact. */}
+          <a
+            href="#contact"
+            className="hidden md:inline-flex min-h-11 items-center rounded-full bg-accent px-4 lg:px-5 py-2 text-sm font-semibold text-black transition-[background-color,transform] duration-200 ease-out hover:bg-white active:scale-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            {t.nav.cta}
+          </a>
+
           {/* Mobile burger */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="lg:hidden p-2 rounded-md hover:bg-white/10 text-white transition"
-            aria-label="Toggle menu"
+            /* 44 px de cible : `p-2` autour d'une icone de 24 px n'en faisait
+               que 40. */
+            className="md:hidden inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+            aria-label={menuOpen ? t.nav.closeMenu : t.nav.openMenu}
             aria-expanded={menuOpen}
           >
             {menuOpen ? (
@@ -267,36 +305,92 @@ export default function Navbar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={() => setMenuOpen(false)}
-              className="lg:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-[2px]"
+              className="md:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-[2px]"
             />
             <motion.div
               key="drawer"
-              initial={{ x: "-100%" }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
+              exit={{ x: "100%" }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="lg:hidden fixed inset-y-0 left-0 z-50 w-[78%] max-w-xs bg-black border-r border-line shadow-2xl flex flex-col"
+              /* Sort par la droite, du cote du burger : le panneau suivait le
+                 sens inverse du doigt. Elargi a 88 % car a 78 % la bande de
+                 page restante, noire elle aussi, ne se distinguait pas du
+                 tiroir. */
+              className="md:hidden fixed inset-y-0 right-0 z-50 flex w-[88%] max-w-sm flex-col border-l border-line bg-black shadow-2xl"
             >
               {/* Drawer header */}
+              {/* Le logo porte le retour a l'accueil, comme dans la barre :
+                  c'est ce qui permet de retirer le lien « Accueil » de la
+                  liste sans perdre l'acces. */}
               <div className="flex items-center gap-3 px-5 py-4 border-b border-line">
-                <span className="flex items-center justify-center h-10 w-10 rounded-2xl bg-surface ring-1 ring-line overflow-hidden">
-                  <img src={logo} alt="Logo Kader Dev" className="h-6 w-6 object-contain invert" />
-                </span>
-                <span className="font-bold text-white">Kader Dev</span>
+                <a
+                  href="#accueil"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label={t.nav.home}
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl bg-surface ring-1 ring-line overflow-hidden transition hover:bg-white/10 hover:ring-accent/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <img src={logo} alt="" aria-hidden="true" className="h-6 w-6 object-contain invert" />
+                </a>
+
+                {/* Le panneau couvre le burger, qui servait de bouton de
+                    fermeture quand il sortait par la gauche. */}
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label={t.nav.closeMenu}
+                  className="ml-auto inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
 
               {/* Links */}
               <div className="flex flex-col overflow-y-auto">
-                {links.map((link, i) => (
-                  <a
-                    key={i}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="px-5 py-4 border-b border-line text-white text-base font-medium hover:bg-white/5 hover:text-accent transition"
-                  >
-                    {link.name}
-                  </a>
-                ))}
+                {links.map((link, i) => {
+                  const actif = activeId === link.id;
+                  return (
+                    <motion.a
+                      key={link.id}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      aria-current={actif ? "true" : undefined}
+                      initial={{ opacity: 0, x: 24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      // Cascade : les entrees arrivaient toutes en bloc. Le
+                      // retard initial laisse le panneau finir sa course.
+                      // `MotionConfig reducedMotion="user"` (App.jsx) retire le
+                      // deplacement et garde le fondu pour qui le demande.
+                      transition={{ duration: 0.25, ease: "easeOut", delay: 0.15 + i * 0.05 }}
+                      className={`relative border-b border-line px-5 py-4 text-base font-medium transition hover:bg-white/5 hover:text-accent ${
+                        actif ? "text-accent" : "text-white"
+                      }`}
+                    >
+                      {/* Meme repere que sur desktop, tourne a la verticale :
+                          la liste est en colonne, un soulignement ne s'y
+                          lirait pas comme un marqueur de position. */}
+                      {actif && (
+                        <span className="absolute inset-y-0 left-0 w-[3px] bg-accent" aria-hidden="true" />
+                      )}
+                      {link.name}
+                    </motion.a>
+                  );
+                })}
+              </div>
+
+              {/* Bouton d'action. Sans lui, retirer « Contact » de la liste
+                  couperait tout acces a la section sur telephone, ou le
+                  bouton de la barre est masque. */}
+              <div className="px-5 pt-5">
+                <a
+                  href="#contact"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex min-h-11 w-full items-center justify-center rounded-full bg-accent px-5 py-3 font-semibold text-black transition-[background-color,transform] duration-200 ease-out hover:bg-white active:scale-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  {t.nav.cta}
+                </a>
               </div>
 
               {/* Socials footer */}

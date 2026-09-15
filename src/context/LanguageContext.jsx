@@ -12,6 +12,12 @@ const translations = {
       services: "Services",
       contact: "Contact",
       footer: "Footer",
+      // Libelle du bouton d'action de la navbar. Distinct de `contact`, qui
+      // nomme la section : ici c'est une invitation, pas une etiquette.
+      cta: "Me contacter",
+      openMenu: "Ouvrir le menu",
+      closeMenu: "Fermer le menu",
+      backToTop: "Revenir en haut de la page",
       follow: "Suivez-moi",
     },
     // Hero
@@ -69,6 +75,21 @@ const translations = {
       p2: "Site d'apprentissage d'algorithme",
       p4: "application web de question reponse",
       p5: "Système de gestion d'engrais",
+      // Projet phare (ProjetPhare.jsx) : capture de viso-studio.com.
+      featured: {
+        label: "Projet phare",
+        name: "Viso Studio",
+        subtitle: "Responsable du développement front-end",
+        description:
+          "Le site de l'agence Viso Studio, en production sur son propre " +
+          "domaine. Identité dessinée à la main, thème clair et sombre, " +
+          "animations au défilement, et un rendu pensé pour le téléphone " +
+          "avant l'écran large.",
+        cta: "Voir le site",
+        hint: "Faites défiler",
+        alt: "Page d'accueil du site de Viso Studio, titre « L'Impact par le design » et boutons d'appel à l'action.",
+        facts: ["Responsable front-end", "Site en production", "Thème clair et sombre"],
+      },
       p6: "Site de billetterie",
       p7: "Site vitrine Viso Studio",
     },
@@ -125,6 +146,10 @@ const translations = {
       services: "Services",
       contact: "Contact",
       footer: "Footer",
+      cta: "Get in touch",
+      openMenu: "Open menu",
+      closeMenu: "Close menu",
+      backToTop: "Back to top of page",
       follow: "Follow me",
     },
     // Hero
@@ -182,6 +207,21 @@ const translations = {
       p2: "Algorithm learning website",
       p4: "Web Q&A application",
       p5: "Fertilizer management system",
+      // Featured project (ProjetPhare.jsx): screenshot of viso-studio.com.
+      featured: {
+        label: "Featured project",
+        name: "Viso Studio",
+        subtitle: "Front-end development lead",
+        description:
+          "The website of the Viso Studio agency, live on its own domain. " +
+          "Hand-drawn identity, light and dark themes, scroll-driven " +
+          "animations, and a layout designed for the phone before the wide " +
+          "screen.",
+        cta: "Visit the site",
+        hint: "Scroll",
+        alt: "Home page of the Viso Studio website, with the headline \"L'Impact par le design\" and its call-to-action buttons.",
+        facts: ["Front-end lead", "Live in production", "Light and dark themes"],
+      },
       p6: "Ticketing website",
       p7: "Viso Studio showcase website",
     },
