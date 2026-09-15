@@ -62,6 +62,30 @@ export default function NewContact() {
   // état déclencherait un second rendu pour rien.
   const [scene3dAutorisee] = useState(() => !connexionTropLente());
 
+  // Le chunk 3D pese 1 010 Ko decompresses : le telecharger et le parser
+  // coute 397 ms a 4x CPU, mesure. Tant que ce travail attendait l'approche
+  // de la section, il tombait en plein defilement. On le paie ici pendant un
+  // temps mort du navigateur, alors que le visiteur est encore en haut de
+  // page. `requestIdleCallback` garantit qu'on ne prend pas la main sur une
+  // tache plus urgente ; le repli a 2 s couvre Safari, qui ne l'implemente
+  // pas. Import volontairement non attendu : on veut l'effet de bord du
+  // cache de modules, pas la valeur.
+  useEffect(() => {
+    if (!scene3dAutorisee) return;
+    let annule = false;
+    const precharger = () => {
+      if (!annule) import("./CarScene");
+    };
+    const id = typeof requestIdleCallback === "function"
+      ? requestIdleCallback(precharger, { timeout: 4000 })
+      : setTimeout(precharger, 2000);
+    return () => {
+      annule = true;
+      if (typeof cancelIdleCallback === "function") cancelIdleCallback(id);
+      else clearTimeout(id);
+    };
+  }, [scene3dAutorisee]);
+
   useEffect(() => {
     const el = containerRef.current;
     if (!el || !scene3dAutorisee) return;
@@ -78,9 +102,10 @@ export default function NewContact() {
     );
     observer.observe(el);
 
-    // ...mais rendu seulement quand la scène est réellement à l'écran. Avec la
-    // marge de 400 px, three.js tournait encore pendant tout le bas de la
-    // section Services.
+    // ...mais rendu seulement quand la scène est réellement à l'écran. Sans
+    // cette seconde condition, three.js tournerait pendant tout le bas de la
+    // page, et la marge élargie ci-dessus aggraverait le problème au lieu de
+    // le résoudre.
     const onScreen = new IntersectionObserver(([entry]) => setIsOnScreen(entry.isIntersecting));
     if (sceneRef.current) onScreen.observe(sceneRef.current);
 
