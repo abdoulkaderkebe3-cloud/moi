@@ -4,6 +4,7 @@ import burgerImg from "../assets/images/png/burger-house.webp";
 import algoImg from "../assets/images/png/site-algo.webp";
 import billetterieImg from "../assets/images/png/billetterie-preview.webp";
 import visoImg from "../assets/images/png/viso-studio.webp";
+import mariageImg from "../assets/images/png/mariage-landry-stephanie.webp";
 import { useLang } from "../context/LanguageContext";
 import { RevealGroup, RevealItem, RevealTitle } from "./Reveal";
 
@@ -134,6 +135,26 @@ export default function Projects() {
               <img
                 src={visoImg}
                 alt="Aperçu du site Viso Studio"
+                className="h-full rounded-lg mt-4"
+                loading="lazy"
+              />
+            </a>
+          </Card>
+
+          <Card className="bg-black border border-line rounded-xl shadow-xl shadow-black/60 hover:border-accent/40 transition-colors transition-shadow duration-300">
+            <h3 className="text-center text-xl font-bold text-accent">
+              {t.projects.p8}
+            </h3>
+            <p className="text-center text-white/50">
+              React, TypeScript, TailwindCSS
+            </p>
+            <a
+              href="https://landry-stephanie.vercel.app"
+              target="_blank"
+            >
+              <img
+                src={mariageImg}
+                alt="Aperçu du site de mariage de Landry et Stéphanie"
                 className="h-full rounded-lg mt-4"
                 loading="lazy"
               />

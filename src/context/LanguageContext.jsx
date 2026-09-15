@@ -92,6 +92,7 @@ const translations = {
       },
       p6: "Site de billetterie",
       p7: "Site vitrine Viso Studio",
+      p8: "Invitation de mariage en ligne",
     },
     // Certifications
     certifications: {
@@ -224,6 +225,7 @@ const translations = {
       },
       p6: "Ticketing website",
       p7: "Viso Studio showcase website",
+      p8: "Online wedding invitation",
     },
     // Certifications
     certifications: {
