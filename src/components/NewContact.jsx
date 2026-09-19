@@ -186,7 +186,7 @@ export default function NewContact() {
             </motion.span>
 
             <motion.a
-              href="mailto:abdoulkaderkebe3@gmail.com"
+              href="mailto:kader@kvder.com"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               style={{ 
@@ -205,7 +205,7 @@ export default function NewContact() {
                 fontWeight: 600, 
                 letterSpacing: '0.5px' 
               }}>
-                abdoulkaderkebe3@gmail.com
+                kader@kvder.com
               </span>
               
               <motion.div
