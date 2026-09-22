@@ -12,9 +12,6 @@ const translations = {
       services: "Services",
       contact: "Contact",
       footer: "Footer",
-      // Libelle du bouton d'action de la navbar. Distinct de `contact`, qui
-      // nomme la section : ici c'est une invitation, pas une etiquette.
-      cta: "Me contacter",
       openMenu: "Ouvrir le menu",
       closeMenu: "Fermer le menu",
       backToTop: "Revenir en haut de la page",
@@ -147,7 +144,6 @@ const translations = {
       services: "Services",
       contact: "Contact",
       footer: "Footer",
-      cta: "Get in touch",
       openMenu: "Open menu",
       closeMenu: "Close menu",
       backToTop: "Back to top of page",

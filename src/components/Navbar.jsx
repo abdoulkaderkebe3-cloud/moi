@@ -152,14 +152,16 @@ export default function Navbar() {
   }, [menuOpen]);
 
   // Barre du haut : « Accueil » doublonnait le logo, qui pointe deja sur
-  // #accueil ; « Footer » ne veut rien dire pour un visiteur ; « Contact » est
-  // desormais porte par le bouton d'action, a droite.
+  // #accueil ; « Footer » ne veut rien dire pour un visiteur. « Contact » est
+  // un lien de navigation comme les autres, le coin droit est reserve aux
+  // reseaux.
   const links = [
     { name: t.nav.about, href: "#a-propos", id: "a-propos" },
     { name: t.nav.skills, href: "#compétences", id: "compétences" },
     { name: t.nav.projects, href: "#projets", id: "projets" },
     { name: t.nav.certifications, href: "#certifications", id: "certifications" },
     { name: t.nav.services, href: "#services", id: "services" },
+    { name: t.nav.contact, href: "#contact", id: "contact" },
   ];
 
   return (
@@ -232,7 +234,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right section: socials + theme toggle + lang toggle + burger */}
+        {/* Coin droit : les reseaux, plus le selecteur de langue qui reste un
+            reglage de la page et n'a pas d'autre place. */}
         <div className="flex items-center gap-1 sm:gap-2">
           {/* Social icons */}
           <div className="hidden lg:flex items-center gap-1.5 sm:gap-2 mr-1">
@@ -260,16 +263,6 @@ export default function Navbar() {
               {lang.toUpperCase()}
             </span>
           </button>
-
-          {/* Bouton d'action. En lecture en Z, le coin haut-droit est la place
-              de l'action forte ; c'est le selecteur de langue qui l'occupait.
-              Masque sous md, ou le tiroir porte deja un lien Contact. */}
-          <a
-            href="#contact"
-            className="hidden md:inline-flex min-h-11 items-center rounded-full bg-accent px-4 lg:px-5 py-2 text-sm font-semibold text-black transition-[background-color,transform] duration-200 ease-out hover:bg-white active:scale-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            {t.nav.cta}
-          </a>
 
           {/* Mobile burger */}
           <button
@@ -378,19 +371,6 @@ export default function Navbar() {
                     </motion.a>
                   );
                 })}
-              </div>
-
-              {/* Bouton d'action. Sans lui, retirer « Contact » de la liste
-                  couperait tout acces a la section sur telephone, ou le
-                  bouton de la barre est masque. */}
-              <div className="px-5 pt-5">
-                <a
-                  href="#contact"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex min-h-11 w-full items-center justify-center rounded-full bg-accent px-5 py-3 font-semibold text-black transition-[background-color,transform] duration-200 ease-out hover:bg-white active:scale-95 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  {t.nav.cta}
-                </a>
               </div>
 
               {/* Socials footer */}
