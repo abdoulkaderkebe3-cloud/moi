@@ -15,7 +15,7 @@ const liens = [
 export default function Footer() {
   const { t } = useLang();
   return (
-    <footer id="footer" className="footer-revele scroll-mt-24 border-t border-line bg-black py-12 text-white/50">
+    <footer id="footer" className="scroll-mt-24 border-t border-line bg-black py-12 text-white/50">
       <RevealGroup className="mx-auto flex max-w-6xl flex-col items-center gap-5 px-6 text-center">
         <RevealItem>
           {/* Le SVG est noir à la source : `invert` le rend blanc sur le fond
