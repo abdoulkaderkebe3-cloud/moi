@@ -33,26 +33,36 @@ function App() {
       <ScrollProgress />
       <Navbar />
       <RetourEnHaut />
-      {/* Le hero n'a ni entrée ni sortie : il est déjà à l'écran à l'ouverture
-          et son zoom au défilement tient lieu de sortie. Le
-          footer n'a ni entrée ni sortie : en bas de page, son haut ne monte
-          jamais jusqu'au point où l'entrée se termine, il restait figé à
-          mi-animation (à moitié transparent) et tremblait à chaque rebond de
-          fin de défilement. */}
-      <SectionTransition enter={false} exit={false}><Hero /></SectionTransition>
-      <Marquee />
-      <SectionTransition><About /></SectionTransition>
-      <SectionTransition><Skills /></SectionTransition>
-      {/* Hors de `SectionTransition` : un transform sur l'ancetre ferait
-          grossir la scene collee en meme temps qu'elle s'ouvre. */}
-      <ProjetPhare />
-      <SectionTransition><Projects /></SectionTransition>
-      <Suspense fallback={null}>
-        <SectionTransition motion="fade"><Certifications /></SectionTransition>
-        <SectionTransition><Services /></SectionTransition>
-        <SectionTransition><NewContact /></SectionTransition>
-      </Suspense>
-      <SectionTransition enter={false} exit={false}><Footer /></SectionTransition>
+      {/* Tout le contenu de la page glisse par-dessus le footer, qui est collé
+          au bas de la fenêtre et se découvre sur les derniers pixels de
+          défilement. Ce bloc porte le fond opaque qui masque le footer pendant
+          tout le reste du parcours, et le calque qui le garde devant lui.
+          Les éléments fixes (barre de progression, navbar, retour en haut)
+          restent en dehors : ils ont leurs propres calques, plus hauts. */}
+      <div className="page-contenu">
+        {/* Le hero n'a ni entrée ni sortie : il est déjà à l'écran à
+            l'ouverture et son zoom au défilement tient lieu de sortie. */}
+        <SectionTransition enter={false} exit={false}><Hero /></SectionTransition>
+        <Marquee />
+        <SectionTransition><About /></SectionTransition>
+        <SectionTransition><Skills /></SectionTransition>
+        {/* Hors de `SectionTransition` : un transform sur l'ancetre ferait
+            grossir la scene collee en meme temps qu'elle s'ouvre. */}
+        <ProjetPhare />
+        <SectionTransition><Projects /></SectionTransition>
+        <Suspense fallback={null}>
+          <SectionTransition motion="fade"><Certifications /></SectionTransition>
+          <SectionTransition><Services /></SectionTransition>
+          <SectionTransition><NewContact /></SectionTransition>
+        </Suspense>
+      </div>
+      {/* Frère direct de `.page-contenu`, et non enveloppé : glissé dans un
+          conteneur à sa propre hauteur, son `sticky` n'aurait aucune course et
+          ne ferait rien. C'est aussi ce qui remplace son ancienne entrée en
+          fondu, qui restait figée à mi-chemin et tremblait à chaque rebond de
+          fin de défilement : son haut ne montait jamais jusqu'au point où
+          l'animation se terminait. */}
+      <Footer />
       </MotionConfig>
     </LanguageProvider>
   );

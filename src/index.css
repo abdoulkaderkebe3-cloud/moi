@@ -302,3 +302,46 @@ body {
   min-height: 100%;
   width: 100%;
 }
+
+/* ── Footer découvert ───────────────────────────────────────────────────
+   Le footer est collé au bas de la fenêtre pendant tout le défilement, caché
+   derrière la page, et se découvre sur ses derniers pixels : c'est le contenu
+   qui remonte, pas le footer qui arrive.
+
+   Ce qu'il remplace : le footer avait une entrée en fondu désactivée à la
+   main (`enter={false} exit={false}`). Son haut ne monte jamais jusqu'au point
+   où une animation `view()` se termine, puisqu'il ferme la page, il restait
+   donc figé à mi-animation, à moitié transparent, et tremblait à chaque rebond
+   de fin de défilement. Ici il n'y a plus d'animation du tout, seulement du
+   `sticky`, donc plus rien à interrompre.
+
+   Deux conditions, toutes deux déjà remplies ailleurs dans ce fichier :
+   `.page-contenu` doit porter un fond opaque, sinon le footer se voit par
+   transparence dès le hero ; et aucun ancêtre ne doit devenir un conteneur de
+   défilement, d'où le `overflow-x: clip` de `html`, `body` et `#root` plutôt
+   qu'un `hidden`. */
+.page-contenu {
+  position: relative;
+  /* Calque propre, sous les éléments fixes (navbar 50, retour en haut 30,
+     barre de progression 99) et au-dessus du footer. */
+  z-index: 1;
+  background-color: #000;
+}
+
+.footer-revele {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+}
+
+/* Le `sticky` cale le bas du footer sur le bas de la fenêtre. Si le footer est
+   plus haut que la fenêtre, son haut reste hors champ et ne se découvre
+   jamais : sous cette hauteur, il reprend sa place dans le flux.
+   Même retour au flux quand moins d'animations est demandé. */
+@media (max-height: 640px) {
+  .footer-revele { position: relative; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-revele { position: relative; }
+}
