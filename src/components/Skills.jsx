@@ -1,5 +1,5 @@
 import { RevealGroup, RevealItem, RevealTitle } from "./Reveal";
-import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, useRef } from "react";
 import figmaIcon from "../assets/images/svg/devicon_figma.svg";
 import javaIcon from "../assets/images/svg/devicon_java.svg";
 import tailwindIcon from "../assets/images/svg/devicon_tailwindcss.svg";
@@ -18,9 +18,20 @@ import uml from "../assets/images/svg/material-icon-theme_uml.svg";
 import dbeaver from "../assets/images/svg/Vector (2).svg";
 import { useLang } from "../context/LanguageContext";
 
-// Lazy-load BlobCursor: keeps gsap's cursor-trail logic out of the
-// critical bundle since it's a purely decorative, desktop-only effect.
-const BlobCursor = lazy(() => import("./BlobCursor"));
+// Curseurs propres à la section : une flèche à la couleur de l'accent, qui
+// devient un anneau sur les touches pour annoncer qu'elles se cliquent. Une
+// URL de données ne lit pas les variables CSS, d'où #e3d5c0 recopié depuis
+// --color-accent (index.css).
+const svgCursor = (svg, x, y, fallback) =>
+  `url("data:image/svg+xml,${encodeURIComponent(svg)}") ${x} ${y}, ${fallback}`;
+const CURSOR_ARROW = svgCursor(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M3 2v17l4.6-4.3 3 6.6 3-1.4-3-6.4H17z" fill="#e3d5c0" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  3, 2, "auto"
+);
+const CURSOR_KEY = svgCursor(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" fill="rgba(227,213,192,0.18)" stroke="#e3d5c0" stroke-width="2"/><circle cx="16" cy="16" r="2.5" fill="#e3d5c0"/></svg>',
+  16, 16, "pointer"
+);
 
 // Géométrie d'une keycap. Le volume est construit en tranches horizontales
 // empilées : chaque tranche monte en Z, rétrécit et s'arrondit un peu plus que
@@ -56,12 +67,14 @@ const BACKDROP_TEXT = "du back Java au front React, je construis des produits qu
 // grille mobile, où il est donc passé en blanc.
 // `hotkey` : lettre du clavier physique qui enfonce la touche. Toutes distinctes,
 // choisies proches du nom de la techno pour rester devinables.
+// `glow` : couleur de lumière quand celle de la touche, trop sombre, ne se
+// verrait pas sur le fond noir (rétroéclairage et halo du curseur).
 const TECHS = [
   // Rangée 1
   { name: "Figma", key: "figma", hotkey: "F", level: "advanced", color: "#FF6B6B", icon: figmaIcon, textColor: "text-white" },
   { name: "Java", key: "java", hotkey: "J", level: "advanced", color: "#FF9500", icon: javaIcon, textColor: "text-white" },
-  { name: "Tailwind CSS", key: "tailwind", hotkey: "W", level: "expert", color: "#0F172A", icon: tailwindIcon, textColor: "text-white" },
-  { name: "React", key: "react", hotkey: "R", level: "expert", color: "#20232A", icon: reactIcon, textColor: "text-white" },
+  { name: "Tailwind CSS", key: "tailwind", hotkey: "W", level: "expert", color: "#0F172A", glow: "#38BDF8", icon: tailwindIcon, textColor: "text-white" },
+  { name: "React", key: "react", hotkey: "R", level: "expert", color: "#20232A", glow: "#61DAFB", icon: reactIcon, textColor: "text-white" },
   // Rangée 2
   { name: "TypeScript", key: "typescript", hotkey: "T", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white", darkIcon: true },
   { name: "GitHub", key: "github", hotkey: "B", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white", darkIcon: true },
@@ -82,7 +95,6 @@ const TECHS = [
 export default function Skills() {
   const { t } = useLang();
   const [selectedSkill, setSelectedSkill] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [keyboardScale, setKeyboardScale] = useState(computeKeyboardScale);
   const [pressedKey, setPressedKey] = useState(null);
   // Le clavier construit 16 touches de 13 éléments chacune, tous en
@@ -114,7 +126,6 @@ export default function Skills() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
       setKeyboardScale(computeKeyboardScale());
     };
 
@@ -173,29 +184,10 @@ export default function Skills() {
       id="compétences"
       ref={sectionRef}
       className="min-h-screen bg-black py-16 px-6 overflow-hidden relative flex flex-col items-center justify-center select-none scroll-mt-24"
+      style={{ cursor: CURSOR_ARROW }}
     >
       {/* Background Subtle Glows */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--accent-rgb)/0.07)_0%,rgba(0,0,0,0)_60%)] pointer-events-none" />
-
-      {/* Blob Cursor Background Effect - Desktop only */}
-      {!isMobile && (
-        <Suspense fallback={null}>
-          <BlobCursor
-            blobType="circle"
-            fillColor="var(--color-accent)"
-            trailCount={1}
-            sizes={[40]}
-            innerSizes={[0]}
-            opacities={[0.5]}
-            shadowColor="rgb(var(--accent-rgb) / 0.8)"
-            shadowOffsetX={0}
-            shadowOffsetY={0}
-            shadowBlur={20}
-            useFilter={false}
-            zIndex={0}
-          />
-        </Suspense>
-      )}
 
       {/* Accroche décorative, inclinée pour suivre la perspective du clavier.
           Sous la grille (z-0) et non sélectionnable. */}
@@ -278,8 +270,10 @@ export default function Skills() {
               style={{
                 transformStyle: "preserve-3d",
                 // Décalage d'une demi-touche par rangée : c'est ce qui donne
-                // la diagonale de la référence.
+                // la diagonale de la référence. Le padding opposé rend toutes
+                // les rangées aussi larges, sinon le bloc penche à droite.
                 paddingLeft: `${(rowIndex * (KEY_SIZE + 12)) / 2}px`,
+                paddingRight: `${((rows.length - 1 - rowIndex) * (KEY_SIZE + 12)) / 2}px`,
               }}
             >
               {row.map(tech => (
@@ -356,28 +350,76 @@ function KeyCap({ tech, active, pressed, onHover, onClick }) {
           handleClick();
         }
       }}
-      className="relative cursor-pointer select-none outline-none"
+      className="group relative select-none outline-none hover:[--key-z:-18px]"
       style={{
+        cursor: CURSOR_KEY,
         width: `${KEY_SIZE}px`,
         height: `${KEY_SIZE}px`,
         transformStyle: "preserve-3d",
+        // --key-z est posé sur la racine pour que l'ombre au sol, qui ne bouge
+        // pas, et la touche, qui s'enfonce, lisent la même profondeur.
+        ...(isClicked || pressed
+          ? { "--key-z": "-28px" }
+          : active
+            ? { "--key-z": "-18px" }
+            : {}),
       }}
     >
+      {/* Socle : déborde de la moitié de l'écart entre touches (gap-3 = 12px),
+          les socles voisins se touchent et forment la plaque du clavier. Sans
+          ce sol, l'ombre de contact se perdait dans le fond noir. */}
+      <div
+        aria-hidden="true"
+        className="absolute pointer-events-none"
+        style={{
+          inset: "-6px",
+          transform: "translateZ(-6px)",
+          backgroundColor: "#151515",
+        }}
+      />
+
+      {/* Rétroéclairage : halo de la couleur de la touche, posé sous le sol.
+          Les touches voisines le masquent naturellement grâce au preserve-3d.
+          Au-dessus de l'ombre de contact (-1 contre -2), sinon elle l'éteint. */}
+      <div
+        aria-hidden="true"
+        className="absolute pointer-events-none opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200 ease-out"
+        style={{
+          inset: "14px",
+          borderRadius: `${KEY_RADIUS_BOTTOM}px`,
+          transform: "translateZ(-1px)",
+          backgroundColor: tech.glow ?? tech.color,
+          // Seul l'interstice de 12px autour de la touche reste visible, d'où
+          // un halo plein et très étalé pour qu'il se lise.
+          boxShadow: `0 0 36px 34px ${tech.glow ?? tech.color}, 0 0 90px 50px ${tech.glow ?? tech.color}80`,
+          ...(active || pressed ? { opacity: 1 } : {}),
+        }}
+      />
+
+      {/* Ombre de contact. Elle se resserre et se fonce quand la touche
+          s'enfonce : c'est ce qui donne l'impression qu'elle touche le sol. */}
+      <div
+        aria-hidden="true"
+        className="absolute pointer-events-none transition-shadow duration-150 ease-out"
+        style={{
+          inset: "10px",
+          borderRadius: `${KEY_RADIUS_BOTTOM}px`,
+          transform: "translateZ(-2px)",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          boxShadow:
+            "calc(16px + var(--key-z, 0px) * 0.5) calc(20px + var(--key-z, 0px) * 0.6) calc(34px + var(--key-z, 0px)) 6px rgba(0,0,0,0.85)",
+        }}
+      />
+
       {/* Enfoncement en CSS pur plutôt qu'en JS : framer-motion réécrivait le
           transform de ce conteneur à chaque frame, ce qui forçait le navigateur
           à recalculer la scène 3D et ses tranches sur toutes les touches
-          survolées. La profondeur passe par --key-z, que le survol pilote seul
-          quand aucune valeur n'est posée en inline. */}
+          survolées. */}
       <div
-        className="absolute inset-0 w-full h-full transition-transform duration-150 ease-out hover:[--key-z:-18px]"
+        className="absolute inset-0 w-full h-full transition-transform duration-150 ease-out"
         style={{
           transformStyle: "preserve-3d",
           transform: "translateZ(var(--key-z, 0px))",
-          ...(isClicked || pressed
-            ? { "--key-z": "-28px" }
-            : active
-              ? { "--key-z": "-18px" }
-              : {}),
         }}
       >
         {/* Corps galbé : tranches empilées de la base vers le sommet. */}
@@ -394,6 +436,11 @@ function KeyCap({ tech, active, pressed, onHover, onClick }) {
                 inset: `${curve * KEY_TAPER}px`,
                 borderRadius: `${KEY_RADIUS_BOTTOM - t * (KEY_RADIUS_BOTTOM - KEY_RADIUS_TOP)}px`,
                 backgroundColor: tech.color,
+                // Lumière venue du haut à gauche : seul le bord de chaque
+                // tranche est visible, donc ce dégradé éclaire un flanc et
+                // plonge l'autre dans l'ombre, sans élément supplémentaire.
+                backgroundImage:
+                  "linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.45) 100%)",
                 transform: `translateZ(${t * KEY_HEIGHT}px)`,
                 // Voile noir dégressif plutôt qu'un filter : même assombrissement
                 // progressif, sans créer 200 contextes de filtrage.
@@ -414,7 +461,9 @@ function KeyCap({ tech, active, pressed, onHover, onClick }) {
               "linear-gradient(155deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.10) 38%, rgba(0,0,0,0.06) 62%, rgba(0,0,0,0.20) 100%)",
             transform: `translateZ(${KEY_HEIGHT}px)`,
             boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -5px 12px rgba(0,0,0,0.22)",
+              // Le liseré clair détache les touches sombres (React, Tailwind)
+              // du fond noir.
+              "inset 0 0 0 1px rgba(255,255,255,0.14), inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -5px 12px rgba(0,0,0,0.22)",
           }}
         >
           {/* Cuvette centrale : creux de la touche, plus marqué vers le bas. */}
@@ -424,7 +473,7 @@ function KeyCap({ tech, active, pressed, onHover, onClick }) {
           />
 
           {/* Lettre du raccourci, discrète, comme la légende d'une vraie touche. */}
-          <span className="absolute top-2 left-3 text-[11px] font-bold tracking-wider opacity-40">
+          <span className="absolute top-2.5 left-3.5 text-sm font-bold tracking-wider opacity-70">
             {tech.hotkey}
           </span>
 
