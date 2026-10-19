@@ -41,7 +41,9 @@ export default function Hero() {
       {/* Ce bloc prend la place du squelette statique d'index.html, au même
           endroit et à la même taille : la bascule ne doit pas se voir. */}
       <div className="hero-zoom-contenu absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
+          {/* Seul h1 du site : c'est le nom que les moteurs doivent associer à la page. */}
           <ShinyText
+            as="h1"
             text="Kebe Abdoul Kader"
             color="#b5b5b5"
             shineColor="#ffffff"

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 // Le trajet (aller, pause, retour, pause) est fixé dans la feuille de style ;
 // le squelette statique d'index.html reprend sa première image.
 const ShinyText = ({
+  as: Tag = 'span',
   text,
   className = '',
   color = '#b5b5b5',
@@ -25,7 +26,7 @@ const ShinyText = ({
   }, []);
 
   return (
-    <span
+    <Tag
       ref={ref}
       data-pause={!onScreen}
       className={`texte-brillant inline-block ${className}`}
@@ -38,7 +39,7 @@ const ShinyText = ({
       }}
     >
       {text}
-    </span>
+    </Tag>
   );
 };
 

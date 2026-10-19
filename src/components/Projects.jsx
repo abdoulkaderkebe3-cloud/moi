@@ -36,7 +36,7 @@ export default function Projects() {
             en absolu avec GSAP, un transform posé autour fausserait son calage. */}
         <RevealGroup className="max-w-xl text-center lg:text-left z-10">
           <RevealItem>
-          <h1 className="text-2xl md:text-3xl font-bold leading-relaxed text-white">
+          <p className="text-2xl md:text-3xl font-bold leading-relaxed text-white">
             {t.projects.description1}{" "}
             <span className="text-accent">{t.projects.description1Highlight}</span>{" "}
             {t.projects.description1End}
@@ -50,7 +50,7 @@ export default function Projects() {
             <span className="block text-white/40 mt-6 text-lg font-normal">
               {t.projects.hint}
             </span>
-          </h1>
+          </p>
           </RevealItem>
         </RevealGroup>
 

@@ -37,7 +37,9 @@
          donc la reprise par React ne provoque aucun saut de couleur. */
       #hero-statique-nom {
         display: inline-block;
-        margin-bottom: 1rem;
+        /* C'est un h1 : ses marges par défaut sont remises à zéro, comme le
+           fait le reset de Tailwind côté React. */
+        margin: 0 0 1rem;
         /* Taille ET interligne repris de Tailwind : text-4xl vaut 2.25rem sur
            2.5rem, et text-5xl et au-delà passent à un interligne de 1. Sans
            cette seconde valeur le titre statique était 14 px plus haut et
@@ -215,6 +217,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Kebe Abdoul Kader",
+      "alternateName": ["Kader Kebe", "Abdoul Kader Kebe", "Kader"],
       "url": "https://kvder.com/",
       "image": "https://kvder.com/og.jpg",
       "jobTitle": "Développeur Full Stack",
@@ -229,6 +232,17 @@
         "https://www.linkedin.com/in/abdoul-kader-kebe-047b1b383/",
         "https://linktr.ee/kvder"
       ]
+    }
+    </script>
+    <!-- Fiche WebSite : c'est elle que Google lit pour le nom affiché au-dessus
+         du résultat, « Kader » au lieu de « kvder.com ». -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Kader",
+      "alternateName": ["Kader Kebe", "kvder"],
+      "url": "https://kvder.com/"
     }
     </script>
   </head>
@@ -321,7 +335,7 @@
          pendant la bascule. -->
     <div id="root">
       <div id="hero-statique" aria-hidden="true">
-        <span id="hero-statique-nom">Kebe Abdoul Kader</span>
+        <h1 id="hero-statique-nom">Kebe Abdoul Kader</h1>
         <p id="hero-statique-role">Développeur Full Stack</p>
       </div>
     </div>
