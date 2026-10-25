@@ -168,10 +168,8 @@ export default function NewContact() {
 
           <RevealItem style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {/* Insécable : à 6,5rem le mot se coupait au trait d'union
-                (« Discutons- / en »). Le reflet de teinte animé a été retiré,
-                un `filter` animé repeint le texte à chaque image pour un
-                effet qui ne se remarquait pas sur un accent aussi pâle. */}
-            <span
+                (« Discutons- / en »). */}
+            <motion.span
               style={{
                 display: 'block',
                 fontSize: 'clamp(2.75rem, 5.5vw, 5rem)',
@@ -184,9 +182,11 @@ export default function NewContact() {
                 backgroundClip: 'text',
                 margin: 0,
               }}
+              animate={{ filter: ['hue-rotate(0deg)', 'hue-rotate(30deg)', 'hue-rotate(0deg)'] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             >
               {t.contact.cta}
-            </span>
+            </motion.span>
 
             <motion.a
               href="mailto:kader@kvder.com"

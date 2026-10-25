@@ -71,7 +71,7 @@ export default function Hero() {
           <ShinyText
             as="h1"
             text="Kebe Abdoul Kader"
-            color="#d4d4d4"
+            color="#b5b5b5"
             shineColor="#ffffff"
             spread={120}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4"

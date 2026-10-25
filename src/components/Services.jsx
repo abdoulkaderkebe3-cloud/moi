@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -19,6 +19,11 @@ import {
   IconOrchestration,
 } from "./ServiceIcons";
 
+// Le fond WebGL est chargé à part : ogl sert déjà au hero, mais le shader du
+// ferrofluide n'a rien à faire dans le bundle critique d'une section de
+// milieu de page.
+const Ferrofluid = lazy(() => import("./Ferrofluid"));
+
 // Les libellés vivent dans LanguageContext, seuls la clé, l'icône et les
 // technos restent ici : ce sont des noms propres, ils ne se traduisent pas.
 const SERVICES = [
@@ -26,6 +31,25 @@ const SERVICES = [
   { key: "apps", Icon: IconStack, tags: ["Java", "Spring Boot", "PostgreSQL", "Angular"] },
   { key: "interfaces", Icon: IconLayout, tags: ["React", "Tailwind", "Figma", "Vercel"] },
   { key: "ai", Icon: IconOrchestration, tags: ["Claude Code", "Prompting", "Revue de code"] },
+];
+
+// L'accent n'est jamais écrit en dur, pas même dans une prop de composant :
+// il est lu sur les tokens de `index.css`, donc changer la couleur du site
+// reste une seule ligne à modifier.
+const readToken = (name, fallback) => {
+  if (typeof document === "undefined") return fallback;
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  return value || fallback;
+};
+
+// Lu une seule fois au premier rendu. Les valeurs de repli ne servent qu'au
+// cas où la feuille de style n'est pas encore appliquée.
+const readAccentColors = () => [
+  readToken("--color-accent", "#e3d5c0"),
+  readToken("--color-accent-strong", "#c9b79c"),
+  "#ffffff",
 ];
 
 // Géométrie de l'anneau, sur le modèle de jesperlandberg.com : les cartes sont
@@ -280,7 +304,71 @@ export default function Services() {
   const reduce = useReducedMotion();
   const layoutHeight = useLayoutHeight();
   const short = layoutHeight < SHORT_HEIGHT;
+  const sectionRef = useRef(null);
   const runRef = useRef(null);
+  // `near` monte le fond quand la section approche, `visible` met son rendu en
+  // pause dès qu'elle sort de l'écran : sans ça le shader tourne sur toute la
+  // page et vide la batterie en arrière-plan.
+  const [near, setNear] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [colors] = useState(readAccentColors);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const preload = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true);
+          preload.disconnect();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    preload.observe(el);
+
+    const onScreen = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    onScreen.observe(el);
+
+    return () => {
+      preload.disconnect();
+      onScreen.disconnect();
+    };
+  }, []);
+
+  const background = (
+    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      {near && (
+        <Suspense fallback={null}>
+          {/* Densité 1 : un fond flou et lumineux ne perd rien en finesse, et
+              sur un téléphone en 3x le shader calculait neuf fois plus de
+              pixels. */}
+          <Ferrofluid
+            dpr={1}
+            colors={colors}
+            paused={!visible}
+            speed={0.35}
+            scale={1.9}
+            turbulence={0.9}
+            glow={1.4}
+            opacity={0.4}
+            mouseInteraction={false}
+            flowDirection="down"
+          />
+        </Suspense>
+      )}
+      {/* Le shader monte jusqu'aux bords : ces voiles fondent le fond en haut
+          et en bas pour que la section se raccorde au noir des voisines
+          sans couture visible. */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-black to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black to-transparent" />
+    </div>
+  );
+
   const header = (
     <div className="text-center">
       <RevealTitle
@@ -316,9 +404,11 @@ export default function Services() {
   if (reduce || layoutHeight < VERY_SHORT_HEIGHT) {
     return (
       <section
+        ref={sectionRef}
         id="services"
         className="relative overflow-hidden bg-black px-6 py-24 scroll-mt-24 md:px-20"
       >
+        {background}
         <div className="relative mx-auto max-w-6xl">
           <div className="mb-16">{header}</div>
           <div className="grid gap-6 md:grid-cols-2">
@@ -342,7 +432,7 @@ export default function Services() {
   // qui rogne. `runRef` porte la course de défilement de l'anneau : sur écran
   // bas, le titre est posé avant elle et ne la rallonge pas.
   return (
-    <section id="services" className="relative bg-black scroll-mt-24">
+    <section ref={sectionRef} id="services" className="relative bg-black scroll-mt-24">
       {short && <div className="relative px-6 pb-2 pt-24 md:px-20">{header}</div>}
       <div ref={runRef} style={{ height: `${100 + (SERVICES.length - 1) * 70}vh` }}>
         {/* En haut, 80 px de marge au minimum : la navbar (69 px) redescend à
@@ -352,7 +442,8 @@ export default function Services() {
             short ? "pt-20" : "pt-24"
           }`}
         >
-            <div className="relative flex min-h-0 flex-1 flex-col">
+          {background}
+          <div className="relative flex min-h-0 flex-1 flex-col">
             {!short && header}
             <ServicesRing runRef={runRef} t={t} />
             <div className="mt-5 text-center">{cta}</div>
