@@ -64,13 +64,10 @@ const translations = {
       description1: "Découvrez mes",
       description1Highlight: "projets réalisés",
       description1End: "avec passion et rigueur.",
-      description2: "Chaque application reflète mon expertise en",
-      description2Highlight: "Full Stack Development",
-      description3: "combinant performance, design et innovation.",
-      hint: "Cliquez sur les images pour en savoir plus.",
+      hint: "Chacun s'ouvre en ligne, dans un nouvel onglet.",
       p1: "Site de burger",
       p2: "Site d'apprentissage d'algorithme",
-      p4: "application web de question reponse",
+      p4: "Application web de questions-réponses",
       p5: "Système de gestion d'engrais",
       // Projet phare (ProjetPhare.jsx) : capture de viso-studio.com.
       featured: {
@@ -90,6 +87,12 @@ const translations = {
       p6: "Site de billetterie",
       p7: "Site vitrine Viso Studio",
       p8: "Invitation de mariage en ligne",
+      p9: "API bancaire",
+      stackLabel: "Stack",
+      linkLabel: "Lien",
+      cta: "Voir le projet",
+      prev: "Projet précédent",
+      next: "Projet suivant",
     },
     // Certifications
     certifications: {
@@ -196,10 +199,7 @@ const translations = {
       description1: "Discover my",
       description1Highlight: "completed projects",
       description1End: "built with passion and rigor.",
-      description2: "Each application reflects my expertise in",
-      description2Highlight: "Full Stack Development",
-      description3: "combining performance, design and innovation.",
-      hint: "Click on the images to learn more.",
+      hint: "Each one opens live, in a new tab.",
       p1: "Burger website",
       p2: "Algorithm learning website",
       p4: "Web Q&A application",
@@ -222,6 +222,12 @@ const translations = {
       p6: "Ticketing website",
       p7: "Viso Studio showcase website",
       p8: "Online wedding invitation",
+      p9: "Banking API",
+      stackLabel: "Stack",
+      linkLabel: "Link",
+      cta: "View project",
+      prev: "Previous project",
+      next: "Next project",
     },
     // Certifications
     certifications: {

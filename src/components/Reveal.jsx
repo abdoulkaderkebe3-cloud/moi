@@ -1,14 +1,11 @@
 import { motion } from "framer-motion";
+import { EASE, DUREE } from "../utils/motion";
 
 // Système d'entrée au défilement partagé par toutes les sections. Avant lui,
 // chaque section faisait le même fondu de 50 px en 0,8 s, réglé à la main dans
 // chaque fichier : répétitif à l'œil et impossible à retoucher d'un coup.
 // Les durées restent dans la fourchette de 150 à 250 ms, c'est l'enchaînement
 // en cascade qui donne le relief, pas la lenteur.
-
-// Courbe « expo out » : départ franc, arrivée douce. Un easeOut standard
-// paraît mou sur des durées aussi courtes.
-const EASE = [0.16, 1, 0.3, 1];
 
 // Déclenchement un peu avant que l'élément soit pleinement à l'écran, une
 // seule fois : rejouer l'entrée à chaque passage fatigue vite.
@@ -23,7 +20,7 @@ const groupVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: EASE } },
+  visible: { opacity: 1, y: 0, transition: { duration: DUREE.base, ease: EASE } },
 };
 
 // Chaque mot monte depuis sous une ligne invisible. Le masque est porté par un
@@ -31,7 +28,7 @@ const itemVariants = {
 // négative évite de rogner les jambages (g, p, q) sans décaler la ligne.
 const wordVariants = {
   hidden: { y: "110%" },
-  visible: { y: "0%", transition: { duration: 0.25, ease: EASE } },
+  visible: { y: "0%", transition: { duration: DUREE.base, ease: EASE } },
 };
 
 function MaskedWords({ text, className }) {

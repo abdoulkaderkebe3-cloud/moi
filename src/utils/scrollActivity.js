@@ -1,5 +1,5 @@
 // Indique si la page est en train de défiler. Les scènes WebGL (rayons du
-// hero, ferrofluide, voiture) sautent leur rendu pendant un défilement et
+// hero, voiture) sautent leur rendu pendant un défilement et
 // reprennent dès qu'il s'arrête : sur un téléphone moyen, recalculer un
 // shader à chaque image pendant le scroll faisait tomber le site sous les
 // 30 images par seconde dans le hero et le contact, alors qu'un décor figé

@@ -167,23 +167,26 @@ export default function NewContact() {
           />
 
           <RevealItem style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <motion.span
+            {/* Insécable : à 6,5rem le mot se coupait au trait d'union
+                (« Discutons- / en »). Le reflet de teinte animé a été retiré,
+                un `filter` animé repeint le texte à chaque image pour un
+                effet qui ne se remarquait pas sur un accent aussi pâle. */}
+            <span
               style={{
                 display: 'block',
-                fontSize: 'clamp(3rem, 7vw, 6.5rem)',
+                fontSize: 'clamp(2.75rem, 5.5vw, 5rem)',
                 fontWeight: 900,
                 lineHeight: 1,
+                whiteSpace: 'nowrap',
                 background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-strong) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
                 margin: 0,
               }}
-              animate={{ filter: ['hue-rotate(0deg)', 'hue-rotate(30deg)', 'hue-rotate(0deg)'] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             >
               {t.contact.cta}
-            </motion.span>
+            </span>
 
             <motion.a
               href="mailto:kader@kvder.com"

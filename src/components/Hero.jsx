@@ -1,14 +1,35 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 import ShinyText from './ShinyText';
 import { useLang } from "../context/LanguageContext";
+import { EASE, DUREE } from "../utils/motion";
 
 // Lazy-load LightRays: keeps the WebGL engine (ogl) out of the critical
 // bundle so the hero text paints before the background effect streams in.
 const LightRays = lazy(() => import('./LightRays'));
 
+// L'intro d'index.html (le rideau poussé) couvre le hero pendant ~3 s. Tant
+// qu'elle joue, l'entrée du hero attend : jouée dessous, personne ne la voyait.
+// Sans intro (moins d'animations demandé, ou déjà terminée), l'entrée part
+// tout de suite.
+function introEnCours() {
+  return document.documentElement.classList.contains("intro-joue");
+}
+
+// La classe `intro-joue` est l'état externe, l'événement `intro-fin` son
+// signal de changement : c'est le cas d'usage de useSyncExternalStore.
+function abonnerIntro(rappel) {
+  window.addEventListener("intro-fin", rappel);
+  return () => window.removeEventListener("intro-fin", rappel);
+}
+
+function useIntroFinie() {
+  return useSyncExternalStore(abonnerIntro, () => !introEnCours());
+}
+
 export default function Hero() {
   const { t } = useLang();
+  const introFinie = useIntroFinie();
 
   return (
     // Zoom au défilement (façon motion.dev « scroll zoom hero ») : la section
@@ -24,6 +45,10 @@ export default function Hero() {
     >
       <div className="sticky top-0 h-screen w-full overflow-clip">
       <div className="hero-zoom-fond absolute inset-0">
+      {/* Les rayons s'allument quand le rideau se lève, au lieu d'être déjà là. */}
+      <div
+        className={`absolute inset-0 transition-opacity ease-out-expo duration-[1200ms] ${introFinie ? "opacity-100" : "opacity-0"}`}
+      >
       <Suspense fallback={null}>
         <LightRays
           raysOrigin="top-center"
@@ -37,6 +62,7 @@ export default function Hero() {
         />
       </Suspense>
       </div>
+      </div>
 
       {/* Ce bloc prend la place du squelette statique d'index.html, au même
           endroit et à la même taille : la bascule ne doit pas se voir. */}
@@ -45,7 +71,7 @@ export default function Hero() {
           <ShinyText
             as="h1"
             text="Kebe Abdoul Kader"
-            color="#b5b5b5"
+            color="#d4d4d4"
             shineColor="#ffffff"
             spread={120}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4"
@@ -53,13 +79,8 @@ export default function Hero() {
 
           <motion.p
             initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              type: "spring",
-              damping: 15,
-              stiffness: 90,
-              delay: 0.6
-            }}
+            animate={introFinie ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: DUREE.lente, ease: EASE, delay: 0.2 }}
             className="text-base sm:text-lg md:text-xl text-white/50 tracking-widest text-center px-4"
           >
             {t.hero.role}

@@ -13,7 +13,16 @@
   --color-accent-strong: #c9b79c;
   --color-surface: rgba(255, 255, 255, 0.04);
   --color-line: rgba(255, 255, 255, 0.10);
+
+  /* Langage de mouvement du site : une courbe et trois durées. Toute nouvelle
+     animation part d'ici (classes `ease-out-expo` et `duration-(--duration-base)`), et le côté
+     JS lit les mêmes valeurs dans `src/utils/motion.js`. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-rapide: 150ms;
+  --duration-base: 250ms;
+  --duration-lente: 600ms;
 }
+
 
 /* Composantes RVB du même accent, pour les halos et dégradés qui doivent en
    moduler l'opacité : `rgb(var(--accent-rgb) / 0.35)`. Une couleur hexadécimale
