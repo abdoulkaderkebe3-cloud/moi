@@ -1,4 +1,7 @@
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { SplitText } from "gsap/SplitText";
 import { documentTop } from "../utils/documentTop";
 import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.webp";
 import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.webp";
@@ -17,6 +20,87 @@ const SCALE_STEP = 0.04;
 // Chevauchement des cartes dans le flux : raccourcit d'autant la distance de
 // scroll, mais au-delà de ~0.15 les cartes se coupent entre elles au repos.
 const OVERLAP = 0.1;
+
+gsap.registerPlugin(DrawSVGPlugin, SplitText);
+
+// Traits de feutre dessinés à main levée, même écriture que les gribouillis
+// des disques de la section Projets : un soulignement sous le titre, une
+// boucle qui dépasse son point de départ autour de la distinction.
+const TRAIT_SOULIGNE = "M3 8 C 45 3, 95 11, 150 6 S 235 10, 297 4";
+const TRAIT_BOUCLE =
+  "M64 5 C 102 3, 118 15, 116 27 C 114 41, 88 48, 56 47 C 22 46, 4 37, 5 24 C 6 11, 32 3, 70 6 C 84 7, 95 10, 102 14";
+
+// Animation d'arrivée de chaque carte, jouée une seule fois quand elle entre
+// à l'écran. Rien ne suit le défilement en continu : c'est précisément ce que
+// la pile a quitté (ScrollTrigger recalculait à chaque défilement).
+// Sans mouvement demandé, rien n'est masqué : tout s'affiche dans son état
+// final, traits compris.
+function useArrivees(containerRef) {
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ctx = gsap.context(() => {});
+    const io = new IntersectionObserver(
+      (entrees) => {
+        entrees.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          ctx.add(() => jouer(e.target));
+        });
+      },
+      { threshold: 0.45 }
+    );
+
+    ctx.add(() => {
+      el.querySelectorAll(".stack-card").forEach((carte) => {
+        gsap.set(carte.querySelectorAll(".trait-feutre"), { drawSVG: "0%" });
+        gsap.set(carte.querySelectorAll(".tampon"), { autoAlpha: 0 });
+        io.observe(carte);
+      });
+    });
+
+    return () => {
+      io.disconnect();
+      ctx.revert();
+    };
+  }, [containerRef]);
+}
+
+function jouer(carte) {
+  const titre = carte.querySelector("h3");
+  const split = SplitText.create(titre, { type: "chars" });
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+  tl.from(split.chars, { yPercent: 60, autoAlpha: 0, duration: 0.45, stagger: 0.025 })
+    .to(carte.querySelector(".trait-souligne"), { drawSVG: "100%", duration: 0.5, ease: "power2.inOut" }, "-=0.15")
+    .to(carte.querySelector(".trait-boucle"), { drawSVG: "100%", duration: 0.75, ease: "power2.inOut" }, "-=0.2");
+
+  // Le tampon s'écrase : il arrive grand et incliné, frappe, l'image
+  // tressaille et l'encre s'étale. Réservé à la distinction classée.
+  const tampon = carte.querySelector(".tampon");
+  if (tampon) {
+    tl.fromTo(
+      tampon,
+      { autoAlpha: 0, scale: 2.6, rotation: -32 },
+      { autoAlpha: 1, scale: 1, rotation: -12, duration: 0.32, ease: "power4.in" },
+      "-=0.35"
+    )
+      .fromTo(
+        carte.querySelector(".tampon-encre"),
+        { scale: 0.5, autoAlpha: 0.5 },
+        { scale: 1.35, autoAlpha: 0, duration: 0.6, ease: "power2.out" },
+        "<0.3"
+      )
+      .fromTo(
+        carte.querySelector(".cadre-image"),
+        { x: 0 },
+        { x: 3, duration: 0.05, repeat: 3, yoyo: true, ease: "none", clearProps: "x" },
+        "<"
+      );
+  }
+  return tl;
+}
 
 // width/height : réservent le ratio avant chargement, donc pas de saut de
 // layout qui décalerait les plages de l'empilement.
@@ -63,6 +147,7 @@ const CERTIFICATIONS = [
 export default function Certifications() {
   const { t } = useLang();
   const containerRef = useRef(null);
+  useArrivees(containerRef);
 
   // Chaque carte recouverte rétrécit entre le moment où elle se colle et celui
   // où la dernière se colle. L'animation est en CSS (`.pile-carte` dans
@@ -138,7 +223,7 @@ export default function Certifications() {
               {/* Deux colonnes en desktop : l'image seule laissait de grandes
                   bandes vides de chaque côté sur les grands écrans. */}
               <div className="grid md:grid-cols-[1.5fr_1fr]">
-                <div className="flex items-center justify-center bg-surface p-3 md:p-5">
+                <div className="cadre-image relative flex items-center justify-center bg-surface p-3 md:p-5">
                   <img
                     src={cert.src}
                     alt={cert.alt}
@@ -148,24 +233,59 @@ export default function Certifications() {
                     decoding="async"
                     className="block h-(--card-h) w-full object-contain rounded-lg"
                   />
+                  {cert.award && (
+                    <div aria-hidden="true" className="tampon absolute right-4 top-4 md:right-7 md:top-7">
+                      <span className="tampon-encre absolute inset-0 rounded-full bg-accent/40 blur-md opacity-0" />
+                      <span className="relative grid h-20 w-20 rotate-[-12deg] place-items-center rounded-full border-[3px] border-double border-accent bg-black/75 text-center font-mono text-[0.65rem] font-bold uppercase leading-tight tracking-widest text-accent md:h-24 md:w-24 md:text-xs">
+                        {cert.award}
+                        <br />
+                        {cert.year}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col justify-center gap-3 border-t border-line p-6 md:border-t-0 md:border-l md:p-8">
-                  <h3 className="text-xl md:text-2xl font-semibold text-white">
-                    {cert.title}
-                  </h3>
+                  <div className="relative self-start">
+                    <h3 className="text-xl md:text-2xl font-semibold text-white">
+                      {cert.title}
+                    </h3>
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 300 12"
+                      preserveAspectRatio="none"
+                      className="absolute -bottom-2 left-0 h-2.5 w-full overflow-visible"
+                    >
+                      <path className="trait-feutre trait-souligne" d={TRAIT_SOULIGNE} fill="none" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                    </svg>
+                  </div>
                   {cert.issuer && (
                     <p className="text-sm leading-relaxed text-white/50">
                       {cert.issuer}
                     </p>
                   )}
-                  <div className="flex flex-wrap items-center gap-2">
-                    {cert.award && (
-                      <span className="rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent ring-1 ring-accent/30">
-                        {cert.award}
+                  <div className="mt-1 flex flex-wrap items-center gap-3">
+                    {/* La boucle entoure la distinction, ou l'année à défaut. */}
+                    <span className="relative inline-flex">
+                      <span
+                        className={
+                          cert.award
+                            ? "rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent ring-1 ring-accent/30"
+                            : "rounded-full bg-surface px-3 py-1 text-xs font-medium text-white/60 ring-1 ring-line"
+                        }
+                      >
+                        {cert.award ?? cert.year}
                       </span>
-                    )}
-                    {cert.year && (
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 120 52"
+                        preserveAspectRatio="none"
+                        className="pointer-events-none absolute -inset-x-3 -inset-y-2.5 h-[calc(100%+1.25rem)] w-[calc(100%+1.5rem)] overflow-visible"
+                      >
+                        <path className="trait-feutre trait-boucle" d={TRAIT_BOUCLE} fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                      </svg>
+                    </span>
+                    {cert.award && cert.year && (
                       <span className="rounded-full bg-surface px-3 py-1 text-xs font-medium text-white/60 ring-1 ring-line">
                         {cert.year}
                       </span>
