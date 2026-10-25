@@ -157,8 +157,8 @@ export default function Navbar() {
   // reseaux.
   const links = [
     { name: t.nav.about, href: "#a-propos", id: "a-propos" },
-    { name: t.nav.skills, href: "#compétences", id: "compétences" },
     { name: t.nav.projects, href: "#projets", id: "projets" },
+    { name: t.nav.skills, href: "#compétences", id: "compétences" },
     { name: t.nav.certifications, href: "#certifications", id: "certifications" },
     { name: t.nav.services, href: "#services", id: "services" },
     { name: t.nav.contact, href: "#contact", id: "contact" },

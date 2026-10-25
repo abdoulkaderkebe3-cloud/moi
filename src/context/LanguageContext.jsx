@@ -98,6 +98,7 @@ const translations = {
     certifications: {
       title: "Mes",
       titleHighlight: "Certifications",
+      verify: "Vérifier le badge",
     },
     // Services
     services: {
@@ -233,6 +234,7 @@ const translations = {
     certifications: {
       title: "My",
       titleHighlight: "Certifications",
+      verify: "Verify the badge",
     },
     // Services
     services: {

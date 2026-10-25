@@ -42,11 +42,13 @@ function App() {
       <SectionTransition enter={false} exit={false}><Hero /></SectionTransition>
       <Marquee />
       <SectionTransition><About /></SectionTransition>
-      <SectionTransition><Skills /></SectionTransition>
-      {/* Hors de `SectionTransition` : un transform sur l'ancetre ferait
-          grossir la scene collee en meme temps qu'elle s'ouvre. */}
+      {/* Les projets passent avant les compétences : un visiteur doit voir
+          les preuves tôt. Hors de `SectionTransition` : un transform sur
+          l'ancetre ferait grossir la scene collee en meme temps qu'elle
+          s'ouvre. */}
       <ProjetPhare />
       <SectionTransition><Projects /></SectionTransition>
+      <SectionTransition><Skills /></SectionTransition>
       <Suspense fallback={null}>
         <SectionTransition motion="fade"><Certifications /></SectionTransition>
         <SectionTransition><Services /></SectionTransition>

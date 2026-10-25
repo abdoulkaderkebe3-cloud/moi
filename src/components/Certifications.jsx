@@ -7,6 +7,8 @@ import cert4 from "../assets/images/png/photo_2026-05-25_17-16-15.webp";
 import cert5 from "../assets/images/png/photo_2026-05-25_17-16-53.webp";
 import cert6 from "../assets/images/png/photo_2026-05-25_17-12-56.webp";
 import vibeathon from "../assets/images/png/certificat-vibeathon-2026.webp";
+import claude101 from "../assets/images/png/badge-claude-101.webp";
+import { ArrowUpRight } from "lucide-react";
 import { useLang } from "../context/LanguageContext";
 import { RevealTitle } from "./Reveal";
 
@@ -53,11 +55,11 @@ function useArrivees(containerRef) {
     );
 
     ctx.add(() => {
-      el.querySelectorAll(".stack-card").forEach((carte) => {
-        gsap.set(carte.querySelectorAll(".trait-feutre"), { drawSVG: "0%" });
-        gsap.set(carte.querySelectorAll(".tampon"), { autoAlpha: 0 });
-        io.observe(carte);
-      });
+      // Sur tout le conteneur d'un coup : par carte, GSAP avertissait pour
+      // chaque carte sans tampon.
+      gsap.set(el.querySelectorAll(".trait-feutre"), { drawSVG: "0%" });
+      gsap.set(el.querySelectorAll(".tampon"), { autoAlpha: 0 });
+      el.querySelectorAll(".stack-card").forEach((carte) => io.observe(carte));
     });
 
     return () => {
@@ -114,6 +116,16 @@ const CERTIFICATIONS = [
     award: "2e place",
     year: "2026",
     alt: "Certificat de participation au Vibeathon 2026",
+  },
+  {
+    src: claude101,
+    width: 1280,
+    height: 876,
+    title: "Claude 101",
+    issuer: "Claude Academy, badge de fin de cours",
+    year: "2026",
+    alt: "Badge Claude 101 de Claude Academy délivré à Kebe Abdoul Kader le 25 octobre 2026",
+    verify: "https://academy.claude.com/verify/e4c3ffc0140d269bbff3747880022688",
   },
   {
     src: cert4,
@@ -291,6 +303,17 @@ export default function Certifications() {
                       </span>
                     )}
                   </div>
+                  {cert.verify && (
+                    <a
+                      href={cert.verify}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex min-h-11 self-start items-center gap-2 rounded-full px-4 text-sm font-semibold text-accent ring-1 ring-accent/40 transition-[transform,background-color] duration-(--duration-base) ease-out-expo hover:-translate-y-0.5 hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                    >
+                      {t.certifications.verify}
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

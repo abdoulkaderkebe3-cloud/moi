@@ -53,8 +53,8 @@ function etiquette({ titre, sousTitre }) {
   return t;
 }
 
-// Gribouillis au survol, repris de la référence : deux boucles de marqueur
-// autour du disque actif, redessinées à 10 images par seconde avec un léger
+// Gribouillis repris de la référence : deux boucles de marqueur autour du
+// disque actif, redessinées à 10 images par seconde avec un léger
 // tremblement, comme une animation image par image. Elles se tracent en trois
 // étapes, restent, puis s'effacent dans l'ordre inverse.
 const POINTS = 64;
@@ -94,7 +94,7 @@ function tracer(geo, rayon, tour, debut) {
   geo.computeBoundingSphere();
 }
 
-function Gribouillis({ index, survolRef, positionRef }) {
+function Gribouillis({ index, positionRef }) {
   const groupe = useRef();
   const rubans = useMemo(() => Array.from({ length: BOUCLES }, creerRuban), []);
   const etat = useRef({ etape: -1, dernier: 0, debuts: [0, 0] });
@@ -104,7 +104,9 @@ function Gribouillis({ index, survolRef, positionRef }) {
     const t = clock.elapsedTime;
     if (t - e.dernier < 0.1) return;
     e.dernier = t;
-    const veut = survolRef.current === index && Math.round(positionRef.current) === index;
+    // Dès que le disque est posé au centre, sans attendre un survol : sur
+    // téléphone il n'y en a pas, les cercles n'apparaissaient jamais.
+    const veut = Math.abs(positionRef.current - index) < 0.08;
     if (veut && e.etape < 0) e.debuts = e.debuts.map(() => Math.random() * Math.PI * 2);
     e.etape = veut ? Math.min(e.etape + 1, ETAPES.length - 1) : Math.max(e.etape - 1, -1);
     groupe.current.visible = e.etape >= 0;
@@ -125,7 +127,7 @@ function Gribouillis({ index, survolRef, positionRef }) {
   );
 }
 
-function Disque({ texture, index, href, positionRef, survolRef, onChoisir }) {
+function Disque({ texture, index, href, positionRef, onChoisir }) {
   const groupe = useRef();
 
   // Le disque actif ouvre son projet, un disque voisin fait défiler jusqu'à
@@ -153,18 +155,16 @@ function Disque({ texture, index, href, positionRef, survolRef, onChoisir }) {
           onClick={cliquer}
           onPointerOver={(e) => {
             e.stopPropagation();
-            survolRef.current = index;
             document.body.style.cursor = "pointer";
           }}
           onPointerOut={() => {
-            if (survolRef.current === index) survolRef.current = -1;
             document.body.style.cursor = "";
           }}
         >
           <circleGeometry args={[RAYON, 96]} />
           <meshStandardMaterial map={texture} roughness={0.42} metalness={0.08} />
         </mesh>
-        <Gribouillis index={index} survolRef={survolRef} positionRef={positionRef} />
+        <Gribouillis index={index} positionRef={positionRef} />
         {/* Bord argenté, vu de biais il donne l'épaisseur du disque. */}
         <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -0.015]}>
           <cylinderGeometry args={[RAYON, RAYON, 0.03, 96, 1, true]} />
@@ -185,7 +185,6 @@ function Disque({ texture, index, href, positionRef, survolRef, onChoisir }) {
 }
 
 function Disques({ projets, positionRef, onChoisir }) {
-  const survolRef = useRef(-1);
   const urls = useMemo(() => projets.filter((p) => p.img).map((p) => p.img), [projets]);
   const chargees = useTexture(urls);
   const textures = useMemo(() => {
@@ -219,7 +218,6 @@ function Disques({ projets, positionRef, onChoisir }) {
           index={i}
           href={p.href}
           positionRef={positionRef}
-          survolRef={survolRef}
           onChoisir={onChoisir}
         />
       ))}
