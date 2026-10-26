@@ -25,6 +25,8 @@ export default function Footer() {
 
         <RevealItem>
           <h3 className="text-xl font-semibold text-white">Kebe Abdoul kader</h3>
+          {/* Écrit en clair pour que Google rattache la requête « kvder » au site. */}
+          <p className="mt-1 text-sm">kvder.com</p>
           <p className="mt-2 text-sm">
             © {new Date().getFullYear()} {t.footer.rights}
           </p>
