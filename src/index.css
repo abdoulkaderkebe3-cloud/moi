@@ -52,6 +52,25 @@
   animation: skill-in 140ms ease-out;
 }
 
+/* Le livre ouvert sort de l'étagère : il pivote vers le lecteur en avançant.
+   Sans animation si le système demande moins de mouvement. */
+@keyframes livre-sort {
+  from { opacity: 0; transform: translateZ(-160px) rotateY(35deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+@utility animate-livre-sort {
+  animation: livre-sort var(--duration-lente) var(--ease-out-expo);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Une lecture de projet ouverte bloque le défilement de la page derrière. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 /* ── Animations pilotées par le défilement ─────────────────────────────────
    Tout ce qui suit le scroll passe ici en CSS (`animation-timeline`) plutôt
    qu'en framer-motion ou GSAP. Le navigateur les joue alors sur le thread de

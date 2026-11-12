@@ -46,7 +46,7 @@ const translations = {
         typescript: "Surcouche typée à JavaScript améliorant la fiabilité du code et la productivité en équipe.",
         github: "Plateforme cloud de gestion de code source et de collaboration basée sur Git.",
         git: "Système de contrôle de version décentralisé indispensable pour suivre l'évolution du code.",
-        html: "Langage de balisage sémantique de base pour structurer le contenu du web.",
+        docker: "Conteneurs pour lancer une base ou une application à l'identique partout. Utilisé pour déployer Oracle 21c.",
         css: "Langage de style permettant de concevoir la mise en page, l'esthétique et les animations d'un site.",
         javascript: "Le langage de programmation incontournable du web pour rendre les pages dynamiques et interactives.",
         springboot: "Framework Java de référence pour bâtir des APIs REST et microservices robustes rapidement.",
@@ -54,21 +54,17 @@ const translations = {
         framer: "Bibliothèque d'animation puissante pour créer des transitions fluides et des micro-interactions sur React.",
         postgres: "Base de données relationnelle open-source réputée pour sa robustesse et sa gestion de données complexes.",
         uml: "Langage de modélisation graphique pour concevoir la structure et le comportement des applications.",
-        dbeaver: "Client de gestion de bases de données universel, idéal pour administrer de nombreuses technologies SQL."
+        oracle: "Administration d'une base Oracle 21c sous SQL Developer : tablespaces, utilisateurs, rôles, privilèges et quotas."
       }
     },
     // Projects
     projects: {
       title: "Mes",
       titleHighlight: "Projets",
-      description1: "Découvrez mes",
-      description1Highlight: "projets réalisés",
-      description1End: "avec passion et rigueur.",
-      hint: "Chacun s'ouvre en ligne, dans un nouvel onglet.",
+      hint: "Cliquez sur un livre pour lire son résumé.",
       p1: "Site de burger",
       p2: "Site d'apprentissage d'algorithme",
       p4: "Application web de questions-réponses",
-      p5: "Système de gestion d'engrais",
       // Projet phare (ProjetPhare.jsx) : capture de viso-studio.com.
       featured: {
         label: "Projet phare",
@@ -88,11 +84,25 @@ const translations = {
       p7: "Site vitrine Viso Studio",
       p8: "Invitation de mariage en ligne",
       p9: "API bancaire",
+      p10: "Plateforme de ma formation",
       stackLabel: "Stack",
       linkLabel: "Lien",
       cta: "Voir le projet",
       prev: "Projet précédent",
       next: "Projet suivant",
+      open: "Ouvrir le résumé de",
+      close: "Fermer",
+      // Résumés au dos des livres de la bibliothèque (Projects.jsx).
+      summaries: {
+        p1: "Site vitrine d'un restaurant de burgers, en ligne. Il sert aussi de projet fil rouge à ma formation Vibe Coding Académie.",
+        p6: "La billetterie en ligne de TransCampus, en production sur son propre domaine, avec un tableau de bord d'administration.",
+        p9: "Le backend d'une application bancaire façon mobile money : Spring Boot, JPA et PostgreSQL, sécurité par jeton JWT, découpé en couches.",
+        p7: "Le site de l'agence Viso Studio, en production. J'y suis responsable du développement front-end.",
+        p10: "Le site de ma formation en développement web, en production : présentation, réservation d'une place et paiement en ligne par GeniusPay, avec Supabase derrière.",
+        p8: "Une invitation de mariage en ligne : programme, lieux et horaires de la journée. Démo anonymisée du site livré au client.",
+        p4: "Une application web de questions-réponses, avec un front React et une API NestJS.",
+        p2: "Un site pour apprendre les algorithmes, écrit en HTML, CSS et JavaScript avec Bootstrap.",
+      },
     },
     // Certifications
     certifications: {
@@ -182,7 +192,7 @@ const translations = {
         typescript: "Typed superset of JavaScript enhancing code reliability and team productivity.",
         github: "Cloud platform for source code management and collaborative Git workflows.",
         git: "Decentralized version control system essential for tracking code evolution.",
-        html: "Semantic markup language structuring the foundation of web pages.",
+        docker: "Containers to run a database or an app identically anywhere. Used to deploy Oracle 21c.",
         css: "Style sheet language used to format, design, and animate web interfaces.",
         javascript: "Core programming language of the web for making interactive and dynamic pages.",
         springboot: "Reference Java framework to quickly build robust REST APIs and microservices.",
@@ -190,21 +200,17 @@ const translations = {
         framer: "Powerful animation library for clean transitions and micro-interactions in React.",
         postgres: "Open-source relational database known for robustness and complex data handling.",
         uml: "Graphical modeling language to plan application structure and behaviors.",
-        dbeaver: "Universal database administration tool, ideal for managing SQL technologies."
+        oracle: "Oracle 21c administration with SQL Developer: tablespaces, users, roles, privileges and quotas."
       }
     },
     // Projects
     projects: {
       title: "My",
       titleHighlight: "Projects",
-      description1: "Discover my",
-      description1Highlight: "completed projects",
-      description1End: "built with passion and rigor.",
-      hint: "Each one opens live, in a new tab.",
+      hint: "Click a book to read its summary.",
       p1: "Burger website",
       p2: "Algorithm learning website",
       p4: "Web Q&A application",
-      p5: "Fertilizer management system",
       // Featured project (ProjetPhare.jsx): screenshot of viso-studio.com.
       featured: {
         label: "Featured project",
@@ -224,11 +230,24 @@ const translations = {
       p7: "Viso Studio showcase website",
       p8: "Online wedding invitation",
       p9: "Banking API",
+      p10: "My training platform",
       stackLabel: "Stack",
       linkLabel: "Link",
       cta: "View project",
       prev: "Previous project",
       next: "Next project",
+      open: "Open the summary of",
+      close: "Close",
+      summaries: {
+        p1: "A showcase website for a burger restaurant, live. It is also the running project of my Vibe Coding Académie course.",
+        p6: "The online ticketing of TransCampus, live on its own domain, with an admin dashboard.",
+        p9: "The backend of a mobile-money style banking app: Spring Boot, JPA and PostgreSQL, JWT security, layered architecture.",
+        p7: "The website of the Viso Studio agency, live. I lead its front-end development.",
+        p10: "The website of my web development course, live: course page, seat booking and online payment with GeniusPay, backed by Supabase.",
+        p8: "An online wedding invitation: schedule, venues and times of the day. Anonymized demo of the site delivered to the client.",
+        p4: "A web Q&A application, with a React front end and a NestJS API.",
+        p2: "A website to learn algorithms, written in HTML, CSS and JavaScript with Bootstrap.",
+      },
     },
     // Certifications
     certifications: {

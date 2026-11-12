@@ -5,7 +5,7 @@ import javaIcon from "../assets/images/svg/devicon_java.svg";
 import tailwindIcon from "../assets/images/svg/devicon_tailwindcss.svg";
 import gitIcon from "../assets/images/svg/icomoon-free_git.svg";
 import reactIcon from "../assets/images/svg/Group.svg";
-import htmlIcon from "../assets/images/svg/logos_html-5.svg";
+import dockerIcon from "../assets/images/svg/logos_docker-icon.svg";
 import githubIcon from "../assets/images/svg/mdi_github.svg";
 import springBootIcon from "../assets/images/svg/Vector.svg";
 import jsIcon from "../assets/images/svg/vscode-icons_file-type-js-official.svg";
@@ -15,7 +15,7 @@ import angularIcon from "../assets/images/svg/skill-icons_angular-light.svg";
 import tsIcon from "../assets/images/svg/akar-icons_typescript-fill.svg";
 import postegre from "../assets/images/svg/devicon_postgresql-wordmark.svg";
 import uml from "../assets/images/svg/material-icon-theme_uml.svg";
-import dbeaver from "../assets/images/svg/Vector (2).svg";
+import oracleIcon from "../assets/images/svg/simple-icons_oracle.svg";
 import { useLang } from "../context/LanguageContext";
 
 // Curseurs propres à la section : une flèche à la couleur de l'accent, qui
@@ -79,7 +79,9 @@ const TECHS = [
   { name: "TypeScript", key: "typescript", hotkey: "T", level: "advanced", color: "#3178C6", icon: tsIcon, textColor: "text-white", darkIcon: true },
   { name: "GitHub", key: "github", hotkey: "B", level: "expert", color: "#21759B", icon: githubIcon, textColor: "text-white", darkIcon: true },
   { name: "Git", key: "git", hotkey: "G", level: "expert", color: "#F34F29", icon: gitIcon, textColor: "text-white", darkIcon: true },
-  { name: "HTML5", key: "html", hotkey: "H", level: "expert", color: "#E34C26", icon: htmlIcon, textColor: "text-white" },
+  // Logos aux couleurs de marque sur fond clair : sur une touche colorée, la
+  // baleine bleue de Docker et le mot rouge d'Oracle disparaîtraient.
+  { name: "Docker", key: "docker", hotkey: "D", level: "intermediate", color: "#E8F4FD", glow: "#2496ED", icon: dockerIcon, textColor: "text-slate-900" },
   // Rangée 3
   { name: "CSS3", key: "css", hotkey: "C", level: "expert", color: "#264BDD", icon: cssIcon, textColor: "text-white" },
   { name: "JavaScript", key: "javascript", hotkey: "S", level: "expert", color: "#F7DF1E", icon: jsIcon, textColor: "text-slate-900" },
@@ -89,7 +91,7 @@ const TECHS = [
   { name: "Framer Motion", key: "framer", hotkey: "M", level: "advanced", color: "#8B5CF6", icon: framerIcon, textColor: "text-white" },
   { name: "PostgreSQL", key: "postgres", hotkey: "P", level: "advanced", color: "#336791", icon: postegre, textColor: "text-white" },
   { name: "UML", key: "uml", hotkey: "U", level: "advanced", color: "#FFB81C", icon: uml, textColor: "text-slate-900" },
-  { name: "DBeaver", key: "dbeaver", hotkey: "D", level: "advanced", color: "#1E90FF", icon: dbeaver, textColor: "text-white", darkIcon: true },
+  { name: "Oracle Database", key: "oracle", hotkey: "Q", level: "intermediate", color: "#F4F4F4", glow: "#EA1B22", icon: oracleIcon, textColor: "text-slate-900" },
 ];
 
 export default function Skills() {
