@@ -66,6 +66,32 @@
   }
 }
 
+/* Le chat de la bibliothèque traverse la pièce (il part de left: 55 %) et
+   balance les pattes. Immobile si le système demande moins de mouvement. */
+@keyframes chat-marche {
+  from { translate: calc(-55vw - 8rem) 0; }
+  to   { translate: 50vw 0; }
+}
+
+@utility animate-chat-marche {
+  animation: chat-marche 30s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes patte {
+  from { rotate: -20deg; }
+  to   { rotate: 20deg; }
+}
+
+@utility animate-patte {
+  animation: patte 0.45s ease-in-out infinite alternate;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 /* Une lecture de projet ouverte bloque le défilement de la page derrière. */
 html:has(dialog[open]) {
   overflow: hidden;

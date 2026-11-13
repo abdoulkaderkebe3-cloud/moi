@@ -3,6 +3,7 @@ import portraitImg from "../assets/images/png/kader-portrait-2026.webp";
 
 import { useLang } from "../context/LanguageContext";
 import { RevealTitle } from "./Reveal";
+import NoteManuscrite from "./NoteManuscrite";
 
 // Toute l'animation de cette section est en CSS, pilotée par le défilement
 // (`.ap-section`, `.ap-image`, `.ap-texte`, `.ap-mot` dans index.css).
@@ -25,7 +26,7 @@ export default function About() {
       <div className="overflow-clip w-full">
         <div className="max-w-6xl w-full mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="ap-image flex justify-center">
-            <ImageContent />
+            <ImageContent note={t.about.note} />
           </div>
 
           <div className="ap-texte max-w-xl">
@@ -37,7 +38,7 @@ export default function About() {
   );
 }
 
-function ImageContent() {
+function ImageContent({ note }) {
   return (
     <div className="relative group">
       <img
@@ -48,7 +49,10 @@ function ImageContent() {
         decoding="async"
         className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl"
       />
-      <div className="absolute inset-0 rounded-2xl bg-accent opacity-10 blur-2xl group-hover:opacity-20 transition duration-500" />
+      {/* Carré calé sur la photo, pas sur le bloc : sur téléphone la note
+          passe dessous et le halo ne doit pas la recouvrir. */}
+      <div className="absolute left-0 top-0 aspect-square w-full rounded-2xl bg-accent opacity-10 blur-2xl group-hover:opacity-20 transition duration-500" />
+      <NoteManuscrite texte={note} />
     </div>
   );
 }

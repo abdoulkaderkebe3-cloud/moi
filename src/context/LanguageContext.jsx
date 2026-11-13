@@ -19,12 +19,14 @@ const translations = {
     },
     // Hero
     hero: {
-      role: "Développeur Full Stack",
+      role: "Développeur Full Stack · des sites qui font venir vos clients",
     },
     // About
     about: {
       title: "À propos",
       titleSuffix: "de moi",
+      // Note manuscrite à côté de la photo.
+      note: "C'est moi, entre deux cours de MIAGE.",
       text: "Je code en binôme avec des agents IA. Ils écrivent vite, je garde la main sur l'architecture et sur ce qui part en production. Étudiant en MIAGE et responsable du développement front-end chez Viso-Studio, je construis des applications web en Java/Spring Boot et React.\n\nCette approche m'a valu la 2e place au Vibeathon Côte d'Ivoire 2026 avec EcoWatt, un système de prises intelligentes qui réduit la facture d'électricité, dont j'étais lead technique.\n\nJe suis aussi Président du Club des Développeurs de mon université, où j'anime des ateliers autour du développement.",
     },
     // Skills
@@ -62,6 +64,13 @@ const translations = {
       title: "Mes",
       titleHighlight: "Projets",
       hint: "Cliquez sur un livre pour lire son résumé.",
+      // Décor de la bibliothèque (projets/decor/).
+      decor: {
+        postit: "Coder petit, rêver grand ♡",
+        affiche: ["Bienvenue", "dans ma", "bibliothèque"],
+        projets: "projets en rayon",
+        bandeau: "Bienvenue dans ma bibliothèque de projets",
+      },
       p1: "Site de burger",
       p2: "Site d'apprentissage d'algorithme",
       p4: "Application web de questions-réponses",
@@ -115,25 +124,35 @@ const translations = {
       title: "Mes",
       titleHighlight: "Services",
       intro:
-        "Un site, une application ou une équipe à faire monter en compétence : je prends le projet de l'idée à la mise en ligne, seul ou avec vos équipes.",
+        "Vous avez une idée, je la mets en ligne. Et je reste là après.",
       cta: "Parlons de votre projet",
       items: {
         training: {
-          title: "Formation en développement web",
-          text: "Ateliers en groupe ou accompagnement individuel, des bases HTML, CSS et JavaScript jusqu'à React et Spring Boot. J'anime déjà ces sessions au Club des Développeurs de mon université.",
+          title: "Une équipe qui code mieux",
+          text: "Ateliers en groupe ou suivi individuel, des bases jusqu'à React et Spring Boot. Je les anime déjà au Club des Développeurs de mon université.",
         },
         apps: {
-          title: "Applications web sur mesure",
-          text: "De la base de données à l'interface : modèle PostgreSQL, API REST en Java et Spring Boot, front en React ou Angular. Un seul interlocuteur sur toute la chaîne.",
+          title: "Un outil qui travaille à votre place",
+          text: "Billetterie, réservations, espace client : de la base de données à l'écran, un seul interlocuteur. TransCampus en est un exemple.",
         },
         interfaces: {
-          title: "Sites vitrines et interfaces",
-          text: "Des interfaces pensées pour le mobile d'abord, sobres et rapides. Maquette, intégration, mise en ligne et suivi. Ce site en est un exemple.",
+          title: "Un site qu'on trouve et qui inspire confiance",
+          text: "Pensé pour le téléphone d'abord, rapide même en 4G, visible sur Google. Ce site en est un exemple.",
         },
         ai: {
-          title: "Développement assisté par IA",
-          text: "J'orchestre des agents IA pour livrer plus vite, en gardant la main sur l'architecture et sur ce qui part en production. C'est cette méthode qui m'a valu la 2e place au Vibeathon 2026.",
+          title: "Livrer plus vite, sans perdre la main",
+          text: "J'orchestre des agents IA et je garde le contrôle de ce qui part en ligne. Méthode qui m'a valu la 2e place au Vibeathon 2026.",
         },
+      },
+      // Étapes d'un projet, sous les cartes (Processus.jsx).
+      process: {
+        title: "Comment on travaille",
+        steps: [
+          { title: "On s'écoute.", text: "Un appel pour comprendre votre activité, vos clients et votre budget." },
+          { title: "Je dessine.", text: "Une maquette pensée pour le téléphone, que vous validez avant la première ligne de code." },
+          { title: "Je développe et je teste.", text: "Sur de vrais téléphones, pas seulement sur mon écran." },
+          { title: "Mise en ligne et suivi.", text: "Le site est à vous, et je reste disponible pour corriger et faire évoluer." },
+        ],
       },
     },
     // Contact
@@ -165,12 +184,13 @@ const translations = {
     },
     // Hero
     hero: {
-      role: "Full Stack Developer",
+      role: "Full Stack Developer · websites that bring you customers",
     },
     // About
     about: {
       title: "About",
       titleSuffix: "me",
+      note: "That's me, between two university classes.",
       text: "I code side by side with AI agents. They write fast, I keep control of the architecture and of what ships to production. A MIAGE student and front-end development lead at Viso-Studio, I build web applications with Java/Spring Boot and React.\n\nThis approach earned me 2nd place at Vibeathon Côte d'Ivoire 2026 with EcoWatt, a smart plug system that cuts electricity bills, where I was the technical lead.\n\nI am also President of the Developers Club at my university, where I host workshops around software development.",
     },
     // Skills
@@ -208,6 +228,12 @@ const translations = {
       title: "My",
       titleHighlight: "Projects",
       hint: "Click a book to read its summary.",
+      decor: {
+        postit: "Code small, dream big ♡",
+        affiche: ["Welcome", "to my", "library"],
+        projets: "projects on the shelves",
+        bandeau: "Welcome to my project library",
+      },
       p1: "Burger website",
       p2: "Algorithm learning website",
       p4: "Web Q&A application",
@@ -260,25 +286,34 @@ const translations = {
       title: "My",
       titleHighlight: "Services",
       intro:
-        "A website, an app, or a team to upskill: I take the project from idea to launch, on my own or alongside your team.",
+        "You have an idea, I put it online. And I stick around after.",
       cta: "Let's talk about your project",
       items: {
         training: {
-          title: "Web development training",
-          text: "Group workshops or one-on-one coaching, from HTML, CSS and JavaScript basics up to React and Spring Boot. I already run these sessions at my university Developers Club.",
+          title: "A team that codes better",
+          text: "Group workshops or one-on-one coaching, from the basics up to React and Spring Boot. I already run them at my university Developers Club.",
         },
         apps: {
-          title: "Custom web applications",
-          text: "From the database to the interface: PostgreSQL data model, REST API in Java and Spring Boot, front end in React or Angular. One person across the whole chain.",
+          title: "A tool that does the work for you",
+          text: "Ticketing, bookings, customer area: from the database to the screen, one single contact. TransCampus is an example.",
         },
         interfaces: {
-          title: "Showcase sites and interfaces",
-          text: "Interfaces designed for mobile first, clean and fast. Mockup, integration, deployment and follow-up. This very site is an example.",
+          title: "A site people find and trust",
+          text: "Designed for phones first, fast even on 4G, visible on Google. This very site is an example.",
         },
         ai: {
-          title: "AI-assisted development",
-          text: "I orchestrate AI agents to ship faster, while keeping control of the architecture and of what goes to production. This method earned me 2nd place at Vibeathon 2026.",
+          title: "Ship faster, without losing control",
+          text: "I orchestrate AI agents and keep control of what goes live. The method that earned me 2nd place at Vibeathon 2026.",
         },
+      },
+      process: {
+        title: "How we work together",
+        steps: [
+          { title: "We talk.", text: "A call to understand your business, your customers and your budget." },
+          { title: "I design.", text: "A phone-first mockup you approve before the first line of code." },
+          { title: "I build and test.", text: "On real phones, not just on my screen." },
+          { title: "Launch and follow-up.", text: "The site is yours, and I stay available to fix and improve it." },
+        ],
       },
     },
     // Contact

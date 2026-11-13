@@ -12,6 +12,7 @@ import { documentTop } from "../utils/documentTop";
 import { RevealGroup, RevealItem, RevealTitle } from "./Reveal";
 import { ArrowRight } from "lucide-react";
 import { useLang } from "../context/LanguageContext";
+import Processus from "./Processus";
 import {
   IconTraining,
   IconStack,
@@ -423,6 +424,7 @@ export default function Services() {
           </div>
           <div className="mt-14 text-center">{cta}</div>
         </div>
+        <Processus process={t.services.process} />
       </section>
     );
   }
@@ -450,6 +452,7 @@ export default function Services() {
           </div>
         </div>
       </div>
+      <Processus process={t.services.process} />
     </section>
   );
 }

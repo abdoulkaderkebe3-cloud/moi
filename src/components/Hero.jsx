@@ -83,7 +83,14 @@ export default function Hero() {
             transition={{ duration: DUREE.lente, ease: EASE, delay: 0.2 }}
             className="text-base sm:text-lg md:text-xl text-white/50 tracking-widest text-center px-4"
           >
-            {t.hero.role}
+            {/* Sur téléphone, une ligne par idée plutôt qu'une coupure au
+                hasard au milieu de l'accroche. */}
+            {t.hero.role.split(" · ").map((partie, i) => (
+              <span key={partie} className="block sm:inline">
+                {i > 0 && <span className="hidden sm:inline"> · </span>}
+                {partie}
+              </span>
+            ))}
           </motion.p>
       </div>
       </div>
